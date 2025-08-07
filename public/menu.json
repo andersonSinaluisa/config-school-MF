@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Apps",
+        "path": "/apps",
+        "icon": "i-heroicons-arrow-right-on-rectangle-solid"
+    },
+    {
+        "name": "Permisos",
+        "path": "/permisos",
+        "icon": "i-heroicons-lock-closed-solid"
+    },
+    {
+        "name": "Roles",
+        "path": "/roles",
+        "icon": "i-heroicons-shield-check-solid"
+    },
+    {
+        "name": "Usuarios",
+        "path": "/usuarios",
+        "icon": "i-heroicons-user-circle-solid"
+    },
+    {
+        "name": "Sesiones",
+        "path": "/sessions",
+        "icon": "i-heroicons-cog-6-tooth-solid"
+    }
+]
