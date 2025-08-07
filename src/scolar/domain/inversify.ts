@@ -12,6 +12,22 @@ import { SECTION_LIST_USE_CASE, SECTION_REPOSITORY, SECTION_SERVICE } from "./sy
 import { SectionRepositoryImpl } from "../infrastructure/adapters/api/SectionRepositoryImpl";
 import { SUBJECT_CREATE_USE_CASE, SUBJECT_LIST_USE_CASE, SUBJECT_REPOSITORY, SUBJECT_SERVICE } from "./symbols/SubjectSymbol";
 import { SubjectRepositoryImpl } from "../infrastructure/adapters/api/SubjectRepositoryImpl";
+import { GRADING_SYSTEM_CREATE_USECASE, GRADING_SYSTEM_DELETE_USECASE, GRADING_SYSTEM_GET_USECASE, GRADING_SYSTEM_LIST_USECASE, GRADING_SYSTEM_REPOSITORY, GRADING_SYSTEM_SERVICE, GRADING_SYSTEM_UPDATE_USECASE } from "./symbols/GradingSystemSymbol";
+import { GradingSystemRepositoryImpl } from "../infrastructure/adapters/api/GradingSystemRepositoryImpl";
+import { GradingSystemService } from "./services/GradingSystemService";
+import { CreateGradingSystemUseCaseImpl } from "../application/useCases/gradingSystems/createGradingSystemUseCase";
+import { ListGradingSystemUseCaseImpl } from "../application/useCases/gradingSystems/listGradingSystemUseCase";
+import { GetGradingSystemUseCaseImpl } from "../application/useCases/gradingSystems/getGradingSystemUseCase";
+import { UpdateGradingSystemUseCaseImpl } from "../application/useCases/gradingSystems/updateGradingSystemUseCase";
+import { DeleteGradingSystemUseCaseImpl } from "../application/useCases/gradingSystems/deleteGradingSystemUseCase";
+import { GRADING_TERM_CREATE_USECASE, GRADING_TERM_DELETE_USECASE, GRADING_TERM_GET_USECASE, GRADING_TERM_LIST_USECASE, GRADING_TERM_REPOSITORY, GRADING_TERM_SERVICE, GRADING_TERM_UPDATE_USECASE } from "./symbols/GradingTermSymbol";
+import { GradingTermRepositoryImpl } from "../infrastructure/adapters/api/GradingTermRepositoryImpl";
+import { GradingTermService } from "./services/GradingTermService";
+import { CreateGradingTermUseCaseImpl } from "../application/useCases/gradingTerms/createGradingTermUseCase";
+import { ListGradingTermUseCaseImpl } from "../application/useCases/gradingTerms/listGradingTermUseCase";
+import { GetGradingTermUseCaseImpl } from "../application/useCases/gradingTerms/getGradingTermUseCase";
+import { UpdateGradingTermUseCaseImpl } from "../application/useCases/gradingTerms/updateGradingTermUseCase";
+import { DeleteGradingTermUseCaseImpl } from "../application/useCases/gradingTerms/deleteGradingTermUseCase";
 import { LevelService } from "./services/LevelService";
 import { ListLevelsUsecaseImpl } from "../application/useCases/levels/listLevelsUseCase";
 import schoolapi from "../infrastructure/services/Api";
@@ -78,8 +94,28 @@ const contianerScolar = new ContainerModule(
         bind(SUBJECT_REPOSITORY).toDynamicValue(() => {
             return new SubjectRepositoryImpl(schoolapi);
         })
+        bind(GRADING_SYSTEM_REPOSITORY).toDynamicValue(() => {
+            return new GradingSystemRepositoryImpl(schoolapi);
+        })
+        bind(GRADING_TERM_REPOSITORY).toDynamicValue(() => {
+            return new GradingTermRepositoryImpl(schoolapi);
+        })
         bind(SECTION_SERVICE).to(SectionService)
         bind(SECTION_LIST_USE_CASE).to(ListSectionUseCaseImpl)
+
+        bind(GRADING_SYSTEM_SERVICE).to(GradingSystemService);
+        bind(GRADING_SYSTEM_CREATE_USECASE).to(CreateGradingSystemUseCaseImpl);
+        bind(GRADING_SYSTEM_LIST_USECASE).to(ListGradingSystemUseCaseImpl);
+        bind(GRADING_SYSTEM_GET_USECASE).to(GetGradingSystemUseCaseImpl);
+        bind(GRADING_SYSTEM_UPDATE_USECASE).to(UpdateGradingSystemUseCaseImpl);
+        bind(GRADING_SYSTEM_DELETE_USECASE).to(DeleteGradingSystemUseCaseImpl);
+
+        bind(GRADING_TERM_SERVICE).to(GradingTermService);
+        bind(GRADING_TERM_CREATE_USECASE).to(CreateGradingTermUseCaseImpl);
+        bind(GRADING_TERM_LIST_USECASE).to(ListGradingTermUseCaseImpl);
+        bind(GRADING_TERM_GET_USECASE).to(GetGradingTermUseCaseImpl);
+        bind(GRADING_TERM_UPDATE_USECASE).to(UpdateGradingTermUseCaseImpl);
+        bind(GRADING_TERM_DELETE_USECASE).to(DeleteGradingTermUseCaseImpl);
 
 
         bind(LEVEL_SERVICE).to(LevelService)
