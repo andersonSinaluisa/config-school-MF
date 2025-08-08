@@ -11,6 +11,7 @@ import { Subject } from "@/scolar/domain/entities/subject";
 import { SchoolYear } from "@/scolar/domain/entities/school_year";
 import { Check, AlertCircle, HelpCircle, Info } from "lucide-react";
 
+
 interface Props {
     onSubmit: () => void;
     onCancel: () => void;
@@ -23,6 +24,7 @@ interface Props {
     subjects: Subject[];
     schoolYears: SchoolYear[];
     formData: CreateClassScheduleCommand;
+
 }
 
 const days = [
@@ -219,6 +221,7 @@ export const ClassScheduleCreatePresenter = ({
                 </Card>
             </div>
         </div>
+
     );
 };
 

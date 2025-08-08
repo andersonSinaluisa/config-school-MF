@@ -53,6 +53,7 @@ export const ClassScheduleCreateContainer = () => {
         defaultValues: { data: { id: 0, courseId: 0, parallelId: 0, schoolYearId: 0, subjectId: 0, dayOfWeek: '', startTime: '', endTime: '' } }
     });
     const formData = watch();
+
     const selectedCourse = watch("data.courseId");
 
     const fetchInitialData = useCallback(() => {
@@ -101,6 +102,7 @@ export const ClassScheduleCreateContainer = () => {
             subjects={subjects}
             schoolYears={schoolYears}
             formData={formData}
+
         />
     );
 };

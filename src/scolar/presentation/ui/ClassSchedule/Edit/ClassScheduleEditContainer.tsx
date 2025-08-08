@@ -34,6 +34,7 @@ export const ClassScheduleEditContainer = () => {
         defaultValues: { data: { id: Number(id), courseId: 0, parallelId: 0, schoolYearId: 0, subjectId: 0, dayOfWeek: '', startTime: '', endTime: '' } }
     });
     const formData = watch();
+
     const [courses, setCourses] = useState<Course[]>([]);
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [schoolYears, setSchoolYears] = useState<SchoolYear[]>([]);
@@ -106,6 +107,7 @@ export const ClassScheduleEditContainer = () => {
             subjects={subjects}
             schoolYears={schoolYears}
             formData={formData}
+
         />
     );
 };
