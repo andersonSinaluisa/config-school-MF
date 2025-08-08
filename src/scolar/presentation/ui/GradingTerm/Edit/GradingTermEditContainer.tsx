@@ -1,22 +1,44 @@
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useInjection } from "inversify-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { GradingTermEditPresenter } from "./GradingTermEditPresenter";
-import { GetGradingTermUseCase, GetGradingTermCommand } from "@/scolar/application/useCases/gradingTerms/getGradingTermUseCase";
-import { UpdateGradingTermUseCase, UpdateGradingTermCommand } from "@/scolar/application/useCases/gradingTerms/updateGradingTermUseCase";
-import { GRADING_TERM_GET_USECASE, GRADING_TERM_UPDATE_USECASE } from "@/scolar/domain/symbols/GradingTermSymbol";
+import {
+    GetGradingTermUseCase,
+    GetGradingTermCommand,
+} from "@/scolar/application/useCases/gradingTerms/getGradingTermUseCase";
+import {
+    UpdateGradingTermUseCase,
+    UpdateGradingTermCommand,
+} from "@/scolar/application/useCases/gradingTerms/updateGradingTermUseCase";
+import {
+    GRADING_TERM_GET_USECASE,
+    GRADING_TERM_UPDATE_USECASE,
+} from "@/scolar/domain/symbols/GradingTermSymbol";
 
-interface FormValues {
-    data: {
-        gradingSystem_id: number;
-        academicYear_id: number;
-        name: string;
-        order: number;
-        weight: string;
-    }
-}
+const formSchema = z.object({
+    data: z.object({
+        gradingSystem_id: z
+            .number({ required_error: "Seleccione un sistema" })
+            .positive(),
+        academicYear_id: z
+            .number({ required_error: "Seleccione un año" })
+            .positive(),
+        name: z.string().min(1, "El nombre es obligatorio"),
+        order: z
+            .number({ required_error: "El orden es obligatorio" })
+            .min(1),
+        weight: z
+            .number({ required_error: "El peso es obligatorio" })
+            .min(0)
+            .max(1),
+    }),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export const GradingTermEditContainer = () => {
     const { id } = useParams();
@@ -25,11 +47,19 @@ export const GradingTermEditContainer = () => {
     const getGT = useInjection<GetGradingTermUseCase>(GRADING_TERM_GET_USECASE);
     const updateGT = useInjection<UpdateGradingTermUseCase>(GRADING_TERM_UPDATE_USECASE);
 
-    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<FormValues>({
-        defaultValues: { data: { gradingSystem_id: 0, academicYear_id: 0, name: '', order: 1, weight: '' } }
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            data: {
+                gradingSystem_id: undefined,
+                academicYear_id: undefined,
+                name: '',
+                order: 1,
+                weight: 0.5,
+            },
+        },
+        mode: 'onChange',
     });
-
-    const formData = watch('data');
 
     useEffect(() => {
         if (!id) return;
@@ -42,7 +72,15 @@ export const GradingTermEditContainer = () => {
             }
             const data = res.extract();
             if (data) {
-                reset({ data: { gradingSystem_id: data.gradingSystem_id, academicYear_id: data.academicYear_id, name: data.name, order: data.order, weight: data.weight } });
+                form.reset({
+                    data: {
+                        gradingSystem_id: data.gradingSystem_id,
+                        academicYear_id: data.academicYear_id,
+                        name: data.name,
+                        order: data.order,
+                        weight: parseFloat(data.weight),
+                    },
+                });
             }
         });
     }, [id]);
@@ -50,7 +88,14 @@ export const GradingTermEditContainer = () => {
     const onSubmit = (values: FormValues) => {
         if (!id) return;
         startTransition(async () => {
-            const command = new UpdateGradingTermCommand(Number(id), values.data.gradingSystem_id, values.data.academicYear_id, values.data.name, values.data.order, values.data.weight);
+            const command = new UpdateGradingTermCommand(
+                Number(id),
+                values.data.gradingSystem_id,
+                values.data.academicYear_id,
+                values.data.name,
+                values.data.order,
+                values.data.weight.toString(),
+            );
             const res = await updateGT.execute(command);
             if (res.isLeft()) {
                 const fail = res.extract();
@@ -66,12 +111,10 @@ export const GradingTermEditContainer = () => {
 
     return (
         <GradingTermEditPresenter
-            onSubmit={handleSubmit(onSubmit)}
-            register={register}
-            errors={errors}
+            form={form}
+            onSubmit={onSubmit}
             isSubmitting={isPending}
             onCancel={onCancel}
-            formData={formData}
         />
     );
 };
