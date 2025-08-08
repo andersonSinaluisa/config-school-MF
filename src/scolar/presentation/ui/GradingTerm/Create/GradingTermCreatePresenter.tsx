@@ -12,14 +12,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { SearchSelect } from "@/components/ui/search-select";
 import { useSystems } from "@/scolar/presentation/hooks/useSystems";
 import { useAcademicYears } from "@/scolar/presentation/hooks/useAcademicYears";
 import { GradingSystem } from "@/scolar/domain/entities/grading_system";
@@ -51,6 +45,19 @@ export const GradingTermCreatePresenter = ({
 }: Props) => {
   const systems = useSystems();
   const years = useAcademicYears();
+  const systemOptions = systems.map((s) => ({
+    value: s.id,
+    label: s.name,
+    subLabel: s.description,
+  }));
+  const yearOptions = years.map((y) => ({
+    value: y.id,
+    label: y.name,
+    subLabel: `${format(y.startDate, "dd/MM/yyyy")} - ${format(
+      y.endDate,
+      "dd/MM/yyyy"
+    )}`,
+  }));
   const selectedSystem = systems.find(
     (s: GradingSystem) => s.id === form.watch("data.gradingSystem_id")
   );
@@ -73,30 +80,15 @@ export const GradingTermCreatePresenter = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Sistema de Calificación</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value ? String(field.value) : ""}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccione un sistema" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {systems.map((s) => (
-                          <SelectItem key={s.id} value={String(s.id)}>
-                            <div className="flex flex-col">
-                              <span>{s.name}</span>
-                              {s.description && (
-                                <span className="text-xs text-muted-foreground">
-                                  {s.description}
-                                </span>
-                              )}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <SearchSelect
+                        options={systemOptions}
+                        value={field.value}
+                        onChange={(v) => field.onChange(Number(v))}
+                        placeholder="Seleccione un sistema"
+                        searchPlaceholder="Buscar sistema..."
+                      />
+                    </FormControl>
                     <FormDescription>
                       Selecciona el sistema al que pertenece el período.
                     </FormDescription>
@@ -116,30 +108,15 @@ export const GradingTermCreatePresenter = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Año Académico</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value ? String(field.value) : ""}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccione un año" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {years.map((y) => (
-                          <SelectItem key={y.id} value={String(y.id)}>
-                            <div className="flex flex-col">
-                              <span>{y.name}</span>
-                              <span className="text-xs text-muted-foreground">
-                                {format(y.startDate, "dd/MM/yyyy")} -
-                                {" "}
-                                {format(y.endDate, "dd/MM/yyyy")}
-                              </span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <SearchSelect
+                        options={yearOptions}
+                        value={field.value}
+                        onChange={(v) => field.onChange(Number(v))}
+                        placeholder="Seleccione un año"
+                        searchPlaceholder="Buscar año..."
+                      />
+                    </FormControl>
                     <FormDescription>
                       Selecciona el año académico correspondiente.
                     </FormDescription>
