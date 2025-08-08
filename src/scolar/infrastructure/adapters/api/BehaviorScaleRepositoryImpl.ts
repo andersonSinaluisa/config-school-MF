@@ -15,7 +15,7 @@ export class BehaviorScaleRepositoryImpl implements BehaviorScaleRepository {
         return data;
     }
     async findById(id: number): Promise<BehaviorScaleDto> {
-        const { data } = await this.http.get<BehaviorScaleDto>(`/behavior-scales/${id}`);
+        const { data } = await this.http.get<BehaviorScaleDto>(`/behavior-scales/${id}/`);
         return data;
     }
     async create(entity: Omit<BehaviorScaleDto, 'id'>): Promise<BehaviorScaleDto> {
@@ -23,10 +23,10 @@ export class BehaviorScaleRepositoryImpl implements BehaviorScaleRepository {
         return data;
     }
     async update(id: number, entity: Omit<BehaviorScaleDto, 'id'>): Promise<BehaviorScaleDto> {
-        const { data } = await this.http.put<BehaviorScaleDto>(`/behavior-scales/${id}`, entity);
+        const { data } = await this.http.put<BehaviorScaleDto>(`/behavior-scales/${id}/`, entity);
         return data;
     }
     async delete(id: number): Promise<void> {
-        await this.http.delete(`/behavior-scales/${id}`);
+        await this.http.delete(`/behavior-scales/${id}/`);
     }
 }

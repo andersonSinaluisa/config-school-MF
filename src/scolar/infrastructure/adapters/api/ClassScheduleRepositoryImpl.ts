@@ -15,7 +15,7 @@ export class ClassScheduleRepositoryImpl implements ClassScheduleRepository {
         return data;
     }
     async findById(id: number): Promise<ClassScheduleDto> {
-        const { data } = await this.http.get<ClassScheduleDto>(`/class-schedules/${id}`);
+        const { data } = await this.http.get<ClassScheduleDto>(`/class-schedules/${id}/`);
         return data;
     }
     async create(entity: Omit<ClassScheduleDto, 'id'>): Promise<ClassScheduleDto> {
@@ -23,10 +23,10 @@ export class ClassScheduleRepositoryImpl implements ClassScheduleRepository {
         return data;
     }
     async update(id: number, entity: Omit<ClassScheduleDto, 'id'>): Promise<ClassScheduleDto> {
-        const { data } = await this.http.put<ClassScheduleDto>(`/class-schedules/${id}`, entity);
+        const { data } = await this.http.put<ClassScheduleDto>(`/class-schedules/${id}/`, entity);
         return data;
     }
     async delete(id: number): Promise<void> {
-        await this.http.delete(`/class-schedules/${id}`);
+        await this.http.delete(`/class-schedules/${id}/`);
     }
 }

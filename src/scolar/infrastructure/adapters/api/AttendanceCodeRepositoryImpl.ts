@@ -15,7 +15,7 @@ export class AttendanceCodeRepositoryImpl implements AttendanceCodeRepository {
         return data;
     }
     async findById(id: number): Promise<AttendanceCodeDto> {
-        const { data } = await this.http.get<AttendanceCodeDto>(`/attendance-codes/${id}`);
+        const { data } = await this.http.get<AttendanceCodeDto>(`/attendance-codes/${id}/`);
         return data;
     }
     async create(entity: Omit<AttendanceCodeDto, 'id'>): Promise<AttendanceCodeDto> {
@@ -23,10 +23,10 @@ export class AttendanceCodeRepositoryImpl implements AttendanceCodeRepository {
         return data;
     }
     async update(id: number, entity: Omit<AttendanceCodeDto, 'id'>): Promise<AttendanceCodeDto> {
-        const { data } = await this.http.put<AttendanceCodeDto>(`/attendance-codes/${id}`, entity);
+        const { data } = await this.http.put<AttendanceCodeDto>(`/attendance-codes/${id}/`, entity);
         return data;
     }
     async delete(id: number): Promise<void> {
-        await this.http.delete(`/attendance-codes/${id}`);
+        await this.http.delete(`/attendance-codes/${id}/`);
     }
 }
