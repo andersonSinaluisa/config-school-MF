@@ -1,5 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { GradingTerm } from "@/scolar/domain/entities/grading_term";
 import { Trash } from "lucide-react";
 
@@ -11,11 +26,18 @@ interface Props {
 export const GradingTermDeletePresenter = ({ gradingTerm, onConfirm }: Props) => {
     return (
         <Dialog>
-            <DialogTrigger asChild>
-                <button title="Eliminar" type="button" className="p-1 rounded-full hover:bg-primary-500 transition">
-                    <Trash className="w-5 h-5 text-primary-200 hover:text-white" />
-                </button>
-            </DialogTrigger>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                            <button type="button" className="p-1 rounded-full hover:bg-primary-500 transition">
+                                <Trash className="w-5 h-5 text-primary-200 hover:text-white" />
+                            </button>
+                        </DialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>Eliminar</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>¿Eliminar período?</DialogTitle>

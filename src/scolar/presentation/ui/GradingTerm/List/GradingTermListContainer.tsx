@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 import { GradingTerm } from "@/scolar/domain/entities/grading_term";
-import { ListGradingTermUseCase, ListGradingTermCommand } from "@/scolar/application/useCases/gradingTerms/listGradingTermUseCase";
+import {
+    ListGradingTermUseCase,
+    ListGradingTermCommand,
+} from "@/scolar/application/useCases/gradingTerms/listGradingTermUseCase";
 import { GRADING_TERM_LIST_USECASE } from "@/scolar/domain/symbols/GradingTermSymbol";
 import { GradingTermListPresenter } from "./GradingTermListPresenter";
 
@@ -33,20 +36,20 @@ export const GradingTermListContainer = () => {
     useEffect(() => { loadData(); }, [command]);
 
     const handleAdd = () => navigate('/terminos-calificacion/nuevo');
-    const handleEdit = (gt: GradingTerm) => navigate(`/terminos-calificacion/${gt.id}`);
     const handlePaginate = (page: number) => setCommand({ ...command, page });
     const handleSearch = (term: string) => {
         if (debounceRef.current) clearTimeout(debounceRef.current);
         debounceRef.current = setTimeout(() => setCommand({ ...command, where: term }), 300);
     };
     const handleDeleted = () => loadData();
+    const handleUpdated = () => loadData();
 
     return (
         <GradingTermListPresenter
             gradingTerms={result}
             onAdd={handleAdd}
-            onEdit={handleEdit}
             onDeleted={handleDeleted}
+            onUpdated={handleUpdated}
             onPaginate={handlePaginate}
             onSearch={handleSearch}
             isPending={isPending}

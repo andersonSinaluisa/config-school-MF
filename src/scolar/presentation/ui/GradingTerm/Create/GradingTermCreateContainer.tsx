@@ -1,34 +1,65 @@
 import { useInjection } from "inversify-react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { toast } from "@/hooks/use-toast";
 import { GradingTermCreatePresenter } from "./GradingTermCreatePresenter";
-import { CreateGradingTermUseCase, CreateGradingTermCommand } from "@/scolar/application/useCases/gradingTerms/createGradingTermUseCase";
+import {
+    CreateGradingTermUseCase,
+    CreateGradingTermCommand,
+} from "@/scolar/application/useCases/gradingTerms/createGradingTermUseCase";
 import { GRADING_TERM_CREATE_USECASE } from "@/scolar/domain/symbols/GradingTermSymbol";
 
-interface FormValues {
-    data: {
-        gradingSystem_id: number;
-        academicYear_id: number;
-        name: string;
-        order: number;
-        weight: string;
-    }
-}
+const formSchema = z.object({
+    data: z.object({
+        gradingSystem_id: z
+            .number({ required_error: "Seleccione un sistema" })
+            .positive(),
+        academicYear_id: z
+            .number({ required_error: "Seleccione un año" })
+            .positive(),
+        name: z.string().min(1, "El nombre es obligatorio"),
+        order: z
+            .number({ required_error: "El orden es obligatorio" })
+            .min(1),
+        weight: z
+            .number({ required_error: "El peso es obligatorio" })
+            .min(0)
+            .max(1),
+    }),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export const GradingTermCreateContainer = () => {
     const navigate = useNavigate();
     const [isPending, startTransition] = useTransition();
     const createGT = useInjection<CreateGradingTermUseCase>(GRADING_TERM_CREATE_USECASE);
-    const { register, handleSubmit, formState: { errors }, watch } = useForm<FormValues>({
-        defaultValues: { data: { gradingSystem_id: 0, academicYear_id: 0, name: '', order: 1, weight: '' } }
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            data: {
+                gradingSystem_id: undefined,
+                academicYear_id: undefined,
+                name: '',
+                order: 1,
+                weight: 0.5,
+            },
+        },
+        mode: 'onChange',
     });
-    const formData = watch('data');
 
     const onSubmit = (values: FormValues) => {
         startTransition(async () => {
-            const c = new CreateGradingTermCommand(values.data.gradingSystem_id, values.data.academicYear_id, values.data.name, values.data.order, values.data.weight);
+            const c = new CreateGradingTermCommand(
+                values.data.gradingSystem_id,
+                values.data.academicYear_id,
+                values.data.name,
+                values.data.order,
+                values.data.weight.toString(),
+            );
             const res = await createGT.execute(c);
             if (res.isLeft()) {
                 const fail = res.extract();
@@ -44,12 +75,10 @@ export const GradingTermCreateContainer = () => {
 
     return (
         <GradingTermCreatePresenter
-            onSubmit={handleSubmit(onSubmit)}
-            register={register}
-            errors={errors}
+            form={form}
+            onSubmit={onSubmit}
             isSubmitting={isPending}
             onCancel={onCancel}
-            formData={formData}
         />
     );
 };
