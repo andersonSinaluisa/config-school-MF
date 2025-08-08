@@ -16,7 +16,7 @@ export const BehaviorScaleEditContainer = () => {
     const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<UpdateBehaviorScaleCommand>({
         defaultValues: { data: { id: Number(id), name: '', minScore: '', maxScore: '' } }
     });
-    const data = watch();
+    const formData = watch();
 
     const load = useCallback(() => {
         startTransition(() => {
@@ -38,7 +38,7 @@ export const BehaviorScaleEditContainer = () => {
 
     const onSubmit = () => {
         startTransition(() => {
-            updateUseCase.execute(new UpdateBehaviorScaleCommand(data.data)).then(res => {
+            updateUseCase.execute(new UpdateBehaviorScaleCommand(formData.data)).then(res => {
                 if (res.isLeft()) {
                     toast({ title: 'Error', description: 'No se pudo actualizar', variant: 'destructive' });
                     return;
@@ -49,5 +49,14 @@ export const BehaviorScaleEditContainer = () => {
     };
     const navigate = useNavigate();
     const onCancel = () => navigate('/escalas-comportamiento');
-    return <BehaviorScaleEditPresenter onSubmit={handleSubmit(onSubmit)} onCancel={onCancel} register={register} errors={errors} isSubmitting={false} />;
+    return (
+        <BehaviorScaleEditPresenter
+            onSubmit={handleSubmit(onSubmit)}
+            onCancel={onCancel}
+            register={register}
+            errors={errors}
+            isSubmitting={false}
+            formData={formData}
+        />
+    );
 };

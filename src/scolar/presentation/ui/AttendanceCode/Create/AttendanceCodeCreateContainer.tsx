@@ -10,9 +10,10 @@ import { useNavigate } from "react-router-dom";
 export const AttendanceCodeCreateContainer = () => {
     const usecase = useInjection<CreateAttendanceCodeUseCase>(ATTENDANCE_CODE_CREATE_USE_CASE);
     const [isPending, startTransition] = useTransition();
-    const { register, handleSubmit, formState: { errors } } = useForm<CreateAttendanceCodeCommand>({
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<CreateAttendanceCodeCommand>({
         defaultValues: { data: { id: 0, code: '', description: '', affectsGrade: false } }
     });
+    const formData = watch();
     const onSubmit = (data: CreateAttendanceCodeCommand) => {
         startTransition(async () => {
             const res = await usecase.execute(new CreateAttendanceCodeCommand(data.data));
@@ -33,6 +34,7 @@ export const AttendanceCodeCreateContainer = () => {
             register={register}
             errors={errors}
             isSubmitting={isPending}
+            formData={formData}
         />
     );
 };

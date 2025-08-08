@@ -6,7 +6,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 import { ClassSchedule } from "@/scolar/domain/entities/classSchedule";
+import { Course } from "@/scolar/domain/entities/course";
+import { Parallel } from "@/scolar/domain/entities/parallel";
+import { Subject } from "@/scolar/domain/entities/subject";
 import { Edit, Plus, Search } from "lucide-react";
+import { format, parse } from "date-fns";
 import { DeleteClassScheduleContainer } from "../Delete/DeleteClassScheduleContainer";
 
 interface Props {
@@ -17,9 +21,23 @@ interface Props {
     onPaginate: (page: number) => void;
     isPending?: boolean;
     onSearch: (term: string) => void;
+    courses: Course[];
+    parallels: Parallel[];
+    subjects: Subject[];
 }
 
-export const ClassScheduleListPresenter = ({ schedules, onEdit, onDelete, onAdd, onPaginate, isPending, onSearch }: Props) => {
+const timeFormat = (value: string) => {
+    try {
+        return format(parse(value, 'HH:mm:ss', new Date()), 'HH:mm');
+    } catch {
+        return value;
+    }
+};
+
+export const ClassScheduleListPresenter = ({ schedules, onEdit, onDelete, onAdd, onPaginate, isPending, onSearch, courses, parallels, subjects }: Props) => {
+    const getCourseName = (id: number) => courses.find(c => c.id === id)?.name || '';
+    const getParallelName = (id: number) => parallels.find(p => p.id === id)?.name || '';
+    const getSubjectName = (id: number) => subjects.find(s => s.id === id)?.name || '';
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -38,9 +56,9 @@ export const ClassScheduleListPresenter = ({ schedules, onEdit, onDelete, onAdd,
                         <TableRow>
                             <TableHead>Curso</TableHead>
                             <TableHead>Paralelo</TableHead>
+                            <TableHead>Materia</TableHead>
                             <TableHead>Día</TableHead>
-                            <TableHead>Inicio</TableHead>
-                            <TableHead>Fin</TableHead>
+                            <TableHead>Horario</TableHead>
                             <TableHead className="text-right">Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -54,11 +72,11 @@ export const ClassScheduleListPresenter = ({ schedules, onEdit, onDelete, onAdd,
                         )}
                         {schedules.data.map((m) => (
                             <TableRow key={m.id}>
-                                <TableCell className="font-medium">{m.courseId}</TableCell>
-                                <TableCell>{m.parallelId}</TableCell>
+                                <TableCell className="font-medium">{getCourseName(m.courseId)}</TableCell>
+                                <TableCell>{getParallelName(m.parallelId)}</TableCell>
+                                <TableCell>{getSubjectName(m.subjectId)}</TableCell>
                                 <TableCell>{m.dayOfWeek}</TableCell>
-                                <TableCell>{m.startTime}</TableCell>
-                                <TableCell>{m.endTime}</TableCell>
+                                <TableCell>{`${timeFormat(m.startTime)} - ${timeFormat(m.endTime)}`}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button variant="ghost" size="icon" onClick={() => onEdit(m)}>
