@@ -10,9 +10,10 @@ import { useNavigate } from "react-router-dom";
 export const MeetingTypeCreateContainer = () => {
     const usecase = useInjection<CreateMeetingTypeUseCase>(MEETING_TYPE_CREATE_USE_CASE);
     const [isPending, startTransition] = useTransition();
-    const { register, handleSubmit, formState: { errors } } = useForm<CreateMeetingTypeCommand>({
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<CreateMeetingTypeCommand>({
         defaultValues: { data: { id: 0, name: '', description: '' } }
     });
+    const formData = watch();
     const onSubmit = (data: CreateMeetingTypeCommand) => {
         startTransition(async () => {
             const res = await usecase.execute(new CreateMeetingTypeCommand(data.data));
@@ -33,6 +34,7 @@ export const MeetingTypeCreateContainer = () => {
             register={register}
             errors={errors}
             isSubmitting={isPending}
+            formData={formData}
         />
     );
 };

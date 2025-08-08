@@ -16,7 +16,7 @@ export const MeetingTypeEditContainer = () => {
     const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<UpdateMeetingTypeCommand>({
         defaultValues: { data: { id: Number(id), name: '', description: '' } }
     });
-    const data = watch();
+    const formData = watch();
 
     const load = useCallback(() => {
         startTransition(() => {
@@ -37,7 +37,7 @@ export const MeetingTypeEditContainer = () => {
 
     const onSubmit = () => {
         startTransition(() => {
-            updateUseCase.execute(new UpdateMeetingTypeCommand(data.data)).then(res => {
+            updateUseCase.execute(new UpdateMeetingTypeCommand(formData.data)).then(res => {
                 if (res.isLeft()) {
                     toast({ title: 'Error', description: 'No se pudo actualizar', variant: 'destructive' });
                     return;
@@ -48,5 +48,14 @@ export const MeetingTypeEditContainer = () => {
     };
     const navigate = useNavigate();
     const onCancel = () => navigate('/tipos-reuniones');
-    return <MeetingTypeEditPresenter onSubmit={handleSubmit(onSubmit)} onCancel={onCancel} register={register} errors={errors} isSubmitting={false} />;
+    return (
+        <MeetingTypeEditPresenter
+            onSubmit={handleSubmit(onSubmit)}
+            onCancel={onCancel}
+            register={register}
+            errors={errors}
+            isSubmitting={false}
+            formData={formData}
+        />
+    );
 };

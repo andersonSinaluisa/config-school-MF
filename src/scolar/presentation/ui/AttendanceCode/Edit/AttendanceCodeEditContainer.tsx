@@ -16,7 +16,7 @@ export const AttendanceCodeEditContainer = () => {
     const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<UpdateAttendanceCodeCommand>({
         defaultValues: { data: { id: Number(id), code: '', description: '', affectsGrade: false } }
     });
-    const data = watch();
+    const formData = watch();
 
     const load = useCallback(() => {
         startTransition(() => {
@@ -38,7 +38,7 @@ export const AttendanceCodeEditContainer = () => {
 
     const onSubmit = () => {
         startTransition(() => {
-            updateUseCase.execute(new UpdateAttendanceCodeCommand(data.data)).then(res => {
+            updateUseCase.execute(new UpdateAttendanceCodeCommand(formData.data)).then(res => {
                 if (res.isLeft()) {
                     toast({ title: 'Error', description: 'No se pudo actualizar', variant: 'destructive' });
                     return;
@@ -49,5 +49,14 @@ export const AttendanceCodeEditContainer = () => {
     };
     const navigate = useNavigate();
     const onCancel = () => navigate('/codigos-asistencia');
-    return <AttendanceCodeEditPresenter onSubmit={handleSubmit(onSubmit)} onCancel={onCancel} register={register} errors={errors} isSubmitting={false} />;
+    return (
+        <AttendanceCodeEditPresenter
+            onSubmit={handleSubmit(onSubmit)}
+            onCancel={onCancel}
+            register={register}
+            errors={errors}
+            isSubmitting={false}
+            formData={formData}
+        />
+    );
 };

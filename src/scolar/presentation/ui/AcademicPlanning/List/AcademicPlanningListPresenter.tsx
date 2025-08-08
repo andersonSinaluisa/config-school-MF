@@ -6,7 +6,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 import { AcademicPlanning } from "@/scolar/domain/entities/academicPlanning";
+import { Course } from "@/scolar/domain/entities/course";
+import { Parallel } from "@/scolar/domain/entities/parallel";
+import { Subject } from "@/scolar/domain/entities/subject";
 import { Edit, Plus, Search } from "lucide-react";
+import { format, parseISO } from "date-fns";
 import { DeleteAcademicPlanningContainer } from "../Delete/DeleteAcademicPlanningContainer";
 
 interface Props {
@@ -17,9 +21,15 @@ interface Props {
     onPaginate: (page: number) => void;
     isPending?: boolean;
     onSearch: (term: string) => void;
+    courses: Course[];
+    parallels: Parallel[];
+    subjects: Subject[];
 }
 
-export const AcademicPlanningListPresenter = ({ plannings, onEdit, onDelete, onAdd, onPaginate, isPending, onSearch }: Props) => {
+export const AcademicPlanningListPresenter = ({ plannings, onEdit, onDelete, onAdd, onPaginate, isPending, onSearch, courses, parallels, subjects }: Props) => {
+    const getCourseName = (id: number) => courses.find(c => c.id === id)?.name || '';
+    const getParallelName = (id: number) => parallels.find(p => p.id === id)?.name || '';
+    const getSubjectName = (id: number) => subjects.find(s => s.id === id)?.name || '';
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -38,6 +48,7 @@ export const AcademicPlanningListPresenter = ({ plannings, onEdit, onDelete, onA
                         <TableRow>
                             <TableHead>Curso</TableHead>
                             <TableHead>Paralelo</TableHead>
+                            <TableHead>Materia</TableHead>
                             <TableHead>Tema</TableHead>
                             <TableHead>Inicio</TableHead>
                             <TableHead>Fin</TableHead>
@@ -54,11 +65,12 @@ export const AcademicPlanningListPresenter = ({ plannings, onEdit, onDelete, onA
                         )}
                         {plannings.data.map((m) => (
                             <TableRow key={m.id}>
-                                <TableCell className="font-medium">{m.courseId}</TableCell>
-                                <TableCell>{m.parallelId}</TableCell>
+                                <TableCell className="font-medium">{getCourseName(m.courseId)}</TableCell>
+                                <TableCell>{getParallelName(m.parallelId)}</TableCell>
+                                <TableCell>{getSubjectName(m.subjectId)}</TableCell>
                                 <TableCell>{m.topic}</TableCell>
-                                <TableCell>{m.startDate}</TableCell>
-                                <TableCell>{m.endDate}</TableCell>
+                                <TableCell>{format(parseISO(m.startDate), 'dd/MM/yyyy')}</TableCell>
+                                <TableCell>{format(parseISO(m.endDate), 'dd/MM/yyyy')}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button variant="ghost" size="icon" onClick={() => onEdit(m)}>
