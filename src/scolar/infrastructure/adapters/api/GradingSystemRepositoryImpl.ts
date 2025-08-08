@@ -17,12 +17,12 @@ export class GradingSystemRepositoryImpl implements GradingSystemRepository {
     }
 
     async update(id: number, data: Omit<GradingSystemDto, "id">): Promise<GradingSystemDto> {
-        const response = await this.api.put<GradingSystemDto>(`/grading-systems/${id}`, data);
+        const response = await this.api.put<GradingSystemDto>(`/grading-systems/${id}/`, data);
         return response.data;
     }
 
     async delete(id: number): Promise<void> {
-        await this.api.delete(`/grading-systems/${id}`);
+        await this.api.delete(`/grading-systems/${id}/`);
     }
 
     async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<GradingSystemDto>> {
@@ -38,7 +38,7 @@ export class GradingSystemRepositoryImpl implements GradingSystemRepository {
     }
 
     async findById(id: number): Promise<GradingSystemDto> {
-        const response = await this.api.get<GradingSystemDto>(`/grading-systems/${id}`);
+        const response = await this.api.get<GradingSystemDto>(`/grading-systems/${id}/`);
         return response.data;
     }
 }

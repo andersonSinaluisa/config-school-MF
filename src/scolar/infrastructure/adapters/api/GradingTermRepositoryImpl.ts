@@ -17,7 +17,7 @@ export class GradingTermRepositoryImpl implements GradingTermRepository {
     }
 
     async update(id: number, data: Omit<GradingTermDto, 'id'>): Promise<GradingTermDto> {
-        const response = await this.api.put<GradingTermDto>(`/grading-terms/${id}`, data);
+        const response = await this.api.put<GradingTermDto>(`/grading-terms/${id}/`, data);
         return response.data;
     }
 
@@ -38,7 +38,7 @@ export class GradingTermRepositoryImpl implements GradingTermRepository {
     }
 
     async findById(id: number): Promise<GradingTermDto> {
-        const response = await this.api.get<GradingTermDto>(`/grading-terms/${id}`);
+        const response = await this.api.get<GradingTermDto>(`/grading-terms/${id}/`);
         return response.data;
     }
 }

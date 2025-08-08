@@ -17,12 +17,12 @@ export class EvaluationTypeRepositoryImpl implements EvaluationTypeRepository {
     }
 
     async update(id: number, data: Omit<EvaluationTypeDto, 'id'>): Promise<EvaluationTypeDto> {
-        const response = await this.api.put<EvaluationTypeDto>(`/evaluation-types/${id}`, data);
+        const response = await this.api.put<EvaluationTypeDto>(`/evaluation-types/${id}/`, data);
         return response.data;
     }
 
     async delete(id: number): Promise<void> {
-        await this.api.delete(`/evaluation-types/${id}`);
+        await this.api.delete(`/evaluation-types/${id}/`);
     }
 
     async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<EvaluationTypeDto>> {
@@ -38,7 +38,7 @@ export class EvaluationTypeRepositoryImpl implements EvaluationTypeRepository {
     }
 
     async findById(id: number): Promise<EvaluationTypeDto> {
-        const response = await this.api.get<EvaluationTypeDto>(`/evaluation-types/${id}`);
+        const response = await this.api.get<EvaluationTypeDto>(`/evaluation-types/${id}/`);
         return response.data;
     }
 }
