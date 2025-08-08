@@ -1,61 +1,114 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { Slider } from "@/components/ui/slider";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { UseFormReturn } from "react-hook-form";
 
 interface FormValues {
     data: {
         name: string;
         description: string;
-        weight: string;
+        weight: number;
     }
 }
 
 interface Props {
-    onSubmit: () => void;
-    onCancel: () => void;
-    register: UseFormRegister<FormValues>;
-    errors: FieldErrors<FormValues>;
-    isSubmitting: boolean;
-    formData: FormValues['data'];
+  form: UseFormReturn<FormValues>;
+  onSubmit: (values: FormValues) => void;
+  onCancel: () => void;
+  isSubmitting: boolean;
 }
 
-export const EvaluationTypeCreatePresenter = ({ onSubmit, onCancel, register, errors, isSubmitting }: Props) => {
-    return (
+export const EvaluationTypeCreatePresenter = ({ form, onSubmit, onCancel, isSubmitting }: Props) => {
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
-            <CardHeader>
-                <CardTitle>Nuevo Tipo de Evaluación</CardTitle>
-            </CardHeader>
-            <form onSubmit={onSubmit}>
-                <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="name">Nombre</Label>
-                        <Input id="name" {...register('data.name', { required: true })} />
-                        {errors.data?.name && (<span className="text-red-500 text-sm">{errors.data.name.message}</span>)}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="description">Descripción</Label>
-                        <Textarea id="description" {...register('data.description', { required: true })} />
-                        {errors.data?.description && (<span className="text-red-500 text-sm">{errors.data.description.message}</span>)}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="weight">Peso</Label>
-                        <Input id="weight" {...register('data.weight', { required: true })} />
-                        {errors.data?.weight && (<span className="text-red-500 text-sm">{errors.data.weight.message}</span>)}
-                    </div>
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
-                        Cancelar
-                    </Button>
-                    <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Guardando...' : 'Guardar'}
-                    </Button>
-                </CardFooter>
-            </form>
+          <CardHeader>
+            <CardTitle>Nuevo Tipo de Evaluación</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="data.name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nombre</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Descripción</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.weight"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Peso</FormLabel>
+                  <FormControl>
+                    <Slider
+                      min={0}
+                      max={1}
+                      step={0.05}
+                      value={[field.value ?? 0]}
+                      onValueChange={(val) => field.onChange(val[0])}
+                    />
+                  </FormControl>
+                  <div className="text-sm text-muted-foreground mt-2">
+                    Valor: {field.value?.toFixed(2)}
+                  </div>
+                  <FormDescription>
+                    Define el peso relativo (0 a 1) de este tipo de evaluación.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting || !form.formState.isValid}
+            >
+              {isSubmitting ? 'Guardando...' : 'Guardar'}
+            </Button>
+          </CardFooter>
         </Card>
-    );
+      </form>
+    </Form>
+  );
 };
 

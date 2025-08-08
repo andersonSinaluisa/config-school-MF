@@ -4,14 +4,17 @@ import { useForm } from "react-hook-form";
 import { useTransition } from "react";
 import { toast } from "@/hooks/use-toast";
 import { EvaluationTypeCreatePresenter } from "./EvaluationTypeCreatePresenter";
-import { CreateEvaluationTypeUseCase, CreateEvaluationTypeCommand } from "@/scolar/application/useCases/evaluationTypes/createEvaluationTypeUseCase";
+import {
+  CreateEvaluationTypeUseCase,
+  CreateEvaluationTypeCommand,
+} from "@/scolar/application/useCases/evaluationTypes/createEvaluationTypeUseCase";
 import { EVALUATION_TYPE_CREATE_USECASE } from "@/scolar/domain/symbols/EvaluationTypeSymbol";
 
 interface FormValues {
     data: {
         name: string;
         description: string;
-        weight: string;
+        weight: number;
     }
 }
 
@@ -19,17 +22,19 @@ export const EvaluationTypeCreateContainer = () => {
     const navigate = useNavigate();
     const [isPending, startTransition] = useTransition();
     const createEvalType = useInjection<CreateEvaluationTypeUseCase>(EVALUATION_TYPE_CREATE_USECASE);
-    const { register, handleSubmit, formState: { errors }, watch } = useForm<FormValues>({
+    const form = useForm<FormValues>({
         defaultValues: {
-            data: { name: "", description: "", weight: "" }
+            data: { name: "", description: "", weight: 0 }
         }
     });
 
-    const formData = watch("data");
-
     const onSubmit = (values: FormValues) => {
         startTransition(async () => {
-            const command = new CreateEvaluationTypeCommand(values.data.name, values.data.description, values.data.weight);
+            const command = new CreateEvaluationTypeCommand(
+                values.data.name,
+                values.data.description,
+                values.data.weight.toString()
+            );
             const res = await createEvalType.execute(command);
             if (res.isLeft()) {
                 const fail = res.extract();
@@ -53,12 +58,10 @@ export const EvaluationTypeCreateContainer = () => {
 
     return (
         <EvaluationTypeCreatePresenter
-            onSubmit={handleSubmit(onSubmit)}
-            register={register}
-            errors={errors}
+            form={form}
+            onSubmit={onSubmit}
             isSubmitting={isPending}
             onCancel={onCancel}
-            formData={formData}
         />
     );
 };
