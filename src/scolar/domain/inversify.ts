@@ -95,7 +95,22 @@ import { ListBehaviorScalesUseCaseImpl } from "../application/useCases/behaviorS
 import { CreateBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/createBehaviorScaleUseCase";
 import { UpdateBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/updateBehaviorScaleUseCase";
 import { DeleteBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/deleteBehaviorScaleUseCase";
-import { GetBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/getBehaviorScaleUseCase";
+import { CLASS_SCHEDULE_REPOSITORY, CLASS_SCHEDULE_SERVICE, CLASS_SCHEDULE_LIST_USE_CASE, CLASS_SCHEDULE_CREATE_USE_CASE, CLASS_SCHEDULE_UPDATE_USE_CASE, CLASS_SCHEDULE_DELETE_USE_CASE, CLASS_SCHEDULE_GET_USE_CASE } from "./symbols/ClassScheduleSymbol";
+import { ClassScheduleRepositoryImpl } from "../infrastructure/adapters/api/ClassScheduleRepositoryImpl";
+import { ClassScheduleService } from "./services/ClassScheduleService";
+import { ListClassSchedulesUseCaseImpl } from "../application/useCases/classSchedules/listClassSchedulesUseCase";
+import { CreateClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/createClassScheduleUseCase";
+import { UpdateClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/updateClassScheduleUseCase";
+import { DeleteClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/deleteClassScheduleUseCase";
+import { GetClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/getClassScheduleUseCase";
+import { ACADEMIC_PLANNING_REPOSITORY, ACADEMIC_PLANNING_SERVICE, ACADEMIC_PLANNING_LIST_USE_CASE, ACADEMIC_PLANNING_CREATE_USE_CASE, ACADEMIC_PLANNING_UPDATE_USE_CASE, ACADEMIC_PLANNING_DELETE_USE_CASE, ACADEMIC_PLANNING_GET_USE_CASE } from "./symbols/AcademicPlanningSymbol";
+import { AcademicPlanningRepositoryImpl } from "../infrastructure/adapters/api/AcademicPlanningRepositoryImpl";
+import { AcademicPlanningService } from "./services/AcademicPlanningService";
+import { ListAcademicPlanningsUseCaseImpl } from "../application/useCases/academicPlannings/listAcademicPlanningsUseCase";
+import { CreateAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/createAcademicPlanningUseCase";
+import { UpdateAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/updateAcademicPlanningUseCase";
+import { DeleteAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/deleteAcademicPlanningUseCase";
+import { GetAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/getAcademicPlanningUseCase";
 
 const contianerScolar = new ContainerModule(
     (bind) => {
@@ -224,6 +239,26 @@ const contianerScolar = new ContainerModule(
         bind(BEHAVIOR_SCALE_UPDATE_USE_CASE).to(UpdateBehaviorScaleUseCaseImpl)
         bind(BEHAVIOR_SCALE_DELETE_USE_CASE).to(DeleteBehaviorScaleUseCaseImpl)
         bind(BEHAVIOR_SCALE_GET_USE_CASE).to(GetBehaviorScaleUseCaseImpl)
+
+        bind(CLASS_SCHEDULE_REPOSITORY).toDynamicValue(() => {
+            return new ClassScheduleRepositoryImpl(schoolapi);
+        })
+        bind(CLASS_SCHEDULE_SERVICE).to(ClassScheduleService)
+        bind(CLASS_SCHEDULE_LIST_USE_CASE).to(ListClassSchedulesUseCaseImpl)
+        bind(CLASS_SCHEDULE_CREATE_USE_CASE).to(CreateClassScheduleUseCaseImpl)
+        bind(CLASS_SCHEDULE_UPDATE_USE_CASE).to(UpdateClassScheduleUseCaseImpl)
+        bind(CLASS_SCHEDULE_DELETE_USE_CASE).to(DeleteClassScheduleUseCaseImpl)
+        bind(CLASS_SCHEDULE_GET_USE_CASE).to(GetClassScheduleUseCaseImpl)
+
+        bind(ACADEMIC_PLANNING_REPOSITORY).toDynamicValue(() => {
+            return new AcademicPlanningRepositoryImpl(schoolapi);
+        })
+        bind(ACADEMIC_PLANNING_SERVICE).to(AcademicPlanningService)
+        bind(ACADEMIC_PLANNING_LIST_USE_CASE).to(ListAcademicPlanningsUseCaseImpl)
+        bind(ACADEMIC_PLANNING_CREATE_USE_CASE).to(CreateAcademicPlanningUseCaseImpl)
+        bind(ACADEMIC_PLANNING_UPDATE_USE_CASE).to(UpdateAcademicPlanningUseCaseImpl)
+        bind(ACADEMIC_PLANNING_DELETE_USE_CASE).to(DeleteAcademicPlanningUseCaseImpl)
+        bind(ACADEMIC_PLANNING_GET_USE_CASE).to(GetAcademicPlanningUseCaseImpl)
     }
 );
 

@@ -28,9 +28,14 @@ import { MeetingTypeEditContainer } from "./scolar/presentation/ui/MeetingType/E
 import { AttendanceCodeListContainer } from "./scolar/presentation/ui/AttendanceCode/List/AttendanceCodeListContainer";
 import { AttendanceCodeCreateContainer } from "./scolar/presentation/ui/AttendanceCode/Create/AttendanceCodeCreateContainer";
 import { AttendanceCodeEditContainer } from "./scolar/presentation/ui/AttendanceCode/Edit/AttendanceCodeEditContainer";
-import { BehaviorScaleListContainer } from "./scolar/presentation/ui/BehaviorScale/List/BehaviorScaleListContainer";
-import { BehaviorScaleCreateContainer } from "./scolar/presentation/ui/BehaviorScale/Create/BehaviorScaleCreateContainer";
-import { BehaviorScaleEditContainer } from "./scolar/presentation/ui/BehaviorScale/Edit/BehaviorScaleEditContainer";
+import { BehaviorScaleCreateContainer } from './scolar/presentation/ui/BehaviorScale/Create/BehaviorScaleCreateContainer';
+import { BehaviorScaleEditContainer } from './scolar/presentation/ui/BehaviorScale/Edit/BehaviorScaleEditContainer';
+import { ClassScheduleListContainer } from './scolar/presentation/ui/ClassSchedule/List/ClassScheduleListContainer';
+import { ClassScheduleCreateContainer } from './scolar/presentation/ui/ClassSchedule/Create/ClassScheduleCreateContainer';
+import { ClassScheduleEditContainer } from './scolar/presentation/ui/ClassSchedule/Edit/ClassScheduleEditContainer';
+import { AcademicPlanningListContainer } from './scolar/presentation/ui/AcademicPlanning/List/AcademicPlanningListContainer';
+import { AcademicPlanningCreateContainer } from './scolar/presentation/ui/AcademicPlanning/Create/AcademicPlanningCreateContainer';
+import { AcademicPlanningEditContainer } from './scolar/presentation/ui/AcademicPlanning/Edit/AcademicPlanningEditContainer';
 
 const isStandalone = !window.singleSpaNavigate;
 
@@ -45,7 +50,9 @@ export const MenuOptions = [
     { name: 'Tipos de evaluación', path: '/tipos-evaluacion' },
     { name: 'Tipos de reunión', path: '/tipos-reuniones' },
     { name: 'Códigos de asistencia', path: '/codigos-asistencia' },
-    { name: 'Escalas de comportamiento', path: '/escalas-comportamiento' }
+    { name: 'Escalas de comportamiento', path: '/escalas-comportamiento' },
+    { name: 'Horarios de clase', path: '/horarios-clase' },
+    { name: 'Planificaciones académicas', path: '/planificaciones-academicas' }
 ];
 
 const router = createBrowserRouter([
@@ -70,8 +77,7 @@ const router = createBrowserRouter([
     { path: '/sistemas-calificacion/nuevo', Component: GradingSystemCreateContainer },
     { path: '/sistemas-calificacion/:id', Component: GradingSystemEditContainer },
     { path: '/terminos-calificacion', Component: GradingTermListContainer },
-    { path: '/terminos-calificacion/nuevo', Component: GradingTermCreateContainer },
-    { path: '/terminos-calificacion/:id', Component: GradingTermEditContainer },
+        { path: '/terminos-calificacion/:id', Component: GradingTermEditContainer },
     { path: '/tipos-reuniones', Component: MeetingTypeListContainer },
     { path: '/tipos-reuniones/nuevo', Component: MeetingTypeCreateContainer },
     { path: '/tipos-reuniones/:id', Component: MeetingTypeEditContainer },
@@ -81,6 +87,12 @@ const router = createBrowserRouter([
     { path: '/escalas-comportamiento', Component: BehaviorScaleListContainer },
     { path: '/escalas-comportamiento/nuevo', Component: BehaviorScaleCreateContainer },
     { path: '/escalas-comportamiento/:id', Component: BehaviorScaleEditContainer },
+    { path: '/horarios-clase', Component: ClassScheduleListContainer },
+    { path: '/horarios-clase/nuevo', Component: ClassScheduleCreateContainer },
+    { path: '/horarios-clase/:id', Component: ClassScheduleEditContainer },
+    { path: '/planificaciones-academicas', Component: AcademicPlanningListContainer },
+    { path: '/planificaciones-academicas/nuevo', Component: AcademicPlanningCreateContainer },
+    { path: '/planificaciones-academicas/:id', Component: AcademicPlanningEditContainer },
 ], {
     basename: isStandalone ? '/' : '/escolar',
 });
