@@ -26,13 +26,14 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
-import { Search, Edit, Plus } from "lucide-react";
+import { Search, Edit, Plus, Home, ChevronRight } from "lucide-react";
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 import { GradingTerm } from "@/scolar/domain/entities/grading_term";
 import { useSystems } from "@/scolar/presentation/hooks/useSystems";
 import { useAcademicYears } from "@/scolar/presentation/hooks/useAcademicYears";
 import { GradingTermDeleteContainer } from "../Delete/GradingTermDeleteContainer";
 import { GradingTermEditInlineContainer } from "../Edit/GradingTermEditInlineContainer";
+import { Link } from "react-router-dom";
 
 interface Props {
     gradingTerms: PaginatedResult<GradingTerm>;
@@ -63,6 +64,21 @@ export const GradingTermListPresenter = ({
             (!yearFilter || gt.academicYear_id === yearFilter)
     );
     return (
+        <div className="space-y-6">
+            <nav className="flex items-center text-sm text-muted-foreground">
+                <Link to="/" className="hover:text-foreground transition-colors">
+                    <Home className="h-4 w-4" />
+                    <span className="sr-only">Inicio</span>
+                </Link>
+                <ChevronRight className="h-4 w-4 mx-1" />
+                <Link to="/sistemas-calificacion" className="hover:text-foreground transition-colors">
+                    Períodos de Calificación
+                </Link>
+                <ChevronRight className="h-4 w-4 mx-1" />
+                <span className="text-foreground font-medium">
+                    Lista de Períodos de Calificación
+                </span>
+            </nav>
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Períodos de Calificación</CardTitle>
@@ -91,7 +107,7 @@ export const GradingTermListPresenter = ({
                             <SelectValue placeholder="Sistema" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="">Todos</SelectItem>
+                            <SelectItem value="0">Todos</SelectItem>
                             {systems.map((s) => (
                                 <SelectItem key={s.id} value={String(s.id)}>
                                     {s.name}
@@ -109,7 +125,7 @@ export const GradingTermListPresenter = ({
                             <SelectValue placeholder="Año" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="">Todos</SelectItem>
+                            <SelectItem value="0">Todos</SelectItem>
                             {years.map((y) => (
                                 <SelectItem key={y.id} value={String(y.id)}>
                                     {y.name}
@@ -229,6 +245,7 @@ export const GradingTermListPresenter = ({
                 </div>
             </CardContent>
         </Card>
+        </div>
     );
 };
 

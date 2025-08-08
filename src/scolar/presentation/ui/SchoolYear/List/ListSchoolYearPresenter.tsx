@@ -23,6 +23,7 @@ interface ListSchoolYearPresenterProps {
 }
 export const ListSchoolYearPresenter = ({ schoolYears, onAdd, onEdit, onDelete, onPaginate, isPending, onSearch }: ListSchoolYearPresenterProps) => {
     return (
+        
         <div className="space-y-6">
 
             <nav className="flex items-center text-sm text-muted-foreground">

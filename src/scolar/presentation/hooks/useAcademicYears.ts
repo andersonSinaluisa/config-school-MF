@@ -4,6 +4,7 @@ import { ListSchoolYearUseCase, ListSchoolYearUseCaseCommand } from "@/scolar/ap
 import { SCHOOL_YEAR_LIST_USE_CASE } from "@/scolar/domain/symbols/SchoolYearSymbol";
 import { SchoolYear } from "@/scolar/domain/entities/school_year";
 import { toast } from "@/hooks/use-toast";
+import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 
 export const useAcademicYears = () => {
   const listUseCase = useInjection<ListSchoolYearUseCase>(SCHOOL_YEAR_LIST_USE_CASE);
@@ -21,7 +22,7 @@ export const useAcademicYears = () => {
           });
           return;
         }
-        const data = res.extract();
+        const data = res.extract() as PaginatedResult<SchoolYear>;
         setYears(data ? data.data : []);
       });
   }, [listUseCase]);

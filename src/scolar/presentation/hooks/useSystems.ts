@@ -4,6 +4,7 @@ import { ListGradingSystemUseCase, ListGradingSystemCommand } from "@/scolar/app
 import { GRADING_SYSTEM_LIST_USECASE } from "@/scolar/domain/symbols/GradingSystemSymbol";
 import { GradingSystem } from "@/scolar/domain/entities/grading_system";
 import { toast } from "@/hooks/use-toast";
+import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 
 export const useSystems = () => {
   const listUseCase = useInjection<ListGradingSystemUseCase>(GRADING_SYSTEM_LIST_USECASE);
@@ -21,7 +22,7 @@ export const useSystems = () => {
           });
           return;
         }
-        const data = res.extract();
+        const data = res.extract() as PaginatedResult<GradingSystem>;
         setSystems(data ? data.data : []);
       });
   }, [listUseCase]);

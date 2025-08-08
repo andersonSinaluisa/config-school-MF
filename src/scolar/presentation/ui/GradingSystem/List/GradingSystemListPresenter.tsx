@@ -4,10 +4,11 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Search, Edit, Plus } from "lucide-react";
+import { Search, Edit, Plus, Home, ChevronRight } from "lucide-react";
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 import { GradingSystem } from "@/scolar/domain/entities/grading_system";
 import { GradingSystemDeleteContainer } from "../Delete/GradingSystemDeleteContainer";
+import { Link } from "react-router-dom";
 
 interface Props {
     gradingSystems: PaginatedResult<GradingSystem>;
@@ -21,6 +22,21 @@ interface Props {
 
 export const GradingSystemListPresenter = ({ gradingSystems, onAdd, onEdit, onDeleted, onPaginate, onSearch, isPending }: Props) => {
     return (
+        <div className="space-y-6">
+            <nav className="flex items-center text-sm text-muted-foreground">
+                <Link to="/" className="hover:text-foreground transition-colors">
+                    <Home className="h-4 w-4" />
+                    <span className="sr-only">Inicio</span>
+                </Link>
+                <ChevronRight className="h-4 w-4 mx-1" />
+                <Link to="/sistemas-calificacion" className="hover:text-foreground transition-colors">
+                    Sistemas de Calificación
+                </Link>
+                <ChevronRight className="h-4 w-4 mx-1" />
+                <span className="text-foreground font-medium">
+                    Lista de Sistemas de Calificación
+                </span>
+            </nav>
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Sistemas de Calificación</CardTitle>
@@ -86,6 +102,7 @@ export const GradingSystemListPresenter = ({ gradingSystems, onAdd, onEdit, onDe
                 </div>
             </CardContent>
         </Card>
+        </div>
     );
 };
 
