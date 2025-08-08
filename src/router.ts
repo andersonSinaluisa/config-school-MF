@@ -22,6 +22,18 @@ import { GradingSystemEditContainer } from "./scolar/presentation/ui/GradingSyst
 import { GradingTermListContainer } from "./scolar/presentation/ui/GradingTerm/List/GradingTermListContainer";
 import { GradingTermCreateContainer } from "./scolar/presentation/ui/GradingTerm/Create/GradingTermCreateContainer";
 import { GradingTermEditContainer } from "./scolar/presentation/ui/GradingTerm/Edit/GradingTermEditContainer";
+import { MeetingTypeListContainer } from "./scolar/presentation/ui/MeetingType/List/MeetingTypeListContainer";
+import { MeetingTypeCreateContainer } from "./scolar/presentation/ui/MeetingType/Create/MeetingTypeCreateContainer";
+import { MeetingTypeEditContainer } from "./scolar/presentation/ui/MeetingType/Edit/MeetingTypeEditContainer";
+import { AttendanceCodeListContainer } from "./scolar/presentation/ui/AttendanceCode/List/AttendanceCodeListContainer";
+import { AttendanceCodeCreateContainer } from "./scolar/presentation/ui/AttendanceCode/Create/AttendanceCodeCreateContainer";
+import { AttendanceCodeEditContainer } from "./scolar/presentation/ui/AttendanceCode/Edit/AttendanceCodeEditContainer";
+import { BehaviorScaleCreateContainer } from './scolar/presentation/ui/BehaviorScale/Create/BehaviorScaleCreateContainer';
+import { BehaviorScaleEditContainer } from './scolar/presentation/ui/BehaviorScale/Edit/BehaviorScaleEditContainer';
+import { ClassScheduleCalendarContainer } from './scolar/presentation/ui/ClassSchedule/Calendar/ClassScheduleCalendarContainer';
+import { AcademicPlanningListContainer } from './scolar/presentation/ui/AcademicPlanning/List/AcademicPlanningListContainer';
+import { AcademicPlanningCreateContainer } from './scolar/presentation/ui/AcademicPlanning/Create/AcademicPlanningCreateContainer';
+import { AcademicPlanningEditContainer } from './scolar/presentation/ui/AcademicPlanning/Edit/AcademicPlanningEditContainer';
 
 const isStandalone = !window.singleSpaNavigate;
 
@@ -33,7 +45,12 @@ export const MenuOptions = [
     { name: 'Periodos lectivos', path: '/periodos-lectivos' },
     { name: 'Sistemas de calificación', path: '/sistemas-calificacion' },
     { name: 'Períodos de calificación', path: '/terminos-calificacion' },
-    { name: 'Tipos de evaluación', path: '/tipos-evaluacion' }
+    { name: 'Tipos de evaluación', path: '/tipos-evaluacion' },
+    { name: 'Tipos de reunión', path: '/tipos-reuniones' },
+    { name: 'Códigos de asistencia', path: '/codigos-asistencia' },
+    { name: 'Escalas de comportamiento', path: '/escalas-comportamiento' },
+    { name: 'Horarios de clase', path: '/horarios-clase' },
+    { name: 'Planificaciones académicas', path: '/planificaciones-academicas' }
 ];
 
 const router = createBrowserRouter([
@@ -60,6 +77,19 @@ const router = createBrowserRouter([
     { path: '/terminos-calificacion', Component: GradingTermListContainer },
     { path: '/terminos-calificacion/nuevo', Component: GradingTermCreateContainer },
     { path: '/terminos-calificacion/:id', Component: GradingTermEditContainer },
+    { path: '/tipos-reuniones', Component: MeetingTypeListContainer },
+    { path: '/tipos-reuniones/nuevo', Component: MeetingTypeCreateContainer },
+    { path: '/tipos-reuniones/:id', Component: MeetingTypeEditContainer },
+    { path: '/codigos-asistencia', Component: AttendanceCodeListContainer },
+    { path: '/codigos-asistencia/nuevo', Component: AttendanceCodeCreateContainer },
+    { path: '/codigos-asistencia/:id', Component: AttendanceCodeEditContainer },
+    { path: '/escalas-comportamiento', Component: BehaviorScaleListContainer },
+    { path: '/escalas-comportamiento/nuevo', Component: BehaviorScaleCreateContainer },
+    { path: '/escalas-comportamiento/:id', Component: BehaviorScaleEditContainer },
+    { path: '/horarios-clase', Component: ClassScheduleCalendarContainer },
+    { path: '/planificaciones-academicas', Component: AcademicPlanningListContainer },
+    { path: '/planificaciones-academicas/nuevo', Component: AcademicPlanningCreateContainer },
+    { path: '/planificaciones-academicas/:id', Component: AcademicPlanningEditContainer },
 ], {
     basename: isStandalone ? '/' : '/escolar',
 });
