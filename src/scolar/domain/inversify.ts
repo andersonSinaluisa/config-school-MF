@@ -72,6 +72,30 @@ import { LOGGER } from "./symbols/SharedSymbol";
 import { Logger } from "../infrastructure/services/Logger";
 import { ListSectionUseCaseImpl } from "../application/useCases/section/listSectionUseCases";
 import { SectionService } from "./services/SectionService";
+import { MEETING_TYPE_REPOSITORY, MEETING_TYPE_SERVICE, MEETING_TYPE_LIST_USE_CASE, MEETING_TYPE_CREATE_USE_CASE, MEETING_TYPE_UPDATE_USE_CASE, MEETING_TYPE_DELETE_USE_CASE, MEETING_TYPE_GET_USE_CASE } from "./symbols/MeetingTypeSymbol";
+import { MeetingTypeRepositoryImpl } from "../infrastructure/adapters/api/MeetingTypeRepositoryImpl";
+import { MeetingTypeService } from "./services/MeetingTypeService";
+import { ListMeetingTypesUseCaseImpl } from "../application/useCases/meetingTypes/listMeetingTypesUseCase";
+import { CreateMeetingTypeUseCaseImpl } from "../application/useCases/meetingTypes/createMeetingTypeUseCase";
+import { UpdateMeetingTypeUseCaseImpl } from "../application/useCases/meetingTypes/updateMeetingTypeUseCase";
+import { DeleteMeetingTypeUseCaseImpl } from "../application/useCases/meetingTypes/deleteMeetingTypeUseCase";
+import { GetMeetingTypeUseCaseImpl } from "../application/useCases/meetingTypes/getMeetingTypeUseCase";
+import { ATTENDANCE_CODE_REPOSITORY, ATTENDANCE_CODE_SERVICE, ATTENDANCE_CODE_LIST_USE_CASE, ATTENDANCE_CODE_CREATE_USE_CASE, ATTENDANCE_CODE_UPDATE_USE_CASE, ATTENDANCE_CODE_DELETE_USE_CASE, ATTENDANCE_CODE_GET_USE_CASE } from "./symbols/AttendanceCodeSymbol";
+import { AttendanceCodeRepositoryImpl } from "../infrastructure/adapters/api/AttendanceCodeRepositoryImpl";
+import { AttendanceCodeService } from "./services/AttendanceCodeService";
+import { ListAttendanceCodesUseCaseImpl } from "../application/useCases/attendanceCodes/listAttendanceCodesUseCase";
+import { CreateAttendanceCodeUseCaseImpl } from "../application/useCases/attendanceCodes/createAttendanceCodeUseCase";
+import { UpdateAttendanceCodeUseCaseImpl } from "../application/useCases/attendanceCodes/updateAttendanceCodeUseCase";
+import { DeleteAttendanceCodeUseCaseImpl } from "../application/useCases/attendanceCodes/deleteAttendanceCodeUseCase";
+import { GetAttendanceCodeUseCaseImpl } from "../application/useCases/attendanceCodes/getAttendanceCodeUseCase";
+import { BEHAVIOR_SCALE_REPOSITORY, BEHAVIOR_SCALE_SERVICE, BEHAVIOR_SCALE_LIST_USE_CASE, BEHAVIOR_SCALE_CREATE_USE_CASE, BEHAVIOR_SCALE_UPDATE_USE_CASE, BEHAVIOR_SCALE_DELETE_USE_CASE, BEHAVIOR_SCALE_GET_USE_CASE } from "./symbols/BehaviorScaleSymbol";
+import { BehaviorScaleRepositoryImpl } from "../infrastructure/adapters/api/BehaviorScaleRepositoryImpl";
+import { BehaviorScaleService } from "./services/BehaviorScaleService";
+import { ListBehaviorScalesUseCaseImpl } from "../application/useCases/behaviorScales/listBehaviorScalesUseCase";
+import { CreateBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/createBehaviorScaleUseCase";
+import { UpdateBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/updateBehaviorScaleUseCase";
+import { DeleteBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/deleteBehaviorScaleUseCase";
+import { GetBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/getBehaviorScaleUseCase";
 
 const contianerScolar = new ContainerModule(
     (bind) => {
@@ -170,6 +194,36 @@ const contianerScolar = new ContainerModule(
         bind(PARALLEL_UPDATE_USECASE).to(UpdateParallelUseCaseImpl)
         bind(PARALLEL_DELETE_USECASE).to(DeleteParallelUseCaseImpl)
         bind(PARALLEL_GET_LIST_BY_COURSE_USECASE).to(ListParallelByCourseUseCaseImpl)
+
+        bind(MEETING_TYPE_REPOSITORY).toDynamicValue(() => {
+            return new MeetingTypeRepositoryImpl(schoolapi);
+        })
+        bind(MEETING_TYPE_SERVICE).to(MeetingTypeService)
+        bind(MEETING_TYPE_LIST_USE_CASE).to(ListMeetingTypesUseCaseImpl)
+        bind(MEETING_TYPE_CREATE_USE_CASE).to(CreateMeetingTypeUseCaseImpl)
+        bind(MEETING_TYPE_UPDATE_USE_CASE).to(UpdateMeetingTypeUseCaseImpl)
+        bind(MEETING_TYPE_DELETE_USE_CASE).to(DeleteMeetingTypeUseCaseImpl)
+        bind(MEETING_TYPE_GET_USE_CASE).to(GetMeetingTypeUseCaseImpl)
+
+        bind(ATTENDANCE_CODE_REPOSITORY).toDynamicValue(() => {
+            return new AttendanceCodeRepositoryImpl(schoolapi);
+        })
+        bind(ATTENDANCE_CODE_SERVICE).to(AttendanceCodeService)
+        bind(ATTENDANCE_CODE_LIST_USE_CASE).to(ListAttendanceCodesUseCaseImpl)
+        bind(ATTENDANCE_CODE_CREATE_USE_CASE).to(CreateAttendanceCodeUseCaseImpl)
+        bind(ATTENDANCE_CODE_UPDATE_USE_CASE).to(UpdateAttendanceCodeUseCaseImpl)
+        bind(ATTENDANCE_CODE_DELETE_USE_CASE).to(DeleteAttendanceCodeUseCaseImpl)
+        bind(ATTENDANCE_CODE_GET_USE_CASE).to(GetAttendanceCodeUseCaseImpl)
+
+        bind(BEHAVIOR_SCALE_REPOSITORY).toDynamicValue(() => {
+            return new BehaviorScaleRepositoryImpl(schoolapi);
+        })
+        bind(BEHAVIOR_SCALE_SERVICE).to(BehaviorScaleService)
+        bind(BEHAVIOR_SCALE_LIST_USE_CASE).to(ListBehaviorScalesUseCaseImpl)
+        bind(BEHAVIOR_SCALE_CREATE_USE_CASE).to(CreateBehaviorScaleUseCaseImpl)
+        bind(BEHAVIOR_SCALE_UPDATE_USE_CASE).to(UpdateBehaviorScaleUseCaseImpl)
+        bind(BEHAVIOR_SCALE_DELETE_USE_CASE).to(DeleteBehaviorScaleUseCaseImpl)
+        bind(BEHAVIOR_SCALE_GET_USE_CASE).to(GetBehaviorScaleUseCaseImpl)
     }
 );
 
