@@ -7,7 +7,15 @@ import { Either, Right, Left } from "purify-ts/Either";
 import { LOGGER } from "@/scolar/domain/symbols/SharedSymbol";
 import { Logger } from "@/scolar/infrastructure/services/Logger";
 
-export class DeleteAcademicPlanningCommand extends UseCaseCommand<number> {}
+export class DeleteAcademicPlanningCommand implements UseCaseCommand {
+    constructor(
+        private id: number
+    ) { }
+
+    get data() {
+        return this.id;
+    }
+}
 
 export type DeleteAcademicPlanningUseCase = UseCase<void, DeleteAcademicPlanningCommand>;
 

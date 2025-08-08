@@ -8,7 +8,15 @@ import { Either, Right, Left } from "purify-ts/Either";
 import { LOGGER } from "@/scolar/domain/symbols/SharedSymbol";
 import { Logger } from "@/scolar/infrastructure/services/Logger";
 
-export class UpdateClassScheduleCommand extends UseCaseCommand<ClassSchedule> {}
+export class UpdateClassScheduleCommand implements UseCaseCommand {
+    constructor(
+        private classSchedule: ClassSchedule
+    ) { }
+
+    get data() {
+        return this.classSchedule;
+    }
+}
 
 export type UpdateClassScheduleUseCase = UseCase<ClassSchedule, UpdateClassScheduleCommand>;
 

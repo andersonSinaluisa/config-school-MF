@@ -8,7 +8,15 @@ import { Either, Right, Left } from "purify-ts/Either";
 import { LOGGER } from "@/scolar/domain/symbols/SharedSymbol";
 import { Logger } from "@/scolar/infrastructure/services/Logger";
 
-export class GetBehaviorScaleCommand extends UseCaseCommand<number> {}
+export class GetBehaviorScaleCommand implements UseCaseCommand {
+    constructor(
+        private id: number
+    ) { }
+
+    get data() {
+        return this.id;
+    }
+}
 
 export type GetBehaviorScaleUseCase = UseCase<BehaviorScale, GetBehaviorScaleCommand>;
 

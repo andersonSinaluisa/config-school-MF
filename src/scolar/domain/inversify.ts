@@ -111,6 +111,7 @@ import { CreateAcademicPlanningUseCaseImpl } from "../application/useCases/acade
 import { UpdateAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/updateAcademicPlanningUseCase";
 import { DeleteAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/deleteAcademicPlanningUseCase";
 import { GetAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/getAcademicPlanningUseCase";
+import { GetBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/getBehaviorScaleUseCase";
 
 const contianerScolar = new ContainerModule(
     (bind) => {

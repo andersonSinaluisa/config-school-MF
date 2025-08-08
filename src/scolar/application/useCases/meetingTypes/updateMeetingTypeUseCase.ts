@@ -8,7 +8,15 @@ import { Either, Right, Left } from "purify-ts/Either";
 import { LOGGER } from "@/scolar/domain/symbols/SharedSymbol";
 import { Logger } from "@/scolar/infrastructure/services/Logger";
 
-export class UpdateMeetingTypeCommand extends UseCaseCommand<MeetingType> {}
+export class UpdateMeetingTypeCommand implements UseCaseCommand {
+    constructor(
+        private meetingType: MeetingType
+    ) { }
+
+    get data() {
+        return this.meetingType;
+    }
+}
 
 export type UpdateMeetingTypeUseCase = UseCase<MeetingType, UpdateMeetingTypeCommand>;
 

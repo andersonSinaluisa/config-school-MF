@@ -34,6 +34,7 @@ import { ClassScheduleCalendarContainer } from './scolar/presentation/ui/ClassSc
 import { AcademicPlanningListContainer } from './scolar/presentation/ui/AcademicPlanning/List/AcademicPlanningListContainer';
 import { AcademicPlanningCreateContainer } from './scolar/presentation/ui/AcademicPlanning/Create/AcademicPlanningCreateContainer';
 import { AcademicPlanningEditContainer } from './scolar/presentation/ui/AcademicPlanning/Edit/AcademicPlanningEditContainer';
+import { BehaviorScaleListContainer } from "./scolar/presentation/ui/BehaviorScale/List/BehaviorScaleListContainer";
 
 const isStandalone = !window.singleSpaNavigate;
 

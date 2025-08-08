@@ -5,7 +5,7 @@ export interface UseCase<T, C extends UseCaseCommand> {
     execute(command: C): Promise<Either<Failure[], T | undefined>>;
 }
 
-export type UseCaseCommand = object
+export interface UseCaseCommand { }
 
 export class EmptyUseCaseCommand implements UseCaseCommand { }
 
