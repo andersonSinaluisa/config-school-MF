@@ -10,9 +10,10 @@ import { useNavigate } from "react-router-dom";
 export const BehaviorScaleCreateContainer = () => {
     const usecase = useInjection<CreateBehaviorScaleUseCase>(BEHAVIOR_SCALE_CREATE_USE_CASE);
     const [isPending, startTransition] = useTransition();
-    const { register, handleSubmit, formState: { errors } } = useForm<CreateBehaviorScaleCommand>({
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<CreateBehaviorScaleCommand>({
         defaultValues: { data: { id: 0, name: '', minScore: '', maxScore: '' } }
     });
+    const formData = watch();
     const onSubmit = (data: CreateBehaviorScaleCommand) => {
         startTransition(async () => {
             const res = await usecase.execute(new CreateBehaviorScaleCommand(data.data));
@@ -33,6 +34,7 @@ export const BehaviorScaleCreateContainer = () => {
             register={register}
             errors={errors}
             isSubmitting={isPending}
+            formData={formData}
         />
     );
 };

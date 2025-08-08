@@ -33,7 +33,8 @@ export const ClassScheduleEditContainer = () => {
     const { register, handleSubmit, formState: { errors }, setValue, watch, control } = useForm<UpdateClassScheduleCommand>({
         defaultValues: { data: { id: Number(id), courseId: 0, parallelId: 0, schoolYearId: 0, subjectId: 0, dayOfWeek: '', startTime: '', endTime: '' } }
     });
-    const data = watch();
+    const formData = watch();
+
     const [courses, setCourses] = useState<Course[]>([]);
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [schoolYears, setSchoolYears] = useState<SchoolYear[]>([]);
@@ -82,7 +83,7 @@ export const ClassScheduleEditContainer = () => {
 
     const onSubmit = () => {
         startTransition(() => {
-            updateUseCase.execute(new UpdateClassScheduleCommand(data.data)).then(res => {
+            updateUseCase.execute(new UpdateClassScheduleCommand(formData.data)).then(res => {
                 if (res.isLeft()) {
                     toast({ title: 'Error', description: 'No se pudo actualizar', variant: 'destructive' });
                     return;
@@ -105,6 +106,8 @@ export const ClassScheduleEditContainer = () => {
             parallels={parallels}
             subjects={subjects}
             schoolYears={schoolYears}
+            formData={formData}
+
         />
     );
 };
