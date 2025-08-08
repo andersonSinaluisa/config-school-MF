@@ -28,6 +28,14 @@ import { ListGradingTermUseCaseImpl } from "../application/useCases/gradingTerms
 import { GetGradingTermUseCaseImpl } from "../application/useCases/gradingTerms/getGradingTermUseCase";
 import { UpdateGradingTermUseCaseImpl } from "../application/useCases/gradingTerms/updateGradingTermUseCase";
 import { DeleteGradingTermUseCaseImpl } from "../application/useCases/gradingTerms/deleteGradingTermUseCase";
+import { EVALUATION_TYPE_CREATE_USECASE, EVALUATION_TYPE_DELETE_USECASE, EVALUATION_TYPE_GET_USECASE, EVALUATION_TYPE_LIST_USECASE, EVALUATION_TYPE_REPOSITORY, EVALUATION_TYPE_SERVICE, EVALUATION_TYPE_UPDATE_USECASE } from "./symbols/EvaluationTypeSymbol";
+import { EvaluationTypeRepositoryImpl } from "../infrastructure/adapters/api/EvaluationTypeRepositoryImpl";
+import { EvaluationTypeService } from "./services/EvaluationTypeService";
+import { CreateEvaluationTypeUseCaseImpl } from "../application/useCases/evaluationTypes/createEvaluationTypeUseCase";
+import { ListEvaluationTypeUseCaseImpl } from "../application/useCases/evaluationTypes/listEvaluationTypeUseCase";
+import { GetEvaluationTypeUseCaseImpl } from "../application/useCases/evaluationTypes/getEvaluationTypeUseCase";
+import { UpdateEvaluationTypeUseCaseImpl } from "../application/useCases/evaluationTypes/updateEvaluationTypeUseCase";
+import { DeleteEvaluationTypeUseCaseImpl } from "../application/useCases/evaluationTypes/deleteEvaluationTypeUseCase";
 import { LevelService } from "./services/LevelService";
 import { ListLevelsUsecaseImpl } from "../application/useCases/levels/listLevelsUseCase";
 import schoolapi from "../infrastructure/services/Api";
@@ -100,6 +108,9 @@ const contianerScolar = new ContainerModule(
         bind(GRADING_TERM_REPOSITORY).toDynamicValue(() => {
             return new GradingTermRepositoryImpl(schoolapi);
         })
+        bind(EVALUATION_TYPE_REPOSITORY).toDynamicValue(() => {
+            return new EvaluationTypeRepositoryImpl(schoolapi);
+        })
         bind(SECTION_SERVICE).to(SectionService)
         bind(SECTION_LIST_USE_CASE).to(ListSectionUseCaseImpl)
 
@@ -117,6 +128,12 @@ const contianerScolar = new ContainerModule(
         bind(GRADING_TERM_UPDATE_USECASE).to(UpdateGradingTermUseCaseImpl);
         bind(GRADING_TERM_DELETE_USECASE).to(DeleteGradingTermUseCaseImpl);
 
+        bind(EVALUATION_TYPE_SERVICE).to(EvaluationTypeService);
+        bind(EVALUATION_TYPE_CREATE_USECASE).to(CreateEvaluationTypeUseCaseImpl);
+        bind(EVALUATION_TYPE_LIST_USECASE).to(ListEvaluationTypeUseCaseImpl);
+        bind(EVALUATION_TYPE_GET_USECASE).to(GetEvaluationTypeUseCaseImpl);
+        bind(EVALUATION_TYPE_UPDATE_USECASE).to(UpdateEvaluationTypeUseCaseImpl);
+        bind(EVALUATION_TYPE_DELETE_USECASE).to(DeleteEvaluationTypeUseCaseImpl);
 
         bind(LEVEL_SERVICE).to(LevelService)
         bind(LEVEL_LIST_USECASE).to(ListLevelsUsecaseImpl)
@@ -127,13 +144,12 @@ const contianerScolar = new ContainerModule(
         bind(COURSE_SUBJECT_SERVICE).to(CourseSubjetService)
 
         bind(COURSE_SERVICE).to(CourseService);
-        bind(COURSE_LIST_USECASE).to(ListCoursesUseCaseImpl);   
-        
+        bind(COURSE_LIST_USECASE).to(ListCoursesUseCaseImpl);
 
         bind(SUBJECT_SERVICE).to(SubjectService);
         bind(SUBJECT_LIST_USE_CASE).to(ListSubjectUseCaseImpl)
         bind(SUBJECT_CREATE_USE_CASE).to(CreateSubjectUseCaseImpl)
-        
+
         bind(COURSE_CREATE_USECASE).to(CreateCourseUseCaseImpl);
         bind(COURSE_DELETE_USECASE).to(DeleteCourseUseCaseImpl)
         bind(COURSE_UPDATE_USECASE).to(UpdateCourseUseCaseImpl)
@@ -147,7 +163,7 @@ const contianerScolar = new ContainerModule(
         bind(SCHOOL_YEAR_UPDATE_USE_CASE).to(UpdateSchoolYearUseCaseImpl)
         bind(SCHOOL_YEAR_GET_USE_CASE).to(GetSchoolYearUseCaseImpl);
         bind(SCHOOL_YEAR_DELETE_USE_CASE).to(DeleteSchoolYearUseCaseImpl);
-        
+
         bind(PARALLEL_SERVICE).to(ParallelService);
         bind(PARALLEL_LIST_USECASE).to(ListParallelUseCaseImpl)
         bind(PARALLEL_CREATE_USECASE).to(CreateParallelUseCaseImpl)
@@ -157,6 +173,4 @@ const contianerScolar = new ContainerModule(
     }
 );
 
-
-
-export { contianerScolar  };
+export { contianerScolar };
