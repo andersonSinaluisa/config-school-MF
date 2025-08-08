@@ -13,78 +13,54 @@ import { SubjectListContainer } from "./scolar/presentation/ui/Subject/List/Subj
 import { SubjectCreateContainer } from "./scolar/presentation/ui/Subject/Create/SubjectCreateContainer";
 import { SubjectCourseContainer } from "./scolar/presentation/ui/Course/SubjectCourse/SubjectCourseContainer";
 import { EditCourseContainer } from "./scolar/presentation/ui/Course/Edit/CourseEditContainer";
+import { EvaluationTypeListContainer } from "./scolar/presentation/ui/EvaluationType/List/EvaluationTypeListContainer";
+import { EvaluationTypeCreateContainer } from "./scolar/presentation/ui/EvaluationType/Create/EvaluationTypeCreateContainer";
+import { EvaluationTypeEditContainer } from "./scolar/presentation/ui/EvaluationType/Edit/EvaluationTypeEditContainer";
+import { GradingSystemListContainer } from "./scolar/presentation/ui/GradingSystem/List/GradingSystemListContainer";
+import { GradingSystemCreateContainer } from "./scolar/presentation/ui/GradingSystem/Create/GradingSystemCreateContainer";
+import { GradingSystemEditContainer } from "./scolar/presentation/ui/GradingSystem/Edit/GradingSystemEditContainer";
+import { GradingTermListContainer } from "./scolar/presentation/ui/GradingTerm/List/GradingTermListContainer";
+import { GradingTermCreateContainer } from "./scolar/presentation/ui/GradingTerm/Create/GradingTermCreateContainer";
+import { GradingTermEditContainer } from "./scolar/presentation/ui/GradingTerm/Edit/GradingTermEditContainer";
 
 const isStandalone = !window.singleSpaNavigate;
 
-export const  MenuOptions = [
+export const MenuOptions = [
     { name: 'Cursos', path: '/cursos' },
-    {name:'Niveles Escolares', path:'/niveles-escolares' },
-    {name:'Paralelos', path:'/paralelos' },
-    {name:'Materias', path:'/materias' },
-    {name:'Periodos lectivos', path:'/periodos-lectivos' }
-]
-
+    { name: 'Niveles Escolares', path: '/niveles-escolares' },
+    { name: 'Paralelos', path: '/paralelos' },
+    { name: 'Materias', path: '/materias' },
+    { name: 'Periodos lectivos', path: '/periodos-lectivos' },
+    { name: 'Sistemas de calificación', path: '/sistemas-calificacion' },
+    { name: 'Períodos de calificación', path: '/terminos-calificacion' },
+    { name: 'Tipos de evaluación', path: '/tipos-evaluacion' }
+];
 
 const router = createBrowserRouter([
-    {
-        path: "/cursos",
-        Component: CourseListContainer
-    },
-    {
-        path: "/cursos/nuevo",
-        Component: CreateCourseContainer
-    },
-    {
-        path: "/cursos/:id",
-        Component: EditCourseContainer,
-    },
-    {
-        path: "/niveles-escolares",
-        Component: LevelListContainer
-    },
-    {
-        path: "/niveles-escolares/nuevo",
-        Component: LevelCreateContainer
-    },
-    {
-        path:"/niveles-escolares/:id",
-        Component: EditLevelContainer
-    },
-    {
-        path: "/paralelos",
-        Component: ListParallelContainer
-    },
-    {
-        path:"/cursos/:courseId/paralelos",
-        Component: ListByCourseContainer
-    },
-    {
-        path:"/periodos-lectivos",
-        Component: ListSchoolYearContainer
-    },
-    {
-        path:"/periodos-lectivos/nuevo",
-        Component: CreateSchoolYearContainer
-    },
-    {
-        path:"/periodos-lectivos/:id",
-        Component: EditSchoolYearContainer
-    },
-    {
-        path:"/materias",
-        Component: SubjectListContainer
-    },
-    {
-        path:"/materias/nuevo",
-        Component: SubjectCreateContainer
-    },
-    {
-        path:"/cursos/:id/materias",
-        Component: SubjectCourseContainer
-    }
-
-],
-{
+    { path: '/cursos', Component: CourseListContainer },
+    { path: '/cursos/nuevo', Component: CreateCourseContainer },
+    { path: '/cursos/:id', Component: EditCourseContainer },
+    { path: '/niveles-escolares', Component: LevelListContainer },
+    { path: '/niveles-escolares/nuevo', Component: LevelCreateContainer },
+    { path: '/niveles-escolares/:id', Component: EditLevelContainer },
+    { path: '/paralelos', Component: ListParallelContainer },
+    { path: '/cursos/:courseId/paralelos', Component: ListByCourseContainer },
+    { path: '/periodos-lectivos', Component: ListSchoolYearContainer },
+    { path: '/periodos-lectivos/nuevo', Component: CreateSchoolYearContainer },
+    { path: '/periodos-lectivos/:id', Component: EditSchoolYearContainer },
+    { path: '/materias', Component: SubjectListContainer },
+    { path: '/materias/nuevo', Component: SubjectCreateContainer },
+    { path: '/cursos/:id/materias', Component: SubjectCourseContainer },
+    { path: '/tipos-evaluacion', Component: EvaluationTypeListContainer },
+    { path: '/tipos-evaluacion/nuevo', Component: EvaluationTypeCreateContainer },
+    { path: '/tipos-evaluacion/:id', Component: EvaluationTypeEditContainer },
+    { path: '/sistemas-calificacion', Component: GradingSystemListContainer },
+    { path: '/sistemas-calificacion/nuevo', Component: GradingSystemCreateContainer },
+    { path: '/sistemas-calificacion/:id', Component: GradingSystemEditContainer },
+    { path: '/terminos-calificacion', Component: GradingTermListContainer },
+    { path: '/terminos-calificacion/nuevo', Component: GradingTermCreateContainer },
+    { path: '/terminos-calificacion/:id', Component: GradingTermEditContainer },
+], {
     basename: isStandalone ? '/' : '/escolar',
 });
 
