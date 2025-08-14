@@ -7,6 +7,7 @@ import { GradingSystemEditPresenter } from "./GradingSystemEditPresenter";
 import { GetGradingSystemUseCase, GetGradingSystemCommand } from "@/scolar/application/useCases/gradingSystems/getGradingSystemUseCase";
 import { UpdateGradingSystemUseCase, UpdateGradingSystemCommand } from "@/scolar/application/useCases/gradingSystems/updateGradingSystemUseCase";
 import { GRADING_SYSTEM_GET_USECASE, GRADING_SYSTEM_UPDATE_USECASE } from "@/scolar/domain/symbols/GradingSystemSymbol";
+import { GradingSystem } from "@/scolar/domain/entities/grading_system";
 
 interface FormValues {
     data: {
@@ -39,7 +40,7 @@ export const GradingSystemEditContainer = () => {
                 navigate('/sistemas-calificacion');
                 return;
             }
-            const data = res.extract();
+            const data = res.extract() as GradingSystem;
             if (data) {
                 reset({ data: { name: data.name, description: data.description, numberOfTerms: data.numberOfTerms, passingScore: data.passingScore } });
             }

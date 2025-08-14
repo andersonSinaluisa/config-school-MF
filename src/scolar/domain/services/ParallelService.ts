@@ -21,6 +21,13 @@ export class ParallelService {
         } as PaginatedResult<Parallel>
     }
     
+    async findByFilters(params: { courseId?: number; schoolYearId?: number; name?: string; capacity?: number; sectionId?: number; }, page: number, size: number, search?: string, order?: string[]) {
+        const res = await this.repository.findByFilters(params, page, size, search, order);
+        return {
+            ...res,
+            data: res.data.map(ParallelMapper.toDomain),
+        } as PaginatedResult<Parallel>
+    }
     async get(id: number) {
         const res = await this.repository.findById(id);
         return ParallelMapper.toDomain(res);

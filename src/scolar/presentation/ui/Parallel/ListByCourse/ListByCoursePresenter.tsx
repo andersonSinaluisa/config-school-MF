@@ -40,7 +40,7 @@ export const ListByCoursePresenter = ({ course, onBack, list }: ListByCoursePres
                 </Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
                 <span className="text-foreground font-medium">
-                    Materias de {course.name || ""}
+                    Paralelos de {course.name || ""}
                 </span>
             </nav>
 
@@ -52,7 +52,8 @@ export const ListByCoursePresenter = ({ course, onBack, list }: ListByCoursePres
                         {course.name || ""}
                     </h1>
                     <p className="text-muted-foreground mt-1">
-                        Completa los campos para crear un nuevo curso. Asegúrate de que toda la información sea correcta antes de guardar.
+                        Aqui puedes gestionar los paralelos del curso. Puedes crear, editar o eliminar paralelos según sea necesario.
+                        
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -73,20 +74,7 @@ export const ListByCoursePresenter = ({ course, onBack, list }: ListByCoursePres
                         />
                     </div>
                     <div>
-                        {
-                            list.meta.total ==0 && (
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>No hay paralelos asignados</CardTitle>
-                                        <CardDescription>
-                                            Actualmente 
-                                            no hay paralelos asignados a este curso. Puedes crear uno nuevo utilizando el formulario a la izquierda.
-                                        </CardDescription>
-                                    </CardHeader>
-                                </Card>
-                            )
-
-                        }
+                       
                         <div className="mb-5">
                             <div className="relative flex-1">
                                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -98,7 +86,7 @@ export const ListByCoursePresenter = ({ course, onBack, list }: ListByCoursePres
                                 />
                             </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {
                                 list.data.map((e) => (
                                     <ParallelCard
@@ -110,6 +98,20 @@ export const ListByCoursePresenter = ({ course, onBack, list }: ListByCoursePres
                                 ))
                             }
                         </div>
+                        {
+                            list.meta.total == 0 && (
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>No hay paralelos asignados</CardTitle>
+                                        <CardDescription>
+                                            Actualmente
+                                            no hay paralelos asignados a este curso. Puedes crear uno nuevo utilizando el formulario a la izquierda.
+                                        </CardDescription>
+                                    </CardHeader>
+                                </Card>
+                            )
+
+                        }
                        
                     </div>
                 </div>

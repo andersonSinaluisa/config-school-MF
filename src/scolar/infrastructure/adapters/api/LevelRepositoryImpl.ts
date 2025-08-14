@@ -15,7 +15,7 @@ export class LevelRepositoryImpl implements LevelRepository{
         return response.data;
     }
     async update(id: number, data: Omit<LevelDto, "id">): Promise<LevelDto> {
-        const response = await this.api.put<LevelDto>(`/levels/${id}`, data);
+        const response = await this.api.put<LevelDto>(`/levels/${id}/`, data);
         return response.data;
     }
     async delete(id: number): Promise<void> {
@@ -33,7 +33,7 @@ export class LevelRepositoryImpl implements LevelRepository{
         return response.data;
     }
     async findById(id: number): Promise<LevelDto> {
-        const response = await this.api.get<LevelDto>(`/levels/${id}`);
+        const response = await this.api.get<LevelDto>(`/levels/${id}/`);
         return response.data;
     }
 

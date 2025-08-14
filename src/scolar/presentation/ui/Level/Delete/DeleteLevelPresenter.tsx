@@ -48,9 +48,11 @@ export const DeleteLevelPresenter = ({ level, onConfirm }: DeleteLevelPresenterP
                             Confirmar
                         </Button>
                     </DialogClose>
+                    <DialogClose asChild>
                     <Button type="button" variant="outline">
                         Cancelar
                     </Button>
+                    </DialogClose>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

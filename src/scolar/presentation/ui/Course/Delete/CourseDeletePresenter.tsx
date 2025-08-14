@@ -47,9 +47,11 @@ export const CourseDeletePresenter = (  { curso, onConfirm }: CourseDeletePresen
                             Confirmar
                         </Button>
                     </DialogClose>
-                    <Button type="button" variant="outline">
-                        Cancelar
-                    </Button>
+                    <DialogClose asChild>
+                        <Button type="button" variant="outline">
+                            Cancelar
+                        </Button>
+                    </DialogClose>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

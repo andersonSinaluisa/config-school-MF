@@ -34,6 +34,23 @@ export function calculateDuration(startDate: Date, endDate: Date) {
 }
 
 
+export function generateConsistentHexColor(id: number): string {
+  // Asegura que sea un número entero positivo
+  const normalized = Math.abs(id);
+
+  // Usa una función hash simple basada en el número
+  const hash = normalized * 2654435761 % 2 ** 32;
+
+  // Extrae los bytes para r, g, b y convierte a hex
+  const r = (hash & 0xFF0000) >> 16;
+  const g = (hash & 0x00FF00) >> 8;
+  const b = (hash & 0x0000FF);
+
+  // Asegura que el color no sea demasiado oscuro
+  const lighten = (c: number) => Math.floor((c + 128) / 2);
+
+  return `#${lighten(r).toString(16).padStart(2, '0')}${lighten(g).toString(16).padStart(2, '0')}${lighten(b).toString(16).padStart(2, '0')}`;
+}
 
 
 export function extractErrorMessage(error: unknown) {

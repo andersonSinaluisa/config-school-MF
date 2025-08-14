@@ -16,7 +16,7 @@ export class ParallelMapper {
             data.section_id,
             data.school_year_id,
             data.course ? CourseMapper.toDomain(data.course) : undefined,
-            data.section ? SectionMapper.toDomain(data.section) : undefined,
+            data.section ? SectionMapper.partialToDomain(data.section) : undefined,
             data.school_year ? SchoolYearMapper.toDomain(data.school_year) : undefined,
             
         )

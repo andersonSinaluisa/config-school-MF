@@ -24,6 +24,7 @@ interface SearchSelectProps {
   placeholder?: string;
   searchPlaceholder?: string;
   emptyMessage?: string;
+  onInputChange?: (value: string) => void;
 }
 
 export function SearchSelect({
@@ -33,6 +34,7 @@ export function SearchSelect({
   placeholder = "Seleccionar...",
   searchPlaceholder = "Buscar...",
   emptyMessage = "Sin resultados.",
+   onInputChange
 }: SearchSelectProps) {
   const [open, setOpen] = React.useState(false);
   const selected = options.find((o) => String(o.value) === String(value));
@@ -52,7 +54,16 @@ export function SearchSelect({
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder={searchPlaceholder} />
+          <CommandInput placeholder={searchPlaceholder} 
+          onChangeCapture={
+            (e) => {
+              const value = e.currentTarget.value;
+              if (onInputChange) {
+                onInputChange(value);
+              }
+            }
+          }
+          />
           <CommandEmpty>{emptyMessage}</CommandEmpty>
           <CommandGroup>
             {options.map((option) => (
@@ -63,6 +74,7 @@ export function SearchSelect({
                   onChange(option.value);
                   setOpen(false);
                 }}
+                 
               >
                 <div className="flex flex-col">
                   <span>{option.label}</span>

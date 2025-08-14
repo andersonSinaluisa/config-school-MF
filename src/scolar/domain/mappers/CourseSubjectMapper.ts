@@ -22,7 +22,7 @@ export class CourseSubjectMapper {
         return {
             courseId: data.courseId,
             subjectId: data.subjectId,
-            hoursPerWeek: Number(data.hoursPerWeek),
+            hoursPerWeek:data.hoursPerWeek,
             isRequired: data.isRequired,
         };
     }
@@ -31,7 +31,7 @@ export class CourseSubjectMapper {
         return {
             subjectId: data.subjectId,
             isRequired: data.isRequired,
-            hoursPerWeek: Number(data.hoursPerWeek),
+            hoursPerWeek: data.hoursPerWeek,
         };
     }
 

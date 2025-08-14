@@ -11,8 +11,9 @@ import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 import { Course } from "@/scolar/domain/entities/course"
 import { CourseSubject } from "@/scolar/domain/entities/course_subject";
 import { Subject } from "@/scolar/domain/entities/subject";
-import { AlertCircle, ArrowLeft, BookOpen, Check, ChevronRight, HelpCircle, Home, Info, Save, Search, ShieldCheck, Trash } from "lucide-react";
+import { AlertCircle, ArrowLeft, BookOpen, Check, ChevronRight, HelpCircle, Home, Info, LayoutGrid, List, Save, Search, ShieldCheck, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 interface SubjectCoursePresenterProps {
     course: Course;
@@ -40,6 +41,7 @@ export const SubjectCoursePresenter = ({
     onChangeHours,
     onRemoveSubject
 }: SubjectCoursePresenterProps) => {
+    const [viewMode, setViewMode] = useState<"lista" | "tarjetas">("lista");
 
 
     return (
@@ -111,55 +113,103 @@ export const SubjectCoursePresenter = ({
                             <CardDescription>
                                 Completa los campos para definir el curso. Asegúrate de que toda la información sea correcta antes de guardar.
                             </CardDescription>
+                            <div className="flex justify-end gap-2 mb-3">
+                                <Button
+                                    variant={viewMode === "lista" ? "default" : "outline"}
+                                    size="sm"
+                                    onClick={() => setViewMode("lista")}
+                                >
+                                    <List className="w-4 h-4 mr-1" /> Lista
+                                </Button>
+                                <Button
+                                    variant={viewMode === "tarjetas" ? "default" : "outline"}
+                                    size="sm"
+                                    onClick={() => setViewMode("tarjetas")}
+                                >
+                                    <LayoutGrid className="w-4 h-4 mr-1" /> Tarjetas
+                                </Button>
+                            </div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                            {
-                               selectedSubjects.map((subject, index) => (
-                                    
-                                      <Alert className="h-full" key={index}>
-                                      <BookOpen className="h-4 w-4" />
-                                      <AlertTitle>
-                                        {subject.subject?.name || "Materia sin nombre"}
-                                           <button
-                                           type="button"
-                                            title="Eliminar materia del curso"
-                                                  onClick={() => onRemoveSubject(subject)}
-                                               className="absolute top-3 right-3 p-1 rounded-full hover:bg-primary-500 transition"
-                                           >
-
-                                               <Trash className="w-5 h-5 text-red-500 hover:text-white" />
-                                           </button>
-                                      </AlertTitle>
-                                      <AlertDescription className="flex justify-between text-sm text-muted-foreground">
-                                        {subject.subject?.description || "No hay descripción disponible para esta materia."}
-                                       
-                                      </AlertDescription>
-                                      <div className="flex items-center justify-between mt-2">
-                                      <Label>
-                                        Horas por semana
-                                      </Label>
-                                       <Input
-                                           type="time"
-                                           value={subject.hoursPerWeek || 0}
-                                           placeholder="Horas por semana"
-                                           onChange={(e) => {
-                                                  const updatedSubject = new CourseSubject(
-                                                    subject.id,
-                                                    subject.courseId,
-                                                    subject.subjectId,
-                                                    e.target.value,
-                                                    subject.isRequired,
-                                                    subject.course,
-                                                    subject.subject
-                                                  );
-                                                  onChangeHours(updatedSubject);
-                                           }}
-                                       />
-                                       </div>
+                        {viewMode === "tarjetas" ? (
+                            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                                {selectedSubjects.map((subject, index) => (
+                                    <Alert className="relative h-full" key={index}>
+                                        <BookOpen className="h-4 w-4" />
+                                        <AlertTitle>
+                                            {subject.subject?.name || "Materia sin nombre"}
+                                            <button
+                                                type="button"
+                                                title="Eliminar materia del curso"
+                                                onClick={() => onRemoveSubject(subject)}
+                                                className="absolute top-3 right-3 p-1 rounded-full hover:bg-primary-500 transition"
+                                            >
+                                                <Trash className="w-5 h-5 text-red-500 hover:text-white" />
+                                            </button>
+                                        </AlertTitle>
+                                        <AlertDescription className="flex justify-between text-sm text-muted-foreground">
+                                            {subject.subject?.description || "No hay descripción disponible para esta materia."}
+                                        </AlertDescription>
+                                        <div className="flex items-center justify-between mt-2">
+                                            <Label>Horas por semana</Label>
+                                            <Input
+                                                type="time"
+                                                value={subject.hoursPerWeek || ""}
+                                                onChange={(e) => {
+                                                    const updatedSubject = new CourseSubject(
+                                                        subject.id,
+                                                        subject.courseId,
+                                                        subject.subjectId,
+                                                        e.target.value,
+                                                        subject.isRequired,
+                                                        subject.course,
+                                                        subject.subject
+                                                    );
+                                                    onChangeHours(updatedSubject);
+                                                }}
+                                            />
+                                        </div>
                                     </Alert>
-                                ))
-                            }
-                        </CardContent>
+                                ))}
+                            </CardContent>
+                        ) : (
+                            <ul className="divide-y divide-muted p-5">
+                                {selectedSubjects.map((subject, index) => (
+                                    <li key={index} className="p-5 shadow-md flex justify-between items-center py-2">
+                                        <div>
+                                            <strong>{subject.subject?.name || "Materia sin nombre"}</strong>
+                                            <p className="text-sm text-muted-foreground">
+                                                {subject.subject?.description || "No hay descripción disponible"}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Input
+                                                type="time"
+                                                value={subject.hoursPerWeek || ""}
+                                                onChange={(e) => {
+                                                    const updatedSubject = new CourseSubject(
+                                                        subject.id,
+                                                        subject.courseId,
+                                                        subject.subjectId,
+                                                        e.target.value,
+                                                        subject.isRequired,
+                                                        subject.course,
+                                                        subject.subject
+                                                    );
+                                                    onChangeHours(updatedSubject);
+                                                }}
+                                            />
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                onClick={() => onRemoveSubject(subject)}
+                                            >
+                                                <Trash className="w-4 h-4" />
+                                            </Button>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                         <CardFooter className="flex justify-between border-t pt-6">
                             <Button variant="outline" onClick={() => onBack()} disabled={isSubmitting}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />

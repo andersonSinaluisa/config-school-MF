@@ -9,7 +9,7 @@ export class SectionRepositoryImpl implements SectionRepository{
 
     constructor(private readonly http: AxiosInstance) {}
     async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<SectionDto>> {
-        const { data } = await this.http.get<PaginatedResult<SectionDto>>("/sections", {
+        const { data } = await this.http.get<PaginatedResult<SectionDto>>("/sections/", {
             params: {
                 page,
                 limit,
@@ -21,19 +21,19 @@ export class SectionRepositoryImpl implements SectionRepository{
         return data;
     }
     async findById(id: number): Promise<SectionDto> {
-        const { data } = await this.http.get<SectionDto>(`/sections/${id}`);
+        const { data } = await this.http.get<SectionDto>(`/sections/${id}/`);
         return data;
     }
     async create(data: Omit<SectionDto, "id">): Promise<SectionDto> {
-        const { data: section } = await this.http.post<SectionDto>("/sections", data);
+        const { data: section } = await this.http.post<SectionDto>("/sections/", data);
         return section;
     }
     async update(id: number, data: Omit<SectionDto, "id">): Promise<SectionDto> {
-        const { data: section } = await this.http.put<SectionDto>(`/sections/${id}`, data);
+        const { data: section } = await this.http.put<SectionDto>(`/sections/${id}/`, data);
         return section;
     }
     async delete(id: number): Promise<void> {
-        await this.http.delete(`/sections/${id}`);
+        await this.http.delete(`/sections/${id}/`);
     }
 
 }

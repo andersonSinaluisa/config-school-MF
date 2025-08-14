@@ -144,8 +144,7 @@ export const EditCourseContainer = ()=>{
                 description: `El curso ${course.name} ha sido actualizado correctamente.`,
                 variant: "success"
             });
-            //TODO: redirect to course detail page
-            //router.push(`/school/cursos/${course.id}`);
+            onBack()
         });
     }
 

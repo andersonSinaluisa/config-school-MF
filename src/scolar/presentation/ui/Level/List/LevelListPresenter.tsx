@@ -32,7 +32,7 @@ export const LevelListPresenter = ({ levels, onEdit, onDelete, onAdd, isPending,
             <CardContent>
                 <div className="relative flex-1">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input type="search" placeholder="Buscar Cursos..." className="pl-9"
+                    <Input type="search" placeholder="Buscar niveles..." className="pl-9"
                         onChange={(e) => onSearch(e.target.value)}
                     />
                 </div>

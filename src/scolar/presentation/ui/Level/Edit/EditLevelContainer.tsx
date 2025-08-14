@@ -85,6 +85,7 @@ export const EditLevelContainer = () => {
                     title: "Éxito",
                     description: "Nivel actualizado correctamente",
                 })
+                onCancel()
             })
         })
     }

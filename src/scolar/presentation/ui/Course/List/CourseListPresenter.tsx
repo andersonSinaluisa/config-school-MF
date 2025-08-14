@@ -57,7 +57,7 @@ export const CourseListPresenter = ({ course, isPending, onSearch, onFilter, onA
                     <div className="mb-4 flex items-center gap-2">
                         <div className="relative flex-1">
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input type="search" placeholder="Buscar Materias..." className="pl-9"
+                            <Input type="search" placeholder="Buscar Cursos..." className="pl-9"
                                 onChange={(e) => onSearch(e.target.value)}
                             />
                         </div>

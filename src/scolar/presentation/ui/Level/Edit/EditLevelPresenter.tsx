@@ -29,25 +29,27 @@ export const EditLevelPresenter = ({
     return (
         <div className="space-y-6">
             <nav className="flex items-center text-sm text-muted-foreground">
-                <Link to="/admin" className="hover:text-foreground transition-colors">
+                <Link to="/" className="hover:text-foreground transition-colors">
                     <Home className="h-4 w-4" />
                     <span className="sr-only">Inicio</span>
                 </Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
-                <Link to="/admin/roles" className="hover:text-foreground transition-colors">
+                <Link to="/niveles-escolares" className="hover:text-foreground transition-colors">
                     Niveles
                 </Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
-                <span className="text-foreground font-medium">Nuevo Nivel Educativo</span>
+                <span className="text-foreground font-medium">
+                    {formData.data.name}
+                </span>
             </nav>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
                         <ShieldCheck className="h-8 w-8 text-primary-500" />
-                        Nuevo Nivel Educativo
+                        {formData.data.name}
                     </h1>
-                    <p className="text-muted-foreground mt-1">Crea un nuevo rol y asigna permisos</p>
+                    <p className="text-muted-foreground mt-1">Actualiza los detalles del nivel educativo</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <Button variant="outline" onClick={() => onCancel()} disabled={isSubmitting}>
@@ -65,7 +67,7 @@ export const EditLevelPresenter = ({
                         ) : (
                             <>
                                 <Save className="mr-2 h-4 w-4" />
-                                Crear Nivel
+                                Guardar
                             </>
                         )}
                     </Button>
@@ -76,7 +78,7 @@ export const EditLevelPresenter = ({
                 <div className="lg:col-span-2">
                     <Card >
                         <CardHeader>
-                            <CardTitle>Crear Nivel</CardTitle>
+                            <CardTitle>Actualizar Nivel</CardTitle>
                         </CardHeader>
                         <form onSubmit={onSubmit}>
                             <CardContent className="space-y-4">
@@ -147,7 +149,9 @@ export const EditLevelPresenter = ({
                     <Card>
                         <CardHeader>
                             <CardTitle>Vista Previa</CardTitle>
-                            <CardDescription>Así se verá el rol después de guardar</CardDescription>
+                            <CardDescription>
+                                Aquí puedes ver cómo se verá el nivel educativo una vez guardado.
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">

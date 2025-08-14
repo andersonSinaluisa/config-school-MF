@@ -9,4 +9,17 @@ export interface ParallelRepository {
     delete(id: number): Promise<void>;
     findById(id: number): Promise<ParallelDto>;
     findByCourseId(page: number, limit: number, courseId: number, search?: string, orderby?: string[]): Promise<PaginatedResult<ParallelDto>>;
+    findByFilters(
+        params: {
+            courseId?: number;
+            schoolYearId?: number;
+            name?: string;
+            capacity?: number;
+            sectionId?: number;
+        },
+        page: number,
+        limit: number,
+        search?: string,
+        orderby?: string[]
+    ): Promise<PaginatedResult<ParallelDto>>;
 }

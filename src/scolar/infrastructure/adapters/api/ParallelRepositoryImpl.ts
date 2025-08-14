@@ -9,6 +9,19 @@ import { injectable } from "inversify";
 export class ParallelRepositoryImpl implements ParallelRepository{
 
     constructor(private readonly http: AxiosInstance) {}
+    async findByFilters(params: { courseId?: number; schoolYearId?: number; name?: string; capacity?: number; sectionId?: number; }, page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<ParallelDto>> {
+
+        const {data} = await this.http.get<PaginatedResult<ParallelDto>>("/parallels/", {
+            params: {
+                ...params,
+                page,
+                limit,
+                search,
+                orderby
+            }
+        });
+        return data;
+    }
     async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<ParallelDto>> {
         const { data } = await this.http.get<PaginatedResult<ParallelDto>>("/parallels/", {
             params: {

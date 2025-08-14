@@ -5,7 +5,7 @@ export interface CourseSubjectDto {
     id: number;
     courseId: number;
     subjectId: number;
-    hoursPerWeek: number;
+    hoursPerWeek: string;
     isRequired: boolean;
     course?: CourseDto;
     subject?: SubjectDto;

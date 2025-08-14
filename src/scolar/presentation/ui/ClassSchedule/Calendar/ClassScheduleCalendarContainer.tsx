@@ -1,4 +1,9 @@
-import { useEffect, useState, useTransition } from "react";
+import { ListClassSchedulesUseCase, ListClassSchedulesCommand } from "@/scolar/application/useCases/classSchedules/listClassSchedulesUseCase";
+import { CreateClassScheduleUseCase, CreateClassScheduleCommand } from "@/scolar/application/useCases/classSchedules/createClassScheduleUseCase";
+import { UpdateClassScheduleUseCase, UpdateClassScheduleCommand } from "@/scolar/application/useCases/classSchedules/updateClassScheduleUseCase";
+import { DeleteClassScheduleUseCase, DeleteClassScheduleCommand } from "@/scolar/application/useCases/classSchedules/deleteClassScheduleUseCase";
+
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { useInjection } from "inversify-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
@@ -7,183 +12,249 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { ClassSchedule } from "@/scolar/domain/entities/classSchedule";
-import { Course } from "@/scolar/domain/entities/course";
-import { Parallel } from "@/scolar/domain/entities/parallel";
-import { Subject } from "@/scolar/domain/entities/subject";
-import { SchoolYear } from "@/scolar/domain/entities/school_year";
-import { ListClassSchedulesUseCase, ListClassSchedulesCommand } from "@/scolar/application/useCases/classSchedules/listClassSchedulesUseCase";
-import { CreateClassScheduleUseCase, CreateClassScheduleCommand } from "@/scolar/application/useCases/classSchedules/createClassScheduleUseCase";
-import { UpdateClassScheduleUseCase, UpdateClassScheduleCommand } from "@/scolar/application/useCases/classSchedules/updateClassScheduleUseCase";
-import { DeleteClassScheduleUseCase, DeleteClassScheduleCommand } from "@/scolar/application/useCases/classSchedules/deleteClassScheduleUseCase";
-import { ListCoursesUseCase, ListCoursesCommand } from "@/scolar/application/useCases/courses/listCoursesUseCase";
-import { ListParallelUseCase, ListParallelUseCaseCommand } from "@/scolar/application/useCases/parallels/listParallelUseCase";
-import { ListSubjectUseCase, ListSubjectCommand } from "@/scolar/application/useCases/subjects/listSubjectsUseCase";
-import { ListSchoolYearUseCase, ListSchoolYearUseCaseCommand } from "@/scolar/application/useCases/schoolYears/listSchoolYearUseCase";
-import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
-import { CLASS_SCHEDULE_LIST_USE_CASE, CLASS_SCHEDULE_CREATE_USE_CASE, CLASS_SCHEDULE_UPDATE_USE_CASE, CLASS_SCHEDULE_DELETE_USE_CASE } from "@/scolar/domain/symbols/ClassScheduleSymbol";
-import { COURSE_LIST_USECASE } from "@/scolar/domain/symbols/CourseSymbol";
-import { PARALLEL_LIST_USECASE } from "@/scolar/domain/symbols/ParallelSymbol";
-import { SUBJECT_LIST_USE_CASE } from "@/scolar/domain/symbols/SubjectSymbol";
-import { SCHOOL_YEAR_LIST_USE_CASE } from "@/scolar/domain/symbols/SchoolYearSymbol";
+
+
+import {
+    CLASS_SCHEDULE_LIST_USE_CASE,
+    CLASS_SCHEDULE_CREATE_USE_CASE,
+    CLASS_SCHEDULE_UPDATE_USE_CASE,
+    CLASS_SCHEDULE_DELETE_USE_CASE
+} from "@/scolar/domain/symbols/ClassScheduleSymbol";
+
 import { ClassScheduleCalendarPresenter } from "./ClassScheduleCalendarPresenter";
+import { useFetchCourse } from "@/scolar/application/hooks/courses/useFetchCourse";
+import { useFetchParallels } from "@/scolar/application/hooks/parallels/useFetchParallels";
+import { useFetchSchoolYears } from "@/scolar/application/hooks/school-year/useFetchSchoolYear";
+import { useFetchSubjects } from "@/scolar/application/hooks/subject/useFetchSubject";
+import { useFetchSection } from "@/scolar/application/hooks/sections/useFetchSection";
+import { PER_PAGE, ScheduleView } from "@/lib/time";
+import { Section } from "@/scolar/domain/entities/section";
 
+
+
+// -------------------- Componente --------------------
 export const ClassScheduleCalendarContainer = () => {
-    interface ScheduleView extends ClassSchedule {
-        courseName: string;
-        parallelName: string;
-        subjectName: string;
-    }
+    // Paginaciones unificadas (más simple de extender)
+    const [paginateCourse, setPaginateCourse] = useState({ page: 1, perPage: PER_PAGE, search: "" });
+    const [paginateParallels, setPaginateParallels] = useState({ page: 1, perPage: PER_PAGE, search: "" });
+    const [paginateSchoolYears, setPaginateSchoolYears] = useState({ page: 1, perPage: PER_PAGE, search: "" });
+    const [paginateSubjects, setPaginateSubjects] = useState({ page: 1, perPage: PER_PAGE, search: "" });
+    const [paginateSections] = useState({ page: 1, perPage: PER_PAGE, search: "" });
 
+
+    // Valores seleccionados
+    const [selectedCourse, setSelectedCourse] = useState<number>(0);
+    const [selectedParallel, setSelectedParallel] = useState<number>(0);
+    const [selectedSchoolYear, setSelectedSchoolYear] = useState<number>(0);
+    const [selectedSubject, setSelectedSubject] = useState<number>(0);
+    const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+    // Fetchs
+    const courses = useFetchCourse(paginateCourse.page, paginateCourse.perPage, paginateCourse.search || "");
+    const parallels = useFetchParallels(paginateParallels.page, paginateParallels.perPage, paginateParallels.search || "");
+    const schoolYears = useFetchSchoolYears(paginateSchoolYears.page, paginateSchoolYears.perPage, paginateSchoolYears.search || "");
+    const subjects = useFetchSubjects(paginateSubjects.page, paginateSubjects.perPage, paginateSubjects.search || "");
+    const sections = useFetchSection(paginateSections.page, paginateSections.perPage, paginateSections.search || "");
+
+
+    // Use cases
     const listUseCase = useInjection<ListClassSchedulesUseCase>(CLASS_SCHEDULE_LIST_USE_CASE);
     const createUseCase = useInjection<CreateClassScheduleUseCase>(CLASS_SCHEDULE_CREATE_USE_CASE);
     const updateUseCase = useInjection<UpdateClassScheduleUseCase>(CLASS_SCHEDULE_UPDATE_USE_CASE);
     const deleteUseCase = useInjection<DeleteClassScheduleUseCase>(CLASS_SCHEDULE_DELETE_USE_CASE);
-    const listCourses = useInjection<ListCoursesUseCase>(COURSE_LIST_USECASE);
-    const listParallels = useInjection<ListParallelUseCase>(PARALLEL_LIST_USECASE);
-    const listSubjects = useInjection<ListSubjectUseCase>(SUBJECT_LIST_USE_CASE);
-    const listSchoolYears = useInjection<ListSchoolYearUseCase>(SCHOOL_YEAR_LIST_USE_CASE);
 
+    // Estado
     const [schedules, setSchedules] = useState<ScheduleView[]>([]);
-    const [courses, setCourses] = useState<Course[]>([]);
-    const [parallels, setParallels] = useState<Parallel[]>([]);
-    const [subjects, setSubjects] = useState<Subject[]>([]);
-    const [schoolYears, setSchoolYears] = useState<SchoolYear[]>([]);
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState<ScheduleView | null>(null);
     const [isPending, startTransition] = useTransition();
 
-    const { register, handleSubmit, reset, control, watch, formState: { errors }, setError, clearErrors } = useForm<ClassSchedule>({
-        defaultValues: { id: 0, courseId: 0, parallelId: 0, schoolYearId: 0, subjectId: 0, dayOfWeek: "", startTime: "", endTime: "" }
+    // Form
+    const {
+        register, handleSubmit, reset, control, watch,
+        formState: { errors }, clearErrors
+    } = useForm<ClassSchedule>({
+        defaultValues: {
+            id: 0, courseId: 0, parallelId: 0, schoolYearId: 0, subjectId: 0,
+            dayOfWeek: "", startTime: "", endTime: ""
+        }
     });
 
-    const selectedCourse = watch("courseId");
-    const filteredParallels = parallels.filter(p => p.courseId === Number(selectedCourse));
+    const selectedCourseId = watch("courseId");
 
-    const load = () => {
+    // Lookups memorizados para mapear nombres sin recomputar
+    const courseById = useMemo(() => new Map(courses.map(c => [c.id, c])), [courses]);
+    const parallelById = useMemo(() => new Map(parallels.map(p => [p.id, p])), [parallels]);
+    const subjectById = useMemo(() => new Map(subjects.map(s => [s.id, s])), [subjects]);
+
+    const filteredParallels = useMemo(
+        () => parallels.filter(p => p.courseId === Number(selectedCourseId)),
+        [parallels, selectedCourseId]
+    );
+
+    // Carga de horarios -> se mapea usando los lookups memorizados
+    const load = useCallback(() => {
         startTransition(() => {
-            listUseCase.execute(new ListClassSchedulesCommand(1, 100, [], "")).then(res => {
-                if (res.isRight()) {
-                    const data = res.extract()!.data;
-                    const mapped: ScheduleView[] = data.map(s => ({
-                        ...s,
-                        courseName: courses.find(c => c.id === s.courseId)?.name || "",
-                        parallelName: parallels.find(p => p.id === s.parallelId)?.name || "",
-                        subjectName: subjects.find(sb => sb.id === s.subjectId)?.name || ""
-                    }));
-                    setSchedules(mapped);
-                } else {
-                    toast({ title: "Error", description: "No se pudo cargar", variant: "destructive" });
-                }
-            });
+            listUseCase.execute(new ListClassSchedulesCommand(1, PER_PAGE, [], ""))
+                .then(res => {
+                    if (res.isRight()) {
+                        const data = res.extract()!.data;
+                        const mapped: ScheduleView[] = data.map(s => ({
+                            ...s,
+                            courseName: courseById.get(s.courseId)?.name || "",
+                            parallelName: parallelById.get(s.parallelId)?.name || "",
+                            subjectName: subjectById.get(s.subjectId)?.name || ""
+                        }));
+                        setSchedules(mapped);
+                    } else {
+                        toast({ title: "Error", description: "No se pudo cargar", variant: "destructive" });
+                    }
+                })
+                .catch(() => toast({ title: "Error", description: "No se pudo cargar", variant: "destructive" }));
         });
-    };
+    }, [courseById, parallelById, subjectById, listUseCase]);
 
+
+    //calcular horarios
+
+
+
+
+    // Cargar cuando estén listos los catálogos base
     useEffect(() => {
-        startTransition(() => {
-            Promise.all([
-                listCourses.execute(new ListCoursesCommand(1, 100, ["id"])),
-                listParallels.execute(new ListParallelUseCaseCommand(1, 100, ["id"])),
-                listSubjects.execute(new ListSubjectCommand(1, 100, ["id"])),
-                listSchoolYears.execute(new ListSchoolYearUseCaseCommand(1, 100, ["id"]))
-            ]).then(([c, p, s, sy]) => {
-                if (c.isRight()) setCourses((c.extract() as PaginatedResult<Course>).data);
-                if (p.isRight()) setParallels((p.extract() as PaginatedResult<Parallel>).data);
-                if (s.isRight()) setSubjects((s.extract() as PaginatedResult<Subject>).data);
-                if (sy.isRight()) setSchoolYears((sy.extract() as PaginatedResult<SchoolYear>).data);
-                load();
-            });
-        });
-    }, []);
+        // Solo carga si tenemos data de catálogos (para mapear nombres bien)
+        if (courses.length || parallels.length || subjects.length) {
+            load();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [courses.length, parallels.length, subjects.length, load]);
 
-    const handleAdd = (day?: string) => {
+    // -------------------- Handlers --------------------
+    const openAdd = useCallback((day?: string) => {
         setEditing(null);
         reset({ id: 0, courseId: 0, parallelId: 0, schoolYearId: 0, subjectId: 0, dayOfWeek: day || "", startTime: "", endTime: "" });
         clearErrors();
         setOpen(true);
-    };
+    }, [reset, clearErrors]);
 
-    const handleSelect = (s: ScheduleView) => {
+    const openEdit = useCallback((s: ScheduleView) => {
         setEditing(s);
         reset(s);
         clearErrors();
         setOpen(true);
-    };
+    }, [reset, clearErrors]);
+
+    
+    useEffect(()=>{
+        console.log(selectedSection)
+    },[selectedSection])
+
 
     const onSubmit = handleSubmit((data) => {
-        if (data.endTime <= data.startTime) {
-            setError("endTime", { type: "manual", message: "La hora de fin debe ser posterior" });
-            return;
-        }
-        const overlapping = schedules.some(s =>
-            s.id !== data.id &&
-            s.courseId === data.courseId &&
-            s.dayOfWeek === data.dayOfWeek &&
-            !(data.endTime <= s.startTime || data.startTime >= s.endTime)
-        );
-        if (overlapping) {
-            setError("startTime", { type: "manual", message: "Se solapa con otro horario" });
-            setError("endTime", { type: "manual", message: "Se solapa con otro horario" });
-            return;
-        }
-        clearErrors(["startTime", "endTime"]);
+
+
+
         startTransition(async () => {
-            if (editing) {
-                const res = await updateUseCase.execute(new UpdateClassScheduleCommand(data));
-                if (res.isLeft()) {
-                    toast({ title: "Error", description: "No se pudo actualizar", variant: "destructive" });
-                    return;
+            try {
+                if (editing) {
+                    const res = await updateUseCase.execute(new UpdateClassScheduleCommand(data));
+                    if (res.isLeft()) {
+                        toast({ title: "Error", description: "No se pudo actualizar", variant: "destructive" });
+                        return;
+                    }
+                    toast({ title: "Horario actualizado", description: "Actualizado correctamente", variant: "success" });
+                } else {
+                    const res = await createUseCase.execute(new CreateClassScheduleCommand(data));
+                    if (res.isLeft()) {
+                        toast({ title: "Error", description: "No se pudo crear", variant: "destructive" });
+                        return;
+                    }
+                    toast({ title: "Horario creado", description: "Creado correctamente", variant: "success" });
                 }
-                toast({ title: "Horario actualizado", description: "Actualizado correctamente", variant: "success" });
-            } else {
-                const res = await createUseCase.execute(new CreateClassScheduleCommand(data));
-                if (res.isLeft()) {
-                    toast({ title: "Error", description: "No se pudo crear", variant: "destructive" });
-                    return;
-                }
-                toast({ title: "Horario creado", description: "Creado correctamente", variant: "success" });
+                setOpen(false);
+                load();
+            } catch {
+                toast({ title: "Error", description: "Ocurrió un problema", variant: "destructive" });
             }
-            setOpen(false);
-            load();
         });
     });
 
-    const handleDelete = () => {
+    const handleDelete = useCallback(() => {
         if (!editing) return;
         startTransition(async () => {
-            const res = await deleteUseCase.execute(new DeleteClassScheduleCommand(editing.id));
-            if (res.isLeft()) {
-                toast({ title: "Error", description: "No se pudo eliminar", variant: "destructive" });
-                return;
+            try {
+                const res = await deleteUseCase.execute(new DeleteClassScheduleCommand(editing.id));
+                if (res.isLeft()) {
+                    toast({ title: "Error", description: "No se pudo eliminar", variant: "destructive" });
+                    return;
+                }
+                toast({ title: "Horario eliminado", description: "Eliminado correctamente", variant: "success" });
+                setOpen(false);
+                load();
+            } catch {
+                toast({ title: "Error", description: "Ocurrió un problema", variant: "destructive" });
             }
-            toast({ title: "Horario eliminado", description: "Eliminado correctamente", variant: "success" });
-            setOpen(false);
-            load();
         });
-    };
+    }, [editing, deleteUseCase, load]);
 
-    const handleBlockDelete = (s: ScheduleView) => {
+    const handleBlockDelete = useCallback((s: ScheduleView) => {
         if (!confirm("¿Eliminar esta clase?")) return;
         startTransition(async () => {
-            const res = await deleteUseCase.execute(new DeleteClassScheduleCommand(s.id));
-            if (res.isLeft()) {
-                toast({ title: "Error", description: "No se pudo eliminar", variant: "destructive" });
-                return;
+            try {
+                const res = await deleteUseCase.execute(new DeleteClassScheduleCommand(s.id));
+                if (res.isLeft()) {
+                    toast({ title: "Error", description: "No se pudo eliminar", variant: "destructive" });
+                    return;
+                }
+                toast({ title: "Horario eliminado", description: "Eliminado correctamente", variant: "success" });
+                load();
+            } catch {
+                toast({ title: "Error", description: "Ocurrió un problema", variant: "destructive" });
             }
-            toast({ title: "Horario eliminado", description: "Eliminado correctamente", variant: "success" });
-            load();
         });
-    };
+    }, [deleteUseCase, load]);
 
+    // -------------------- Render --------------------
     return (
         <>
-            <ClassScheduleCalendarPresenter schedules={schedules} onAdd={handleAdd} onSelect={handleSelect} onDelete={handleBlockDelete} />
+            <ClassScheduleCalendarPresenter
+                schedules={schedules}
+                onAdd={openAdd}
+                onSelect={openEdit}
+                onDelete={handleBlockDelete}
+                course={courses}
+                parallel={parallels}
+                subject={subjects}
+                year={schoolYears}
+                section={sections}
+                onSearchCourse={(value) => setPaginateCourse(prev => ({ ...prev, search: value }))}
+                onSearchParallel={(value) => setPaginateParallels(prev => ({ ...prev, search: value }))}
+                onSearchYear={(value) => setPaginateSchoolYears(prev => ({ ...prev, search: value }))}
+                onSearchSubject={(value) => setPaginateSubjects(prev => ({ ...prev, search: value }))}
+                selectedCourseId={selectedCourse}
+                selectedParallelId={selectedParallel}
+                selectedSectionId={selectedSection?.id || null}
+                selectedSubjectId={selectedSubject}
+                selectedYearId={selectedSchoolYear}
+                setSelectedCourseId={setSelectedCourse}
+                setSelectedParallelId={setSelectedParallel}
+                setSelectedSectionId={
+                    (id) => setSelectedSection(sections.find(s => s.id === id) || null)
+                }
+                setSelectedSubjectId={setSelectedSubject}
+                setSelectedYearId={setSelectedSchoolYear}
+                days={selectedSection?.days || []}
+
+            />
+
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <form onSubmit={onSubmit} className="space-y-4">
                         <DialogHeader>
                             <DialogTitle>{editing ? "Editar Horario" : "Agregar Horario"}</DialogTitle>
                         </DialogHeader>
+
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="courseId">Curso</Label>
@@ -206,6 +277,7 @@ export const ClassScheduleCalendarContainer = () => {
                                 />
                                 {errors.courseId && <p className="text-red-500 text-sm">Requerido</p>}
                             </div>
+
                             <div className="space-y-2">
                                 <Label htmlFor="parallelId">Paralelo</Label>
                                 <Controller
@@ -218,7 +290,7 @@ export const ClassScheduleCalendarContainer = () => {
                                                 <SelectValue placeholder="Seleccionar paralelo" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {filteredParallels.map(p => (
+                                                {parallels.map(p => (
                                                     <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -227,6 +299,7 @@ export const ClassScheduleCalendarContainer = () => {
                                 />
                                 {errors.parallelId && <p className="text-red-500 text-sm">Requerido</p>}
                             </div>
+
                             <div className="space-y-2">
                                 <Label htmlFor="subjectId">Materia</Label>
                                 <Controller
@@ -248,6 +321,7 @@ export const ClassScheduleCalendarContainer = () => {
                                 />
                                 {errors.subjectId && <p className="text-red-500 text-sm">Requerido</p>}
                             </div>
+
                             <div className="space-y-2">
                                 <Label htmlFor="schoolYearId">Periodo Lectivo</Label>
                                 <Controller
@@ -269,6 +343,7 @@ export const ClassScheduleCalendarContainer = () => {
                                 />
                                 {errors.schoolYearId && <p className="text-red-500 text-sm">Requerido</p>}
                             </div>
+
                             <div className="space-y-2">
                                 <Label htmlFor="dayOfWeek">Día</Label>
                                 <Controller
@@ -281,7 +356,7 @@ export const ClassScheduleCalendarContainer = () => {
                                                 <SelectValue placeholder="Seleccionar día" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"].map(d => (
+                                                {selectedSection?.days.map(d => (
                                                     <SelectItem key={d} value={d}>{d}</SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -290,22 +365,33 @@ export const ClassScheduleCalendarContainer = () => {
                                 />
                                 {errors.dayOfWeek && <p className="text-red-500 text-sm">Requerido</p>}
                             </div>
+
                             <div className="space-y-2">
                                 <Label htmlFor="startTime">Inicio</Label>
                                 <Input id="startTime" type="time" {...register("startTime", { required: true })} />
-                                {errors.startTime && <p className="text-red-500 text-sm">{errors.startTime.message || 'Requerido'}</p>}
+                                {errors.startTime && <p className="text-red-500 text-sm">{errors.startTime.message || "Requerido"}</p>}
                             </div>
+
                             <div className="space-y-2">
                                 <Label htmlFor="endTime">Fin</Label>
                                 <Input id="endTime" type="time" {...register("endTime", { required: true })} />
-                                {errors.endTime && <p className="text-red-500 text-sm">{errors.endTime.message || 'Requerido'}</p>}
+                                {errors.endTime && <p className="text-red-500 text-sm">{errors.endTime.message || "Requerido"}</p>}
                             </div>
                         </div>
+
                         <DialogFooter className="flex justify-between">
-                            {editing && <Button type="button" variant="destructive" onClick={handleDelete} disabled={isPending}>Eliminar</Button>}
+                            {editing && (
+                                <Button type="button" variant="destructive" onClick={handleDelete} disabled={isPending}>
+                                    Eliminar
+                                </Button>
+                            )}
                             <div className="ml-auto flex gap-2">
-                                <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isPending}>Cancelar</Button>
-                                <Button type="submit" disabled={isPending}>{isPending ? "Guardando..." : "Guardar"}</Button>
+                                <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
+                                    Cancelar
+                                </Button>
+                                <Button type="submit" disabled={isPending}>
+                                    {isPending ? "Guardando..." : "Guardar"}
+                                </Button>
                             </div>
                         </DialogFooter>
                     </form>
@@ -314,4 +400,3 @@ export const ClassScheduleCalendarContainer = () => {
         </>
     );
 };
-

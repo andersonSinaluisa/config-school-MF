@@ -1,10 +1,11 @@
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { CreateLevelCommand } from "@/scolar/application/useCases/levels/createLevelUseCase"
-import { AlertCircle, Badge, Check, ChevronRight, HelpCircle, Home, Info, Save, ShieldCheck } from "lucide-react"
+import { AlertCircle, Check, ChevronRight, HelpCircle, Home, Info, Save, ShieldCheck } from "lucide-react"
 import { FieldErrors, UseFormRegister } from "react-hook-form"
 import { Link } from "react-router-dom"
 
@@ -142,7 +143,9 @@ export const LevelCreatePresenter = ({ register, onSubmit, onCancel, errors, isS
                     <Card>
                         <CardHeader>
                             <CardTitle>Vista Previa</CardTitle>
-                            <CardDescription>Así se verá el rol después de guardar</CardDescription>
+                            <CardDescription>
+                                Aquí puedes ver cómo se verá el nivel educativo una vez guardado.
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
