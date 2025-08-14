@@ -4,8 +4,16 @@ import { CourseDto } from "../../infrastructure/dto/CourseDto";
 
 export interface CourseRepository {
 
-    findAll(page: number, limit: number, search?: string, orderby?: string[])
-    : Promise<PaginatedResult<CourseDto>>;
+    findAll(
+        page: number,
+        limit: number,
+        search?: string,
+        orderby?: string[],
+        filters?: {
+            name?: string;
+            level_id?: number;
+        },
+    ): Promise<PaginatedResult<CourseDto>>;
 
     create(course: Omit<CourseDto, 'id'| 'level'>): Promise<CourseDto>;
 

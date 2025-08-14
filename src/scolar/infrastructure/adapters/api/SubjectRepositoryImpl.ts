@@ -9,13 +9,20 @@ import { injectable } from "inversify";
 export class SubjectRepositoryImpl implements SubjectRepository{
 
     constructor(private readonly http: AxiosInstance) {}
-    async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<SubjectDto>> {
+    async findAll(
+        page: number,
+        limit: number,
+        search?: string,
+        orderby?: string[],
+        filters?: { name?: string; code?: string }
+    ): Promise<PaginatedResult<SubjectDto>> {
         const { data } = await this.http.get<PaginatedResult<SubjectDto>>("/subjects/", {
             params: {
                 page,
                 limit,
                 search,
-                orderby
+                orderby,
+                ...(filters ?? {})
             }
         });
 

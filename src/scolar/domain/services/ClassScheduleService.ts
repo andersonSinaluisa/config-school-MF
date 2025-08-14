@@ -12,8 +12,20 @@ export class ClassScheduleService {
         private repository: ClassScheduleRepository
     ) {}
 
-    async all(page: number, size: number, search?: string, order?: string[]) {
-        const res = await this.repository.findAll(page, size, search, order);
+    async all(
+        page: number,
+        size: number,
+        search?: string,
+        order?: string[],
+        filters?: {
+            course_id?: number;
+            parallel_id?: number;
+            school_year_id?: number;
+            subject_id?: number;
+            day_of_week?: number;
+        },
+    ) {
+        const res = await this.repository.findAll(page, size, search, order, filters);
         return {
             ...res,
             data: res.data.map(ClassScheduleMapper.toDomain),

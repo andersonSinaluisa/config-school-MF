@@ -13,8 +13,14 @@ export class SubjectService{
          private repository: SubjectRepository
     ){}
 
-    async all(page: number, size: number, search?: string, order?: string[]){
-        const res = await this.repository.findAll(page, size, search, order);
+    async all(
+        page: number,
+        size: number,
+        search?: string,
+        order?: string[],
+        filters?: { name?: string; code?: string }
+    ){
+        const res = await this.repository.findAll(page, size, search, order, filters);
         return {
             ...res,
             data: res.data.map(SubjectMapper.toDomain)

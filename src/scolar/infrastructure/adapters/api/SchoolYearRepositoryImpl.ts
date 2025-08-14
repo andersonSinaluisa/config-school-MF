@@ -11,13 +11,20 @@ export class SchoolYearRepositoryImpl implements SchoolYearRepository{
         const { data } = await this.http.get<SchoolYearDto>(`/school-years/${id}/`);
         return data;
     }
-    async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<SchoolYearDto>> {
+    async findAll(
+        page: number,
+        limit: number,
+        search?: string,
+        orderby?: string[],
+        filters?: { name?: string; status?: string }
+    ): Promise<PaginatedResult<SchoolYearDto>> {
         const { data } = await this.http.get<PaginatedResult<SchoolYearDto>>("/school-years/", {
             params: {
                 page,
                 limit,
                 search,
-                orderby
+                orderby,
+                ...(filters ?? {})
             }
         });
         return data;
