@@ -1,9 +1,8 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {  BookMarkedIcon, ChevronRight, Home, Search } from "lucide-react"
+import { Command, CommandInput } from "@/components/ui/command"
+import {  BookMarkedIcon, ChevronRight, Home } from "lucide-react"
 import { Subject } from "@/scolar/domain/entities/subject"
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto"
 import { Loader } from "@/components/loader"
@@ -15,11 +14,10 @@ export interface SubjectListPresenterProps {
     subjects: PaginatedResult<Subject>
     isPending: boolean
     onSearch: (searchTerm: string) => void
-    onFilter: (filter: string) => void
     onAddSubject: () => void
     isPendingDelete: boolean
     onDelete: (subject: Subject) => void
-
+    onClearFilters: () => void
 }
 
 export const SubjectListPresenter = (props: SubjectListPresenterProps) => {
@@ -56,52 +54,11 @@ export const SubjectListPresenter = (props: SubjectListPresenterProps) => {
 
                 </CardHeader>
                 <CardContent>
-                    <div className="mb-4 flex items-center gap-2">
-                        <div className="relative flex-1">
-                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input type="search" placeholder="Buscar Cursos..." className="pl-9"
-                                onChange={(e) => props.onSearch(e.target.value)}
-                            />
-                        </div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild
-                            >
-                                <Button variant="outline">
-                                    Filtrar
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="ml-2 h-4 w-4"
-                                    >
-                                        <path d="M3 6h18" />
-                                        <path d="M7 12h10" />
-                                        <path d="M10 18h4" />
-                                    </svg>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-[200px]">
-                                <DropdownMenuLabel
-                                    onClick={() => props.onFilter("createdAt")}
-                                >Filtrar por</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                    onClick={() => props.onFilter("createdAt")}
-                                >Fecha de creación</DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => props.onFilter("updatedAt")}
-                                >Número de permisos</DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => props.onFilter("name")}
-                                >Nombre</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                    <div className="mb-4 flex flex-col md:flex-row md:items-center gap-2">
+                        <Command className="rounded-lg border md:flex-1">
+                            <CommandInput placeholder="Buscar..." onValueChange={props.onSearch} />
+                        </Command>
+                        <Button variant="outline" onClick={props.onClearFilters}>Limpiar filtros</Button>
                     </div>
                 </CardContent>
                 <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-6">

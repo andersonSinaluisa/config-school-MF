@@ -3,13 +3,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
+import { Command, CommandInput } from "@/components/ui/command";
+import { SearchSelect } from "@/components/ui/search-select";
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 import { ClassSchedule } from "@/scolar/domain/entities/classSchedule";
 import { Course } from "@/scolar/domain/entities/course";
 import { Parallel } from "@/scolar/domain/entities/parallel";
 import { Subject } from "@/scolar/domain/entities/subject";
-import { Edit, Plus, Search } from "lucide-react";
+import { SchoolYear } from "@/scolar/domain/entities/school_year";
+import { Edit, Plus } from "lucide-react";
 import { format, parse } from "date-fns";
 import { DeleteClassScheduleContainer } from "../Delete/DeleteClassScheduleContainer";
 
@@ -24,6 +26,13 @@ interface Props {
     courses: Course[];
     parallels: Parallel[];
     subjects: Subject[];
+    schoolYears: SchoolYear[];
+    onCourseChange: (value: string | number) => void;
+    onParallelChange: (value: string | number) => void;
+    onSchoolYearChange: (value: string | number) => void;
+    onSubjectChange: (value: string | number) => void;
+    onDayChange: (value: string | number) => void;
+    onClearFilters: () => void;
 }
 
 const timeFormat = (value: string) => {
@@ -34,7 +43,7 @@ const timeFormat = (value: string) => {
     }
 };
 
-export const ClassScheduleListPresenter = ({ schedules, onEdit, onDelete, onAdd, onPaginate, isPending, onSearch, courses, parallels, subjects }: Props) => {
+export const ClassScheduleListPresenter = ({ schedules, onEdit, onDelete, onAdd, onPaginate, isPending, onSearch, courses, parallels, subjects, schoolYears, onCourseChange, onParallelChange, onSchoolYearChange, onSubjectChange, onDayChange, onClearFilters }: Props) => {
     const getCourseName = (id: number) => courses.find(c => c.id === id)?.name || '';
     const getParallelName = (id: number) => parallels.find(p => p.id === id)?.name || '';
     const getSubjectName = (id: number) => subjects.find(s => s.id === id)?.name || '';
@@ -47,9 +56,16 @@ export const ClassScheduleListPresenter = ({ schedules, onEdit, onDelete, onAdd,
                 </Button>
             </CardHeader>
             <CardContent>
-                <div className="relative flex-1 mb-4">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input type="search" placeholder="Buscar..." className="pl-9" onChange={(e) => onSearch(e.target.value)} />
+                <div className="mb-4 flex flex-col md:grid md:grid-cols-5 gap-2">
+                    <Command className="rounded-lg border md:col-span-2">
+                        <CommandInput placeholder="Buscar..." onValueChange={onSearch} />
+                    </Command>
+                    <SearchSelect options={courses.map(c => ({ value: c.id, label: c.name }))} onChange={onCourseChange} placeholder="Curso" />
+                    <SearchSelect options={parallels.map(p => ({ value: p.id, label: p.name }))} onChange={onParallelChange} placeholder="Paralelo" />
+                    <SearchSelect options={schoolYears.map(s => ({ value: s.id, label: s.name }))} onChange={onSchoolYearChange} placeholder="Año lectivo" />
+                    <SearchSelect options={subjects.map(s => ({ value: s.id, label: s.name }))} onChange={onSubjectChange} placeholder="Materia" />
+                    <SearchSelect options={[{value:1,label:'Lunes'},{value:2,label:'Martes'},{value:3,label:'Miércoles'},{value:4,label:'Jueves'},{value:5,label:'Viernes'},{value:6,label:'Sábado'}]} onChange={onDayChange} placeholder="Día" />
+                    <Button variant="outline" onClick={onClearFilters} className="md:col-span-1">Limpiar filtros</Button>
                 </div>
                 <Table>
                     <TableHeader>

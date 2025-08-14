@@ -2,8 +2,8 @@
 import { useCallback, useEffect, useRef, useState, useTransition } from "react"
 import { ListSchoolYearPresenter } from "./ListSchoolYearPresenter"
 import { useInjection } from "inversify-react"
-import { ListSchoolYearUseCase, ListSchoolYearUseCaseCommand } from "@/scolar/application/useCases/schoolYears/listSchoolYearUseCase"
-import { SCHOOL_YEAR_LIST_USE_CASE } from "@/scolar/domain/symbols/SchoolYearSymbol"
+import { ListSchoolYearByFiltersUseCase, ListSchoolYearByFiltersUseCaseCommand } from "@/scolar/application/useCases/schoolYears/listSchoolYearByFiltersUseCase"
+import { SCHOOL_YEAR_LIST_BY_FILTERS_USE_CASE } from "@/scolar/domain/symbols/SchoolYearSymbol"
 import { SchoolYear } from "@/scolar/domain/entities/school_year"
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto"
 import { toast } from "@/hooks/use-toast"
@@ -13,14 +13,14 @@ import { useNavigate } from "react-router-dom"
 export const ListSchoolYearContainer = () => {
 
     const [isPending,startTransition] = useTransition()
-    const listSchoolYearUseCase = useInjection<ListSchoolYearUseCase>(SCHOOL_YEAR_LIST_USE_CASE)
-    const [filter, ] = useState<string[]>([])
+    const listSchoolYearUseCase = useInjection<ListSchoolYearByFiltersUseCase>(SCHOOL_YEAR_LIST_BY_FILTERS_USE_CASE)
     const [page, setPage] = useState<number>(1)
     const [perPage, ] = useState<number>(10)
       const debounceRef = useRef<NodeJS.Timeout | null>(null);
   
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined)
-        const [schoolYear, setSchoolYear] = useState<PaginatedResult<SchoolYear>>({
+    const [status, setStatus] = useState<string | undefined>(undefined)
+    const [schoolYear, setSchoolYear] = useState<PaginatedResult<SchoolYear>>({
             data: [],
             meta: {
                 currentPage: 1,
@@ -34,10 +34,12 @@ export const ListSchoolYearContainer = () => {
     const fetchSchoolYears = useCallback(() => {
         startTransition(()=>{
             listSchoolYearUseCase.execute(
-                new ListSchoolYearUseCaseCommand(
+                new ListSchoolYearByFiltersUseCaseCommand(
+                    undefined,
+                    status,
                     page,
                     perPage,
-                    filter,
+                    [],
                     searchTerm
                 )
             ).then(result=>{
@@ -60,7 +62,7 @@ export const ListSchoolYearContainer = () => {
                 })
             })
         })
-    }, [listSchoolYearUseCase, page, perPage, filter, searchTerm, startTransition])
+    }, [listSchoolYearUseCase, page, perPage, searchTerm, status, startTransition])
 
 
     useEffect(() => {
@@ -86,10 +88,20 @@ export const ListSchoolYearContainer = () => {
         debounceRef.current = setTimeout(() => {
             startTransition(() => {
                 setSearchTerm(searchTerm)
-                setPage(1) // Reset to first page on new search
+                setPage(1)
             })
-        }, 300); // Adjust the delay as needed
+        }, 300);
     }
+
+    const onStatusChange = (value: string | number) => {
+        setStatus(value ? String(value) : undefined)
+    }
+
+    const clearFilters = () => {
+        setSearchTerm(undefined)
+        setStatus(undefined)
+    }
+
     return (
         <ListSchoolYearPresenter
             isPending={isPending}
@@ -100,7 +112,10 @@ export const ListSchoolYearContainer = () => {
                 setPage(page)
             }}
             schoolYears={schoolYear}
-            onSearch= {onSearch}
+            onSearch={onSearch}
+            status={status}
+            onStatusChange={onStatusChange}
+            onClearFilters={clearFilters}
         />
     )
 }

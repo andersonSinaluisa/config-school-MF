@@ -66,17 +66,21 @@ export const SubjectListContainer = () => {
     const onAddSubject = () => {
         navigate('/materias/crear')
     }
+    const clearFilters = () => {
+        setSearchTerm(undefined)
+    }
+
     return (
         <SubjectListPresenter
             subjects={subjects}
             isPending={isPending}
             onSearch={(searchTerm) => setSearchTerm(searchTerm)}
-            onFilter={() => { }}
             onAddSubject={onAddSubject}
             isPendingDelete={false} // Placeholder, implement delete logic if needed
             onDelete={() => {
                 // Logic to delete a subject
             }}
+            onClearFilters={clearFilters}
         />
     )
 
