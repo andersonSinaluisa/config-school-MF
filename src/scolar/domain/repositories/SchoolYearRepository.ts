@@ -7,7 +7,11 @@ export interface SchoolYearRepository {
         page: number,
         limit: number,
         search?: string,
-        orderby?: string[]
+        orderby?: string[],
+        filters?: {
+            name?: string;
+            status?: string;
+        },
     ): Promise<PaginatedResult<SchoolYearDto>>;
     findById(id: number): Promise<SchoolYearDto>;
 

@@ -1,4 +1,4 @@
-import { COURSE_CREATE_USECASE, COURSE_DELETE_USECASE, COURSE_GET_USECASE, COURSE_LIST_USECASE, COURSE_REPOSITORY, COURSE_SERVICE, COURSE_UPDATE_USECASE } from "./symbols/CourseSymbol";
+import { COURSE_CREATE_USECASE, COURSE_DELETE_USECASE, COURSE_GET_USECASE, COURSE_LIST_USECASE, COURSE_LIST_BY_FILTERS_USECASE, COURSE_REPOSITORY, COURSE_SERVICE, COURSE_UPDATE_USECASE } from "./symbols/CourseSymbol";
 import { CourseRepositoryImpl } from "../infrastructure/adapters/api/CourseRepositoryImpl";
 import { COURSE_SUBJECT_ASSIGN_TO_COURSE_USECASE, COURSE_SUBJECT_LIST_FROM_COURSE_USECASE, COURSE_SUBJECT_LIST_USECASE, COURSE_SUBJECT_REPOSITORY, COURSE_SUBJECT_SERVICE } from "./symbols/CourseSubjectSymbol";
 import { LEVEL_CREATE_USECASE, LEVEL_DELETE_USECASE, LEVEL_GET_USECASE, LEVEL_LIST_USECASE, LEVEL_REPOSITORY, LEVEL_SERVICE, LEVEL_UPDATE_USECASE } from "./symbols/LevelSymbol";
@@ -6,11 +6,11 @@ import { CourseSubjectRepositoryImpl } from "../infrastructure/adapters/api/Cour
 import { LevelRepositoryImpl } from "../infrastructure/adapters/api/LevelRepositoryImpl";
 import { PARALLEL_CREATE_USECASE, PARALLEL_DELETE_USECASE, PARALLEL_GET_LIST_BY_COURSE_USECASE, PARALLEL_LIST_USECASE, PARALLEL_REPOSITORY, PARALLEL_SERVICE, PARALLEL_UPDATE_USECASE } from "./symbols/ParallelSymbol";
 import { ParallelRepositoryImpl } from "../infrastructure/adapters/api/ParallelRepositoryImpl";
-import { SCHOOL_YEAR_CREATE_USE_CASE, SCHOOL_YEAR_DELETE_USE_CASE, SCHOOL_YEAR_GET_USE_CASE, SCHOOL_YEAR_LIST_USE_CASE, SCHOOL_YEAR_REPOSITORY, SCHOOL_YEAR_SERVICE, SCHOOL_YEAR_UPDATE_USE_CASE } from "./symbols/SchoolYearSymbol";
+import { SCHOOL_YEAR_CREATE_USE_CASE, SCHOOL_YEAR_DELETE_USE_CASE, SCHOOL_YEAR_GET_USE_CASE, SCHOOL_YEAR_LIST_USE_CASE, SCHOOL_YEAR_LIST_BY_FILTERS_USE_CASE, SCHOOL_YEAR_REPOSITORY, SCHOOL_YEAR_SERVICE, SCHOOL_YEAR_UPDATE_USE_CASE } from "./symbols/SchoolYearSymbol";
 import { SchoolYearRepositoryImpl } from "../infrastructure/adapters/api/SchoolYearRepositoryImpl";
 import { SECTION_LIST_USE_CASE, SECTION_REPOSITORY, SECTION_SERVICE } from "./symbols/SectionSymbol";
 import { SectionRepositoryImpl } from "../infrastructure/adapters/api/SectionRepositoryImpl";
-import { SUBJECT_CREATE_USE_CASE, SUBJECT_LIST_USE_CASE, SUBJECT_REPOSITORY, SUBJECT_SERVICE } from "./symbols/SubjectSymbol";
+import { SUBJECT_CREATE_USE_CASE, SUBJECT_LIST_USE_CASE, SUBJECT_LIST_BY_FILTERS_USE_CASE, SUBJECT_REPOSITORY, SUBJECT_SERVICE } from "./symbols/SubjectSymbol";
 import { SubjectRepositoryImpl } from "../infrastructure/adapters/api/SubjectRepositoryImpl";
 import { GRADING_SYSTEM_CREATE_USECASE, GRADING_SYSTEM_DELETE_USECASE, GRADING_SYSTEM_GET_USECASE, GRADING_SYSTEM_LIST_USECASE, GRADING_SYSTEM_REPOSITORY, GRADING_SYSTEM_SERVICE, GRADING_SYSTEM_UPDATE_USECASE } from "./symbols/GradingSystemSymbol";
 import { GradingSystemRepositoryImpl } from "../infrastructure/adapters/api/GradingSystemRepositoryImpl";
@@ -44,7 +44,9 @@ import { CreateLevelUseCaseImpl } from "../application/useCases/levels/createLev
 import { CourseService } from "./services/CourseService";
 import { SubjectService } from "./services/SubjectService";
 import { ListSubjectUseCaseImpl } from "../application/useCases/subjects/listSubjectsUseCase";
+import { ListSubjectsByFiltersUseCaseImpl } from "../application/useCases/subjects/listSubjectsByFiltersUseCase";
 import { ListCoursesUseCaseImpl } from "../application/useCases/courses/listCoursesUseCase";
+import { ListCoursesByFiltersUseCaseImpl } from "../application/useCases/courses/listCoursesByFiltersUseCase";
 import { CreateCourseUseCaseImpl } from "../application/useCases/courses/createCourseUseCase";
 import { DeleteCourseUseCaseImpl } from "../application/useCases/courses/deleteCourseUseCase";
 import { UpdateCourseUseCaseImpl } from "../application/useCases/courses/updateCourseUseCase";
@@ -55,6 +57,7 @@ import { CourseSubjetService } from "./services/CourseSubjectService";
 import { ListSubjectFromCourseUseCaseImpl } from "../application/useCases/courses/listSubjectFromCourse";
 import { SchoolYearService } from "./services/SchoolYearService";
 import { ListSchoolYearUseCaseImpl } from "../application/useCases/schoolYears/listSchoolYearUseCase";
+import { ListSchoolYearByFiltersUseCaseImpl } from "../application/useCases/schoolYears/listSchoolYearByFiltersUseCase";
 import { ListParallelUseCaseImpl } from "../application/useCases/parallels/listParallelUseCase";
 import { CreateSchoolYearUseCaseImpl } from "../application/useCases/schoolYears/createSchoolYearUseCase";
 import { UpdateSchoolYearUseCaseImpl } from "../application/useCases/schoolYears/updateSchoolYearUseCase";
@@ -95,18 +98,20 @@ import { ListBehaviorScalesUseCaseImpl } from "../application/useCases/behaviorS
 import { CreateBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/createBehaviorScaleUseCase";
 import { UpdateBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/updateBehaviorScaleUseCase";
 import { DeleteBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/deleteBehaviorScaleUseCase";
-import { CLASS_SCHEDULE_REPOSITORY, CLASS_SCHEDULE_SERVICE, CLASS_SCHEDULE_LIST_USE_CASE, CLASS_SCHEDULE_CREATE_USE_CASE, CLASS_SCHEDULE_UPDATE_USE_CASE, CLASS_SCHEDULE_DELETE_USE_CASE, CLASS_SCHEDULE_GET_USE_CASE } from "./symbols/ClassScheduleSymbol";
+import { CLASS_SCHEDULE_REPOSITORY, CLASS_SCHEDULE_SERVICE, CLASS_SCHEDULE_LIST_USE_CASE, CLASS_SCHEDULE_LIST_BY_FILTERS_USE_CASE, CLASS_SCHEDULE_CREATE_USE_CASE, CLASS_SCHEDULE_UPDATE_USE_CASE, CLASS_SCHEDULE_DELETE_USE_CASE, CLASS_SCHEDULE_GET_USE_CASE } from "./symbols/ClassScheduleSymbol";
 import { ClassScheduleRepositoryImpl } from "../infrastructure/adapters/api/ClassScheduleRepositoryImpl";
 import { ClassScheduleService } from "./services/ClassScheduleService";
 import { ListClassSchedulesUseCaseImpl } from "../application/useCases/classSchedules/listClassSchedulesUseCase";
+import { ListClassSchedulesByFiltersUseCaseImpl } from "../application/useCases/classSchedules/listClassSchedulesByFiltersUseCase";
 import { CreateClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/createClassScheduleUseCase";
 import { UpdateClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/updateClassScheduleUseCase";
 import { DeleteClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/deleteClassScheduleUseCase";
 import { GetClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/getClassScheduleUseCase";
-import { ACADEMIC_PLANNING_REPOSITORY, ACADEMIC_PLANNING_SERVICE, ACADEMIC_PLANNING_LIST_USE_CASE, ACADEMIC_PLANNING_CREATE_USE_CASE, ACADEMIC_PLANNING_UPDATE_USE_CASE, ACADEMIC_PLANNING_DELETE_USE_CASE, ACADEMIC_PLANNING_GET_USE_CASE } from "./symbols/AcademicPlanningSymbol";
+import { ACADEMIC_PLANNING_REPOSITORY, ACADEMIC_PLANNING_SERVICE, ACADEMIC_PLANNING_LIST_USE_CASE, ACADEMIC_PLANNING_LIST_BY_FILTERS_USE_CASE, ACADEMIC_PLANNING_CREATE_USE_CASE, ACADEMIC_PLANNING_UPDATE_USE_CASE, ACADEMIC_PLANNING_DELETE_USE_CASE, ACADEMIC_PLANNING_GET_USE_CASE } from "./symbols/AcademicPlanningSymbol";
 import { AcademicPlanningRepositoryImpl } from "../infrastructure/adapters/api/AcademicPlanningRepositoryImpl";
 import { AcademicPlanningService } from "./services/AcademicPlanningService";
 import { ListAcademicPlanningsUseCaseImpl } from "../application/useCases/academicPlannings/listAcademicPlanningsUseCase";
+import { ListAcademicPlanningsByFiltersUseCaseImpl } from "../application/useCases/academicPlannings/listAcademicPlanningsByFiltersUseCase";
 import { CreateAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/createAcademicPlanningUseCase";
 import { UpdateAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/updateAcademicPlanningUseCase";
 import { DeleteAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/deleteAcademicPlanningUseCase";
@@ -185,9 +190,11 @@ const contianerScolar = new ContainerModule(
 
         bind(COURSE_SERVICE).to(CourseService);
         bind(COURSE_LIST_USECASE).to(ListCoursesUseCaseImpl);
+        bind(COURSE_LIST_BY_FILTERS_USECASE).to(ListCoursesByFiltersUseCaseImpl);
 
         bind(SUBJECT_SERVICE).to(SubjectService);
         bind(SUBJECT_LIST_USE_CASE).to(ListSubjectUseCaseImpl)
+        bind(SUBJECT_LIST_BY_FILTERS_USE_CASE).to(ListSubjectsByFiltersUseCaseImpl)
         bind(SUBJECT_CREATE_USE_CASE).to(CreateSubjectUseCaseImpl)
 
         bind(COURSE_CREATE_USECASE).to(CreateCourseUseCaseImpl);
@@ -199,6 +206,7 @@ const contianerScolar = new ContainerModule(
         bind(COURSE_SUBJECT_LIST_USECASE).to(ListSubjectFromCourseUseCaseImpl)
         bind(SCHOOL_YEAR_SERVICE).to(SchoolYearService)
         bind(SCHOOL_YEAR_LIST_USE_CASE).to(ListSchoolYearUseCaseImpl)
+        bind(SCHOOL_YEAR_LIST_BY_FILTERS_USE_CASE).to(ListSchoolYearByFiltersUseCaseImpl)
         bind(SCHOOL_YEAR_CREATE_USE_CASE).to(CreateSchoolYearUseCaseImpl)
         bind(SCHOOL_YEAR_UPDATE_USE_CASE).to(UpdateSchoolYearUseCaseImpl)
         bind(SCHOOL_YEAR_GET_USE_CASE).to(GetSchoolYearUseCaseImpl);
@@ -246,6 +254,7 @@ const contianerScolar = new ContainerModule(
         })
         bind(CLASS_SCHEDULE_SERVICE).to(ClassScheduleService)
         bind(CLASS_SCHEDULE_LIST_USE_CASE).to(ListClassSchedulesUseCaseImpl)
+        bind(CLASS_SCHEDULE_LIST_BY_FILTERS_USE_CASE).to(ListClassSchedulesByFiltersUseCaseImpl)
         bind(CLASS_SCHEDULE_CREATE_USE_CASE).to(CreateClassScheduleUseCaseImpl)
         bind(CLASS_SCHEDULE_UPDATE_USE_CASE).to(UpdateClassScheduleUseCaseImpl)
         bind(CLASS_SCHEDULE_DELETE_USE_CASE).to(DeleteClassScheduleUseCaseImpl)
@@ -256,6 +265,7 @@ const contianerScolar = new ContainerModule(
         })
         bind(ACADEMIC_PLANNING_SERVICE).to(AcademicPlanningService)
         bind(ACADEMIC_PLANNING_LIST_USE_CASE).to(ListAcademicPlanningsUseCaseImpl)
+        bind(ACADEMIC_PLANNING_LIST_BY_FILTERS_USE_CASE).to(ListAcademicPlanningsByFiltersUseCaseImpl)
         bind(ACADEMIC_PLANNING_CREATE_USE_CASE).to(CreateAcademicPlanningUseCaseImpl)
         bind(ACADEMIC_PLANNING_UPDATE_USE_CASE).to(UpdateAcademicPlanningUseCaseImpl)
         bind(ACADEMIC_PLANNING_DELETE_USE_CASE).to(DeleteAcademicPlanningUseCaseImpl)

@@ -8,9 +8,21 @@ import { AcademicPlanningRepository } from "@/scolar/domain/repositories/Academi
 export class AcademicPlanningRepositoryImpl implements AcademicPlanningRepository {
     constructor(private readonly http: AxiosInstance) {}
 
-    async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<AcademicPlanningDto>> {
+    async findAll(
+        page: number,
+        limit: number,
+        search?: string,
+        orderby?: string[],
+        filters?: {
+            course_id?: number;
+            parallel_id?: number;
+            school_year_id?: number;
+            subject_id?: number;
+            topic?: string;
+        },
+    ): Promise<PaginatedResult<AcademicPlanningDto>> {
         const { data } = await this.http.get<PaginatedResult<AcademicPlanningDto>>("/academic-plannings/", {
-            params: { page, limit, search, orderby },
+            params: { page, limit, search, orderby, ...(filters ?? {}) },
         });
         return data;
     }
@@ -18,11 +30,11 @@ export class AcademicPlanningRepositoryImpl implements AcademicPlanningRepositor
         const { data } = await this.http.get<AcademicPlanningDto>(`/academic-plannings/${id}`);
         return data;
     }
-    async create(entity: Omit<AcademicPlanningDto, 'id'>): Promise<AcademicPlanningDto> {
+    async create(entity: Omit<AcademicPlanningDto, "id">): Promise<AcademicPlanningDto> {
         const { data } = await this.http.post<AcademicPlanningDto>("/academic-plannings/", entity);
         return data;
     }
-    async update(id: number, entity: Omit<AcademicPlanningDto, 'id'>): Promise<AcademicPlanningDto> {
+    async update(id: number, entity: Omit<AcademicPlanningDto, "id">): Promise<AcademicPlanningDto> {
         const { data } = await this.http.put<AcademicPlanningDto>(`/academic-plannings/${id}`, entity);
         return data;
     }
@@ -30,3 +42,4 @@ export class AcademicPlanningRepositoryImpl implements AcademicPlanningRepositor
         await this.http.delete(`/academic-plannings/${id}`);
     }
 }
+
