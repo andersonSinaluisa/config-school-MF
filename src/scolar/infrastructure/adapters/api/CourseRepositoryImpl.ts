@@ -8,13 +8,20 @@ import { injectable } from "inversify";
 export class CourseRepositoryImpl implements CourseRepository{
 
     constructor(private readonly http: AxiosInstance) {}
-    async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<CourseDto>> {
+    async findAll(
+        page: number,
+        limit: number,
+        search?: string,
+        orderby?: string[],
+        filters?: { name?: string; level_id?: number }
+    ): Promise<PaginatedResult<CourseDto>> {
         const { data } = await this.http.get<PaginatedResult<CourseDto>>("/courses/", {
             params: {
                 page,
                 limit,
                 search,
-                orderby
+                orderby,
+                ...(filters ?? {})
             }
         });
         return data;

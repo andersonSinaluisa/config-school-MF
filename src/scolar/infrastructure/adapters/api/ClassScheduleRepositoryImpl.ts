@@ -8,9 +8,21 @@ import { ClassScheduleRepository } from "@/scolar/domain/repositories/ClassSched
 export class ClassScheduleRepositoryImpl implements ClassScheduleRepository {
     constructor(private readonly http: AxiosInstance) {}
 
-    async findAll(page: number, limit: number, search?: string, orderby?: string[]): Promise<PaginatedResult<ClassScheduleDto>> {
+    async findAll(
+        page: number,
+        limit: number,
+        search?: string,
+        orderby?: string[],
+        filters?: {
+            course_id?: number;
+            parallel_id?: number;
+            school_year_id?: number;
+            subject_id?: number;
+            day_of_week?: number;
+        },
+    ): Promise<PaginatedResult<ClassScheduleDto>> {
         const { data } = await this.http.get<PaginatedResult<ClassScheduleDto>>("/class-schedules/", {
-            params: { page, limit, search, orderby },
+            params: { page, limit, search, orderby, ...(filters ?? {}) },
         });
         return data;
     }
@@ -18,11 +30,11 @@ export class ClassScheduleRepositoryImpl implements ClassScheduleRepository {
         const { data } = await this.http.get<ClassScheduleDto>(`/class-schedules/${id}/`);
         return data;
     }
-    async create(entity: Omit<ClassScheduleDto, 'id'>): Promise<ClassScheduleDto> {
+    async create(entity: Omit<ClassScheduleDto, "id">): Promise<ClassScheduleDto> {
         const { data } = await this.http.post<ClassScheduleDto>("/class-schedules/", entity);
         return data;
     }
-    async update(id: number, entity: Omit<ClassScheduleDto, 'id'>): Promise<ClassScheduleDto> {
+    async update(id: number, entity: Omit<ClassScheduleDto, "id">): Promise<ClassScheduleDto> {
         const { data } = await this.http.put<ClassScheduleDto>(`/class-schedules/${id}/`, entity);
         return data;
     }
@@ -30,3 +42,4 @@ export class ClassScheduleRepositoryImpl implements ClassScheduleRepository {
         await this.http.delete(`/class-schedules/${id}/`);
     }
 }
+
