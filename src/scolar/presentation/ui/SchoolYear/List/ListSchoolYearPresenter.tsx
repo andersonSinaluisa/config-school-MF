@@ -7,9 +7,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { formatDate } from "@/lib/utils"
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto"
 import { SchoolYear } from "@/scolar/domain/entities/school_year"
-import { ChevronRight, Edit, Home, Plus, Search } from "lucide-react"
+import { ChevronRight, Edit, Home, Plus } from "lucide-react"
 import { DeleteSchoolYearContainer } from "../Delete/DeleteSchoolYearContainer"
-import { Input } from "@/components/ui/input"
+import { Command, CommandInput } from "@/components/ui/command"
+import { SearchSelect } from "@/components/ui/search-select"
 import { Link } from "react-router-dom"
 
 interface ListSchoolYearPresenterProps {
@@ -20,8 +21,16 @@ interface ListSchoolYearPresenterProps {
     onPaginate: (page: number) => void;
     isPending: boolean;
     onSearch: (searchTerm: string) => void;
+    status?: string;
+    onStatusChange: (value: string | number) => void;
+    onClearFilters: () => void;
 }
-export const ListSchoolYearPresenter = ({ schoolYears, onAdd, onEdit, onDelete, onPaginate, isPending, onSearch }: ListSchoolYearPresenterProps) => {
+export const ListSchoolYearPresenter = ({ schoolYears, onAdd, onEdit, onDelete, onPaginate, isPending, onSearch, status, onStatusChange, onClearFilters }: ListSchoolYearPresenterProps) => {
+    const statusOptions = [
+        { value: 'active', label: 'Activo' },
+        { value: 'inactive', label: 'Inactivo' },
+        { value: 'archived', label: 'Finalizado' }
+    ];
     return (
         
         <div className="space-y-6">
@@ -49,11 +58,17 @@ export const ListSchoolYearPresenter = ({ schoolYears, onAdd, onEdit, onDelete, 
                     </Button>
                 </CardHeader>
                 <CardContent>
-                    <div className="relative flex-1">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input type="search" placeholder="Buscar Cursos..." className="pl-9"
-                            onChange={(e) => onSearch(e.target.value)}
+                    <div className="mb-4 flex flex-col md:flex-row md:items-center gap-2">
+                        <Command className="rounded-lg border md:flex-1">
+                            <CommandInput placeholder="Buscar..." onValueChange={onSearch} />
+                        </Command>
+                        <SearchSelect
+                            options={statusOptions}
+                            value={status}
+                            onChange={onStatusChange}
+                            placeholder="Estado"
                         />
+                        <Button variant="outline" onClick={onClearFilters}>Limpiar filtros</Button>
                     </div>
                     {schoolYears.data.length === 0 ? (
                         <div className="text-center py-6 text-muted-foreground">No hay años escolares registrados</div>
