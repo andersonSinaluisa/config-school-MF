@@ -9,6 +9,11 @@ import { formatDate } from "@/lib/utils"
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto"
 import { Parallel } from "@/scolar/domain/entities/parallel"
 import { Edit, Plus, Search,  } from "lucide-react"
+import { Command, CommandInput } from "@/components/ui/command"
+import { SearchSelect } from "@/components/ui/search-select"
+import { Level } from "@/scolar/domain/entities/level"
+import { SchoolYear } from "@/scolar/domain/entities/school_year"
+import { Course } from "@/scolar/domain/entities/course"
 
 interface ListParallelPresenterProps {
     onAdd: () => void
@@ -17,6 +22,19 @@ interface ListParallelPresenterProps {
     isPending?: boolean
     onPaginate: (page: number) => void
     onSearch: (searchTerm: string) => void
+    onSearchLevel: (levelName: string) => void
+    onSearchSchoolYear: (schoolYearName: string) => void
+    onSearchCourse: (courseName: string) => void
+    onClearFilters?: () => void
+    onLevelChange?: (levelId: string) => void
+    onSchoolYearChange?: (schoolYearId: string) => void
+    onCourseChange?: (courseId: string) => void
+    levels: Level[]
+    schoolYears: SchoolYear[]
+    courses: Course[]
+    selectedLevel?: Level
+    selectedSchoolYear?: SchoolYear
+    selectedCourse?: Course
 }
 
 export const ListParallelPresenter = ({
@@ -26,6 +44,19 @@ export const ListParallelPresenter = ({
     isPending = false,
     onPaginate,
     onSearch,
+    onClearFilters,
+    onLevelChange,
+    onSchoolYearChange,
+    onCourseChange,
+    levels,
+    schoolYears,
+    courses,
+    selectedLevel,
+    selectedSchoolYear,
+    selectedCourse,
+    onSearchLevel,
+    onSearchSchoolYear,
+    onSearchCourse
 }: ListParallelPresenterProps) => {
     
     
@@ -44,9 +75,45 @@ export const ListParallelPresenter = ({
             <CardContent>
                 <div className="relative flex-1">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input type="search" placeholder="Buscar Cursos..." className="pl-9"
+                    <Input type="search" 
+                        placeholder="Buscar Cursos..." className="pl-9"
                         onChange={(e) => onSearch(e.target.value)}
                     />
+                </div>
+                <div className="mb-4 flex flex-col md:flex-row md:items-center gap-2">
+
+                    <Command className="rounded-lg border md:flex-1">
+                        <CommandInput placeholder="Buscar Nivel..."
+                         />
+                    </Command>
+                    <SearchSelect
+                        options={levels.map(l => ({ value: l.id, label: l.name }))}
+                        value={selectedLevel?.id}
+                        onChange={(level) => onLevelChange?.(level?.toString())}
+                        placeholder="Seleccionar nivel"
+                        onInputChange={
+                            (e) => onSearchLevel(e)
+                        }
+                    />
+                    <SearchSelect
+                        options={schoolYears.map(l => ({ value: l.id, label: l.name }))}
+                        value={selectedSchoolYear?.id}
+                        onChange={(schoolYear) => onSchoolYearChange?.(schoolYear?.toString())}
+                        placeholder="Seleccionar año escolar"
+                        onInputChange={
+                            (e) => onSearchSchoolYear(e)
+                        }
+                    />
+                    <SearchSelect
+                        options={courses.map(l => ({ value: l.id, label: l.name }))}
+                        value={selectedCourse?.id}
+                        onChange={(course) => onCourseChange?.(course?.toString())}
+                        placeholder="Seleccionar curso"
+                        onInputChange={
+                            (e) => onSearchCourse(e)
+                        }
+                    />
+                    <Button variant="ghost" onClick={onClearFilters}>Limpiar filtros</Button>
                 </div>
                 <Table>
                     <TableHeader>

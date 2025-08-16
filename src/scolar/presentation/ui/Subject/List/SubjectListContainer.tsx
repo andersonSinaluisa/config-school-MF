@@ -64,7 +64,7 @@ export const SubjectListContainer = () => {
     }, [fetchSubjects])
     const navigate = useNavigate();
     const onAddSubject = () => {
-        navigate('/materias/crear')
+        navigate('/materias/nuevo')
     }
     const clearFilters = () => {
         setSearchTerm(undefined)

@@ -7,10 +7,12 @@ import { SearchSelect } from "@/components/ui/search-select"
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto"
 import { Course } from "@/scolar/domain/entities/course"
 import { Level } from "@/scolar/domain/entities/level"
-import { BookOpen, ChevronRight, Home } from "lucide-react"
+import { BookOpen, ChevronRight, Home, Menu, Search } from "lucide-react"
 import { CourseDeleteContainer } from "../Delete/CourseDeleteContainer"
 import { Loader } from "@/components/loader"
 import { Link } from "react-router-dom"
+import { Input } from "@/components/ui/input"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface CourseListPresenterProps {
     course: PaginatedResult<Course>
@@ -57,8 +59,16 @@ export const CourseListPresenter = ({ course, isPending, onSearch, onAddCourse, 
                     </CardDescription>
                     
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="relative w-full">
+
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input type="search" placeholder="Buscar Cursos..." className="pl-9"
+                            onChange={(e) => onSearch(e.target.value)}
+                        />
+                    </div>
                     <div className="mb-4 flex flex-col md:flex-row md:items-center gap-2">
+                      
                         <Command className="rounded-lg border md:flex-1">
                             <CommandInput placeholder="Buscar Cursos..." onValueChange={onSearch} />
                         </Command>
@@ -86,51 +96,78 @@ export const CourseListPresenter = ({ course, isPending, onSearch, onAddCourse, 
                         course.data.map((course) => (
                             <Card
                                 key={course.id}
-                                className="mb-4 border border-gray-200 shadow-sm hover:shadow-md transition rounded-2xl"
+                                className="border border-gray-200 shadow-sm hover:shadow-md transition rounded-2xl"
                             >
-                                <CardHeader className="flex flex-row items-center gap-3 bg-primary rounded-t-xl relative">
-                                    <div className="bg-primary-200 p-2 rounded-full">
-                                        <BookOpen className="text-primary-600 w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <CardTitle className="text-lg font-semibold text-gray-100 hover:text-primary-100 transition-colors duration-200">
-                                            {course.name}
-                                        </CardTitle>
-                                        <CardDescription className="text-gray-200">
-                                            {course.description}
-                                        </CardDescription>
-                                    </div>
-
-                                    {/* Icono eliminar */}
+                                <CardHeader className=" bg-primary rounded-t-xl ">
                                     
-                                    <CourseDeleteContainer
-                                         
-                                        course={course}
-                                        onConfirm={() => onDelete(course)}
-                                    />
+                                    <div className="flex flex-col">
+                                        <div className="flex flex-row justify-between">
+
+                                                {/* Icono eliminar */}
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger>
+                                                        <Menu color="white"></Menu>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent>
+                                                        <DropdownMenuItem>
+                                                            <Link
+                                                                to={`/cursos/${course.id}`}
+                                                                className="text-primary-600 hover:underline"
+                                                            >
+                                                                Ver detalles
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem>
+                                                            <Link
+                                                                to={`/cursos/${course.id}/paralelos`}
+                                                                className="text-primary-600 hover:underline"
+                                                            >
+                                                                Ver paralelos
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem>
+                                                            <Link
+                                                                to={`/cursos/${course.id}/materias`}
+                                                                className="text-primary-600 hover:underline"
+                                                            >
+                                                                Ver asignaturas
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+
+                                            <CourseDeleteContainer
+
+                                                course={course}
+                                                onConfirm={() => onDelete(course)}
+                                            />
+                                        </div>
+                                        <div className="flex flex-row items-center gap-3 relative">
+                                            <div className="bg-primary-200 p-2 rounded-full">
+                                                <BookOpen className="text-primary-600 w-5 h-5" />
+                                            </div>
+                                            <div>
+                                                <CardTitle className="text-lg font-semibold text-gray-100 hover:text-primary-100 transition-colors duration-200">
+                                                    {course.name}
+                                                </CardTitle>
+                                                <CardDescription className="text-gray-200">
+                                                    {course.description}
+                                                </CardDescription>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                   
                                 </CardHeader>
 
                                 <CardContent>
-                                    <div className="flex items-center justify-between text-sm text-muted-foreground mt-3">
+                                    <div className="flex items-center justify-between text-sm text-muted-foreground pt-5">
                                         <span className="flex items-center gap-1">
                                             🎓 Nivel: {course.level?.name || "Sin nivel"}
                                         </span>
                                         
                                     </div>
-                                    <div className="mt-3 flex items-center justify-between text-sm text-muted-foreground">
-                                        <Link
-                                            to={`/cursos/${course.id}`}
-                                            className="text-primary-600 hover:underline"
-                                        >
-                                            Ver detalles
-                                        </Link>
-                                        <Link
-                                            to={`/cursos/${course.id}/materias`}
-                                            className="text-primary-600 hover:underline"
-                                        >
-                                            Ver asignaturas
-                                        </Link>
-                                    </div>
+                                    
                                 </CardContent>
                           </Card>
                         ))

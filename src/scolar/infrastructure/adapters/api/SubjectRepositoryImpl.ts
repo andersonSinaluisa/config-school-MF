@@ -29,7 +29,7 @@ export class SubjectRepositoryImpl implements SubjectRepository{
         return data;
     }
     async findById(id: number): Promise<SubjectDto> {
-        const { data } = await this.http.get<SubjectDto>(`/subjects/${id}`);
+        const { data } = await this.http.get<SubjectDto>(`/subjects/${id}/`);
         return data;
     }
     async create(subject: Omit<SubjectDto, "id">): Promise<SubjectDto> {
@@ -37,7 +37,7 @@ export class SubjectRepositoryImpl implements SubjectRepository{
         return data;
     }
     async update(id: number, subject: Omit<SubjectDto, "id">): Promise<SubjectDto> {
-        const { data } = await this.http.put<SubjectDto>(`/subjects/${id}`, subject);
+        const { data } = await this.http.put<SubjectDto>(`/subjects/${id}/`, subject);
         return data;
     }
     async delete(id: number): Promise<void> {

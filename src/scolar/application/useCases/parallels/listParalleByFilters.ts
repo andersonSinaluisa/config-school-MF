@@ -10,8 +10,7 @@ import { Left, Right } from "purify-ts/Either";
 
 export class ListParallelByFiltersUseCaseCommand extends PaginateUseCaseCommand {
     constructor(
-        private params: { courseId?: number; schoolYearId?: number; name?: string; capacity?: number; sectionId?: number; },
-        private readonly courseId: number,
+        public params: { courseId?: number; schoolYearId?: number; name?: string; capacity?: number; sectionId?: number; },
         page: number = 1,
         limit: number = 10,
         orderby: string[],
@@ -24,7 +23,6 @@ export class ListParallelByFiltersUseCaseCommand extends PaginateUseCaseCommand 
     get data() {
         return {
             ...super.data,
-            courseId: this.courseId,
            params: this.params
         };
     }

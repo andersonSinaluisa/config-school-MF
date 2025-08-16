@@ -3,24 +3,26 @@ import { ListByCoursePresenter } from "./ListByCoursePresenter"
 import { useInjection } from "inversify-react";
 import { GetCourseCommand, GetCourseUseCase } from "@/scolar/application/useCases/courses/getCourseUseCase";
 import { COURSE_GET_USECASE } from "@/scolar/domain/symbols/CourseSymbol";
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { startTransition, useCallback, useEffect, useState } from "react";
 import { Course } from "@/scolar/domain/entities/course";
 import { toast } from "@/hooks/use-toast";
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto";
 import { Parallel } from "@/scolar/domain/entities/parallel";
-import { ListParallelByCourseUseCase, ListParallelByCourseUseCaseCommand } from "@/scolar/application/useCases/parallels/listParallelByCourseUseCase";
-import { PARALLEL_GET_LIST_BY_COURSE_USECASE } from "@/scolar/domain/symbols/ParallelSymbol";
+import { PARALLEL_LIST_USECASE } from "@/scolar/domain/symbols/ParallelSymbol";
 import { useNavigate, useParams } from "react-router-dom";
+import { useFetchSchoolYears } from "@/scolar/application/hooks/school-year/useFetchSchoolYear";
+import { ListParallelByFiltersUseCase, ListParallelByFiltersUseCaseCommand } from "@/scolar/application/useCases/parallels/listParalleByFilters";
 
 
 export const ListByCourseContainer = ()=>{
 
     const { courseId } = useParams<{ courseId: string }>();
     const getCourseUseCase = useInjection<GetCourseUseCase>(COURSE_GET_USECASE);
-    const getParallelsByCourseUseCase = useInjection<ListParallelByCourseUseCase>(PARALLEL_GET_LIST_BY_COURSE_USECASE); // Assuming you have a use case for fetching parallels by course
-    const [, startTransition] = useTransition()
+    const getParallelsByCourseUseCase = useInjection<ListParallelByFiltersUseCase>(PARALLEL_LIST_USECASE); 
     const [course,setCourse] = useState<Course|null>(null)
 
+    const [searchSchoolYear,setSearchSchoolYear] = useState<string>("")
+    const schoolYear = useFetchSchoolYears(1,1000,searchSchoolYear);
     const [result, setResult] = useState<PaginatedResult<Parallel>>({
         data: [],
         meta: {
@@ -32,8 +34,10 @@ export const ListByCourseContainer = ()=>{
             next: null
         }
     })
-    const [paginate,] = useState<ListParallelByCourseUseCaseCommand>(
-        ()=>new ListParallelByCourseUseCaseCommand(courseId ? parseInt(courseId, 10) : 0, 1, 10, [], undefined)
+    const [paginate,setPaginate] = useState<ListParallelByFiltersUseCaseCommand>(
+        () => new ListParallelByFiltersUseCaseCommand(
+            { courseId: courseId? parseInt(courseId, 10): 0 }, 
+        1, 10, [], undefined)
     )
 
 
@@ -93,11 +97,30 @@ export const ListByCourseContainer = ()=>{
         navigate(-1);
     }
 
+    const onSchoolYearChange = (schoolYear:string) => {
+        setPaginate(
+            new ListParallelByFiltersUseCaseCommand(
+                {
+                    courseId: courseId ? parseInt(courseId, 10) : 0,
+                    schoolYearId: schoolYear ? parseInt(schoolYear, 10) : undefined
+                },
+                1,
+                100,
+                [],
+                undefined
+            )
+        )
+    }
+
     return (
         <ListByCoursePresenter
             course={course}
             onBack={handleBack}
             list={result}
+            onSchoolYearChange={onSchoolYearChange}
+            onSearchSchoolYear={setSearchSchoolYear}
+            schoolYears={schoolYear}
+            selectedSchoolYearId={paginate.params.schoolYearId?.toString()}
         />
     )
 }

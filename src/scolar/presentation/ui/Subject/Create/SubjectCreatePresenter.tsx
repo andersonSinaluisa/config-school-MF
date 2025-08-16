@@ -30,25 +30,27 @@ export const SubjectCreatePresenter = ({
     return (
         <div className="space-y-6">
             <nav className="flex items-center text-sm text-muted-foreground">
-                <Link to="/admin" className="hover:text-foreground transition-colors">
+                <Link to="/" className="hover:text-foreground transition-colors">
                     <Home className="h-4 w-4" />
                     <span className="sr-only">Inicio</span>
                 </Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
-                <Link to="/admin/roles" className="hover:text-foreground transition-colors">
-                    Niveles
+                <Link to="/materias" className="hover:text-foreground transition-colors">
+                    Asignaturas
                 </Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
-                <span className="text-foreground font-medium">Nuevo Nivel Educativo</span>
+                <span className="text-foreground font-medium">Nueva Asignatura</span>
             </nav>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
                         <ShieldCheck className="h-8 w-8 text-primary-500" />
-                        Nuevo Nivel Educativo
+                        Nueva Asignatura
                     </h1>
-                    <p className="text-muted-foreground mt-1">Crea un nuevo rol y asigna permisos</p>
+                    <p className="text-muted-foreground mt-1">
+                        Completa el formulario para crear una nueva Asignatura. Asegúrate de que la información sea precisa y completa.
+                    </p>
                 </div>
                 <div className="flex items-center gap-2">
                     <Button variant="outline" onClick={() => onCancel()} disabled={isSubmitting}>
@@ -66,7 +68,7 @@ export const SubjectCreatePresenter = ({
                         ) : (
                             <>
                                 <Save className="mr-2 h-4 w-4" />
-                                Crear Nivel
+                                Guardar
                             </>
                         )}
                     </Button>
@@ -77,11 +79,11 @@ export const SubjectCreatePresenter = ({
                 <div className="lg:col-span-2">
                     <Card >
                         <CardHeader>
-                            <CardTitle>{"Crear"} Materia</CardTitle>
+                            <CardTitle>{"Crear"} Asignatura</CardTitle>
                         </CardHeader>
                         <form onSubmit={onSubmit}>
                             <CardContent className="space-y-4">
-                                {errors && <div className="bg-red-50 text-red-500 p-3 rounded-md text-sm">{errors.root?.message}</div>}
+                                {errors.root && <div className="bg-destructive text-destructive-foreground p-3 rounded-md text-sm">{errors.root?.message}</div>}
 
                                 <div className="space-y-2">
                                     <Label htmlFor="name">Nombre</Label>
@@ -157,14 +159,15 @@ export const SubjectCreatePresenter = ({
                     <Card>
                         <CardHeader>
                             <CardTitle>Vista Previa</CardTitle>
-                            <CardDescription>Así se verá el rol después de guardar</CardDescription>
+                            <CardDescription>Así se verá la Asignatura una vez creada</CardDescription>
+                                
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-2">
                                         <ShieldCheck className="h-5 w-5 text-primary-500" />
-                                        <h3 className="font-medium">{formData.data.name || "Nombre del nivel"}</h3>
+                                        <h3 className="font-medium">{formData.data.name || "Nombre de la asignatura"}</h3>
                                     </div>
                                     <Badge className="bg-accent-300 text-accent-800 hover:bg-accent-400 border-accent-500">Activo</Badge>
                                 </div>
@@ -186,7 +189,7 @@ export const SubjectCreatePresenter = ({
                         <CardHeader className="pb-3">
                             <CardTitle className="flex items-center">
                                 <Info className="h-4 w-4 mr-2 text-primary" />
-                                Guía de Niveles Educativos
+                                Guía de Asignaturas
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -194,25 +197,25 @@ export const SubjectCreatePresenter = ({
                                 <li className="flex items-start">
                                     <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                     <span>
-                                        Asegúrate de que el nombre del nivel sea claro y descriptivo para los usuarios
+                                        Asegúrate de que el nombre de la asignatura sea claro y descriptivo para los usuarios
                                     </span>
                                 </li>
                                 <li className="flex items-start">
                                     <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                     <span>
-                                        Utiliza descripciones concisas para explicar el propósito del nivel educativo
+                                        Utiliza descripciones concisas para explicar el propósito de la asignatura
                                     </span>
                                 </li>
                                 <li className="flex items-start">
                                     <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                     <span>
-                                        Asegúrate de que el orden del nivel sea correcto y lógico en la jerarquía educativa
+                                        Asegúrate de que las horas por semana seán adecuadas
                                     </span>
                                 </li>
                                 <li className="flex items-start">
                                     <AlertCircle className="h-4 w-4 mr-2 text-destructive mt-0.5" />
                                     <span>
-                                        Evita usar nombres de niveles educativos que ya existan en el sistema para evitar confusiones
+                                        Evita usar nombres de asignaturas que ya existan en el sistema para evitar confusiones
                                     </span>
                                 </li>
                             </ul>
@@ -223,7 +226,7 @@ export const SubjectCreatePresenter = ({
                                     <div className="text-xs">
                                         <p className="font-medium text-blue-700 dark:text-blue-300">¿Necesitas ayuda?</p>
                                         <p className="text-blue-600 dark:text-blue-400">
-                                            Consulta la documentación de roles para más información sobre mejores prácticas.
+                                            Consulta la documentación de las asignaturas para más información sobre mejores prácticas.
                                         </p>
                                     </div>
                                 </div>

@@ -14,7 +14,7 @@ export const CourseDeletePresenter = (  { curso, onConfirm }: CourseDeletePresen
                 <button 
                 title="Eliminar curso"
                     type="button"
-                    className="absolute top-3 right-3 p-1 rounded-full hover:bg-primary-500 transition"
+                    className=" p-1 rounded-full hover:bg-primary-500 transition"
                 >
                     
                     <Trash className="w-5 h-5 text-primary-200 hover:text-white" />

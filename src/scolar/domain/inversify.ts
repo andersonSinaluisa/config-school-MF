@@ -45,7 +45,6 @@ import { CourseService } from "./services/CourseService";
 import { SubjectService } from "./services/SubjectService";
 import { ListSubjectUseCaseImpl } from "../application/useCases/subjects/listSubjectsUseCase";
 import { ListSubjectsByFiltersUseCaseImpl } from "../application/useCases/subjects/listSubjectsByFiltersUseCase";
-import { ListCoursesUseCaseImpl } from "../application/useCases/courses/listCoursesUseCase";
 import { ListCoursesByFiltersUseCaseImpl } from "../application/useCases/courses/listCoursesByFiltersUseCase";
 import { CreateCourseUseCaseImpl } from "../application/useCases/courses/createCourseUseCase";
 import { DeleteCourseUseCaseImpl } from "../application/useCases/courses/deleteCourseUseCase";
@@ -58,7 +57,6 @@ import { ListSubjectFromCourseUseCaseImpl } from "../application/useCases/course
 import { SchoolYearService } from "./services/SchoolYearService";
 import { ListSchoolYearUseCaseImpl } from "../application/useCases/schoolYears/listSchoolYearUseCase";
 import { ListSchoolYearByFiltersUseCaseImpl } from "../application/useCases/schoolYears/listSchoolYearByFiltersUseCase";
-import { ListParallelUseCaseImpl } from "../application/useCases/parallels/listParallelUseCase";
 import { CreateSchoolYearUseCaseImpl } from "../application/useCases/schoolYears/createSchoolYearUseCase";
 import { UpdateSchoolYearUseCaseImpl } from "../application/useCases/schoolYears/updateSchoolYearUseCase";
 import { GetSchoolYearUseCaseImpl } from "../application/useCases/schoolYears/getSchoolYearUseCase";
@@ -117,6 +115,7 @@ import { UpdateAcademicPlanningUseCaseImpl } from "../application/useCases/acade
 import { DeleteAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/deleteAcademicPlanningUseCase";
 import { GetAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/getAcademicPlanningUseCase";
 import { GetBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/getBehaviorScaleUseCase";
+import { ListParallelByFiltersUseCaseImpl } from "../application/useCases/parallels/listParalleByFilters";
 
 const contianerScolar = new ContainerModule(
     (bind) => {
@@ -189,7 +188,7 @@ const contianerScolar = new ContainerModule(
         bind(COURSE_SUBJECT_SERVICE).to(CourseSubjetService)
 
         bind(COURSE_SERVICE).to(CourseService);
-        bind(COURSE_LIST_USECASE).to(ListCoursesUseCaseImpl);
+        bind(COURSE_LIST_USECASE).to(ListCoursesByFiltersUseCaseImpl);
         bind(COURSE_LIST_BY_FILTERS_USECASE).to(ListCoursesByFiltersUseCaseImpl);
 
         bind(SUBJECT_SERVICE).to(SubjectService);
@@ -213,7 +212,7 @@ const contianerScolar = new ContainerModule(
         bind(SCHOOL_YEAR_DELETE_USE_CASE).to(DeleteSchoolYearUseCaseImpl);
 
         bind(PARALLEL_SERVICE).to(ParallelService);
-        bind(PARALLEL_LIST_USECASE).to(ListParallelUseCaseImpl)
+        bind(PARALLEL_LIST_USECASE).to(ListParallelByFiltersUseCaseImpl)
         bind(PARALLEL_CREATE_USECASE).to(CreateParallelUseCaseImpl)
         bind(PARALLEL_UPDATE_USECASE).to(UpdateParallelUseCaseImpl)
         bind(PARALLEL_DELETE_USECASE).to(DeleteParallelUseCaseImpl)

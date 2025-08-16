@@ -10,15 +10,23 @@ import { Parallel } from "@/scolar/domain/entities/parallel";
 import { ParallelCard } from "@/scolar/application/components/ParallelCard";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom"
+import { Command, CommandInput } from "@/components/ui/command"
+import { SchoolYear } from "@/scolar/domain/entities/school_year"
+import { SearchSelect } from "@/components/ui/search-select"
 
 
 interface ListByCoursePresenterProps{
     course: Course|null;
     onBack: ()=>void
     list: PaginatedResult<Parallel>;
+    schoolYears: SchoolYear[]
+    selectedSchoolYearId?: string
+    onSchoolYearChange: (schoolYearId: string) => void
+    onSearchSchoolYear: (searchTerm: string) => void
 }
 
-export const ListByCoursePresenter = ({ course, onBack, list }: ListByCoursePresenterProps)=>{
+export const ListByCoursePresenter = ({ course, onBack, 
+    list, schoolYears, selectedSchoolYearId, onSchoolYearChange, onSearchSchoolYear }: ListByCoursePresenterProps)=>{
     if (course==null){
         return null
     }
@@ -85,6 +93,23 @@ export const ListByCoursePresenter = ({ course, onBack, list }: ListByCoursePres
                                    
                                 />
                             </div>
+                            <div className="mb-4 flex flex-col md:flex-row md:items-center gap-2">
+
+                                <Command className="rounded-lg border md:flex-1">
+                                    <CommandInput placeholder="Buscar..."
+                                    />
+                                </Command>
+                                <SearchSelect
+                                    options={schoolYears.map(l => ({ value: l.id, label: l.name }))}
+                                    value={selectedSchoolYearId}
+                                    onChange={(schoolYear) => onSchoolYearChange?.(schoolYear?.toString())}
+                                    placeholder="Seleccionar año escolar"
+                                    onInputChange={
+                                        (e) => onSearchSchoolYear(e)
+                                    }
+                                />
+                            </div>
+
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {
