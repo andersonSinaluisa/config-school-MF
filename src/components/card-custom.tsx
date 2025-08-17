@@ -5,10 +5,16 @@ interface CardCustomProps {
     paragraph: string;
     icon: React.ReactNode;
     ribbonLabel: string;
+    action?: React.ReactNode;
 }
 export const CardCustom = (props: CardCustomProps) => {
     return (
         <div className="relative w-10/12 max-w-xs mx-auto bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-200">
+            {props.action && (
+                <div className="absolute top-2 left-2 z-20">
+                    {props.action}
+                </div>
+            )}
             {/* Top Ribbon */}
             <div className="absolute top-0 right-0 bg-primary text-white px-4 py-1 rounded-bl-2xl text-xs font-semibold tracking-wide z-10">
                 {props.ribbonLabel}

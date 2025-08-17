@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Command, CommandInput } from "@/components/ui/command"
-import {  BookMarkedIcon, ChevronRight, Home } from "lucide-react"
+import {  BookMarkedIcon, ChevronRight, Home, Edit } from "lucide-react"
 import { Subject } from "@/scolar/domain/entities/subject"
 import { PaginatedResult } from "@/scolar/infrastructure/dto/paginateDto"
 import { Loader } from "@/components/loader"
@@ -75,13 +75,20 @@ export const SubjectListPresenter = (props: SubjectListPresenterProps) => {
                     {props.subjects.data && props.subjects.data.length > 0 ? (
                         props.subjects.data.map((subject) => (
                             <CardCustom
-                            key={subject.id}
-                                icon={<BookMarkedIcon size={80}/>}
+                                key={subject.id}
+                                icon={<BookMarkedIcon size={80} />}
                                 title={subject.name}
                                 paragraph={subject.description || "No hay descripción disponible."}
                                 ribbonLabel={subject.hoursPerWeek + " horas/semana"}
+                                action={
+                                    <Link to={`/materias/${subject.id}`}>
+                                        <Button variant="ghost" size="icon">
+                                            <Edit className="h-4 w-4" />
+                                            <span className="sr-only">Editar</span>
+                                        </Button>
+                                    </Link>
+                                }
                             />
-                            
                         ))
                     ) : (
                         <p className="text-center text-muted-foreground">No hay cursos disponibles.</p>
