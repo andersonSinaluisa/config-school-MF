@@ -39,25 +39,27 @@ export const CreateSchoolYearPresenter = ({
         <form className="space-y-6" onSubmit={onSubmit}>
 
             <nav className="flex items-center text-sm text-muted-foreground">
-                <Link to="/admin" className="hover:text-foreground transition-colors">
+                <Link to="/" className="hover:text-foreground transition-colors">
                     <Home className="h-4 w-4" />
                     <span className="sr-only">Inicio</span>
                 </Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
-                <Link to="/admin/roles" className="hover:text-foreground transition-colors">
-                    Niveles
+                <Link to="/periodos-lectivos" className="hover:text-foreground transition-colors">
+                    Periodos Lectivos
                 </Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
-                <span className="text-foreground font-medium">Nuevo Nivel Educativo</span>
+                <span className="text-foreground font-medium">Nuevo Periodo Lectivo</span>
             </nav>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
                         <ShieldCheck className="h-8 w-8 text-primary-500" />
-                        Nuevo Nivel Educativo
+                        Nuevo Periodo Lectivo
                     </h1>
-                    <p className="text-muted-foreground mt-1">Crea un nuevo rol y asigna permisos</p>
+                    <p className="text-muted-foreground mt-1">
+                        Crea un nuevo periodo lectivo para organizar los años escolares de tu institución
+                    </p>
                 </div>
                 <div className="flex items-center gap-2">
                     <Button variant="outline" onClick={() => onCancel()} disabled={isSubmitting}>
@@ -75,7 +77,7 @@ export const CreateSchoolYearPresenter = ({
                         ) : (
                             <>
                                 <Save className="mr-2 h-4 w-4" />
-                                Crear Nivel
+                                Guardar
                             </>
                         )}
                     </Button>
@@ -209,7 +211,7 @@ export const CreateSchoolYearPresenter = ({
                     <CardHeader className="pb-3">
                         <CardTitle className="flex items-center">
                             <Info className="h-4 w-4 mr-2 text-primary" />
-                            Guía de Niveles Educativos
+                            Guía de Periodos Lectivos
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -217,19 +219,19 @@ export const CreateSchoolYearPresenter = ({
                             <li className="flex items-start">
                                 <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                 <span>
-                                    Asegúrate de que el nombre del nivel sea claro y descriptivo para los usuarios
+                                    Asegúrate de que el nombre del periodo escolar se claro, Ejemplo: 2024
                                 </span>
                             </li>
                             <li className="flex items-start">
                                 <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                 <span>
-                                    Utiliza descripciones concisas para explicar el propósito del nivel educativo
+                                    Usa un formato consistente para los nombres de los niveles educativos, Ejemplo: Primaria, Secundaria
                                 </span>
                             </li>
                             <li className="flex items-start">
                                 <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                 <span>
-                                    Asegúrate de que el orden del nivel sea correcto y lógico en la jerarquía educativa
+                                    Considera incluir el año o grado en el nombre para mayor claridad, Ejemplo: Primaria 2024
                                 </span>
                             </li>
                             <li className="flex items-start">
@@ -246,7 +248,7 @@ export const CreateSchoolYearPresenter = ({
                                 <div className="text-xs">
                                     <p className="font-medium text-blue-700 dark:text-blue-300">¿Necesitas ayuda?</p>
                                     <p className="text-blue-600 dark:text-blue-400">
-                                        Consulta la documentación de roles para más información sobre mejores prácticas.
+                                        Consulta la documentación de periodos escolares para más información sobre mejores prácticas.
                                     </p>
                                 </div>
                             </div>

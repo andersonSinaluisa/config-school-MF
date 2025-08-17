@@ -63,7 +63,7 @@ export const GradingSystemCreatePresenter = ({ form, onSubmit, onCancel, isSubmi
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => onCancel()} disabled={isSubmitting}>
+            <Button type="button" variant="outline" onClick={() => onCancel()} disabled={isSubmitting}>
               Cancelar
             </Button>
             <Button

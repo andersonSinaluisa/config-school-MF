@@ -214,7 +214,7 @@ export const EditSchoolYearPresenter = ({
                         <CardHeader className="pb-3">
                             <CardTitle className="flex items-center">
                                 <Info className="h-4 w-4 mr-2 text-primary" />
-                                Guía de Niveles Educativos
+                                Guía de Periodos Lectivos
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -222,19 +222,19 @@ export const EditSchoolYearPresenter = ({
                                 <li className="flex items-start">
                                     <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                     <span>
-                                        Asegúrate de que el nombre del nivel sea claro y descriptivo para los usuarios
+                                        Asegúrate de que el nombre del periodo escolar se claro, Ejemplo: 2024
                                     </span>
                                 </li>
                                 <li className="flex items-start">
                                     <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                     <span>
-                                        Utiliza descripciones concisas para explicar el propósito del nivel educativo
+                                        Usa un formato consistente para los nombres de los niveles educativos, Ejemplo: Primaria, Secundaria
                                     </span>
                                 </li>
                                 <li className="flex items-start">
                                     <Check className="h-4 w-4 mr-2 text-primary mt-0.5" />
                                     <span>
-                                        Asegúrate de que el orden del nivel sea correcto y lógico en la jerarquía educativa
+                                        Considera incluir el año o grado en el nombre para mayor claridad, Ejemplo: Primaria 2024
                                     </span>
                                 </li>
                                 <li className="flex items-start">
@@ -251,7 +251,7 @@ export const EditSchoolYearPresenter = ({
                                     <div className="text-xs">
                                         <p className="font-medium text-blue-700 dark:text-blue-300">¿Necesitas ayuda?</p>
                                         <p className="text-blue-600 dark:text-blue-400">
-                                            Consulta la documentación de roles para más información sobre mejores prácticas.
+                                            Consulta la documentación de periodos escolares para más información sobre mejores prácticas.
                                         </p>
                                     </div>
                                 </div>
