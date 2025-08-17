@@ -10,7 +10,7 @@ import { SCHOOL_YEAR_CREATE_USE_CASE, SCHOOL_YEAR_DELETE_USE_CASE, SCHOOL_YEAR_G
 import { SchoolYearRepositoryImpl } from "../infrastructure/adapters/api/SchoolYearRepositoryImpl";
 import { SECTION_LIST_USE_CASE, SECTION_REPOSITORY, SECTION_SERVICE } from "./symbols/SectionSymbol";
 import { SectionRepositoryImpl } from "../infrastructure/adapters/api/SectionRepositoryImpl";
-import { SUBJECT_CREATE_USE_CASE, SUBJECT_LIST_USE_CASE, SUBJECT_LIST_BY_FILTERS_USE_CASE, SUBJECT_REPOSITORY, SUBJECT_SERVICE } from "./symbols/SubjectSymbol";
+import { SUBJECT_CREATE_USE_CASE, SUBJECT_LIST_USE_CASE, SUBJECT_LIST_BY_FILTERS_USE_CASE, SUBJECT_REPOSITORY, SUBJECT_SERVICE, SUBJECT_GET_USE_CASE, SUBJECT_UPDATE_USE_CASE } from "./symbols/SubjectSymbol";
 import { SubjectRepositoryImpl } from "../infrastructure/adapters/api/SubjectRepositoryImpl";
 import { GRADING_SYSTEM_CREATE_USECASE, GRADING_SYSTEM_DELETE_USECASE, GRADING_SYSTEM_GET_USECASE, GRADING_SYSTEM_LIST_USECASE, GRADING_SYSTEM_REPOSITORY, GRADING_SYSTEM_SERVICE, GRADING_SYSTEM_UPDATE_USECASE } from "./symbols/GradingSystemSymbol";
 import { GradingSystemRepositoryImpl } from "../infrastructure/adapters/api/GradingSystemRepositoryImpl";
@@ -51,6 +51,8 @@ import { DeleteCourseUseCaseImpl } from "../application/useCases/courses/deleteC
 import { UpdateCourseUseCaseImpl } from "../application/useCases/courses/updateCourseUseCase";
 import { GetCourseUseCaseImpl } from "../application/useCases/courses/getCourseUseCase";
 import { CreateSubjectUseCaseImpl } from "../application/useCases/subjects/createSubjectUseCase";
+import { GetSubjectUseCaseImpl } from "../application/useCases/subjects/getSubjectUseCase";
+import { UpdateSubjectUseCaseImpl } from "../application/useCases/subjects/updateSubjectUseCase";
 import { AssignSubjectToCourseUseCaseImpl } from "../application/useCases/courses/assingSubjectToCourse";
 import { CourseSubjetService } from "./services/CourseSubjectService";
 import { ListSubjectFromCourseUseCaseImpl } from "../application/useCases/courses/listSubjectFromCourse";
@@ -195,6 +197,8 @@ const contianerScolar = new ContainerModule(
         bind(SUBJECT_LIST_USE_CASE).to(ListSubjectUseCaseImpl)
         bind(SUBJECT_LIST_BY_FILTERS_USE_CASE).to(ListSubjectsByFiltersUseCaseImpl)
         bind(SUBJECT_CREATE_USE_CASE).to(CreateSubjectUseCaseImpl)
+        bind(SUBJECT_GET_USE_CASE).to(GetSubjectUseCaseImpl)
+        bind(SUBJECT_UPDATE_USE_CASE).to(UpdateSubjectUseCaseImpl)
 
         bind(COURSE_CREATE_USECASE).to(CreateCourseUseCaseImpl);
         bind(COURSE_DELETE_USECASE).to(DeleteCourseUseCaseImpl)

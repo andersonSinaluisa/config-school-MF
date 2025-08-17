@@ -11,6 +11,7 @@ import { CreateSchoolYearContainer } from "./scolar/presentation/ui/SchoolYear/C
 import { EditSchoolYearContainer } from "./scolar/presentation/ui/SchoolYear/Edit/EditSchoolYearContainer";
 import { SubjectListContainer } from "./scolar/presentation/ui/Subject/List/SubjectListContainer";
 import { SubjectCreateContainer } from "./scolar/presentation/ui/Subject/Create/SubjectCreateContainer";
+import { SubjectEditContainer } from "./scolar/presentation/ui/Subject/Edit/SubjectEditContainer";
 import { SubjectCourseContainer } from "./scolar/presentation/ui/Course/SubjectCourse/SubjectCourseContainer";
 import { EditCourseContainer } from "./scolar/presentation/ui/Course/Edit/CourseEditContainer";
 import { EvaluationTypeListContainer } from "./scolar/presentation/ui/EvaluationType/List/EvaluationTypeListContainer";
@@ -68,6 +69,7 @@ const router = createBrowserRouter([
     { path: '/periodos-lectivos/:id', Component: EditSchoolYearContainer },
     { path: '/materias', Component: SubjectListContainer },
     { path: '/materias/nuevo', Component: SubjectCreateContainer },
+    { path: '/materias/:id', Component: SubjectEditContainer },
     { path: '/cursos/:id/materias', Component: SubjectCourseContainer },
     { path: '/tipos-evaluacion', Component: EvaluationTypeListContainer },
     { path: '/tipos-evaluacion/nuevo', Component: EvaluationTypeCreateContainer },
