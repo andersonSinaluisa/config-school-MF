@@ -6,10 +6,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { generateConsistentHexColor } from "@/lib/utils";
 import { ClassSchedule } from "@/scolar/domain/entities/classSchedule";
 import { Course } from "@/scolar/domain/entities/course";
+import { CourseSubject } from "@/scolar/domain/entities/course_subject";
 import { Parallel } from "@/scolar/domain/entities/parallel";
 import { SchoolYear } from "@/scolar/domain/entities/school_year";
 import { Section } from "@/scolar/domain/entities/section";
-import { Subject } from "@/scolar/domain/entities/subject";
 import { Calendar, Plus, Trash2 } from "lucide-react";
 
 interface ScheduleView extends ClassSchedule {
@@ -31,7 +31,7 @@ interface Props {
     year: SchoolYear[];
     course: Course[];
     parallel: Parallel[];
-    subject: Subject[];
+    subject: CourseSubject[];
     section: Section[]
 
     selectedYearId: number | null;
@@ -135,7 +135,7 @@ export const ClassScheduleCalendarPresenter = ({
                     <div>
                         <Label>Paralelo</Label>
                         <SearchSelect
-                            options={parallel.map((p) => ({ label: p.name, value: p.id.toString() }))}
+                            options={parallel.map((p) => ({ label: p.name + " " + p.course?.name, value: p.id.toString() }))}
                             placeholder="Buscar paralelo"
                             onInputChange={onSearchParallel}
                             onChange={(v) => setSelectedParallelId(Number(v))}
@@ -146,7 +146,10 @@ export const ClassScheduleCalendarPresenter = ({
                     <div>
                         <Label>Asignatura</Label>
                         <SearchSelect
-                            options={subject.map((s) => ({ label: s.name, value: s.id.toString() }))}
+                            options={subject.map((s) => 
+                                ({ label: s.subject?.name+" "+s.hoursPerWeek, 
+                                    value: s.subject?.id.toString()||"0" 
+                                }))}
                             placeholder="Buscar asignatura"
                             onInputChange={onSearchSubject}
                             onChange={(v) => setSelectedSubjectId(Number(v))}

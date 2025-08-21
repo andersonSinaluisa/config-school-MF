@@ -32,14 +32,13 @@ import { GradingTerm } from "@/scolar/domain/entities/grading_term";
 import { useSystems } from "@/scolar/presentation/hooks/useSystems";
 import { useAcademicYears } from "@/scolar/presentation/hooks/useAcademicYears";
 import { GradingTermDeleteContainer } from "../Delete/GradingTermDeleteContainer";
-import { GradingTermEditInlineContainer } from "../Edit/GradingTermEditInlineContainer";
 import { Link } from "react-router-dom";
 
 interface Props {
     gradingTerms: PaginatedResult<GradingTerm>;
     onAdd: () => void;
     onDeleted: () => void;
-    onUpdated: () => void;
+    onEdit: (id:string) => void;
     onPaginate: (page: number) => void;
     onSearch: (term: string) => void;
     isPending?: boolean;
@@ -49,7 +48,7 @@ export const GradingTermListPresenter = ({
     gradingTerms,
     onAdd,
     onDeleted,
-    onUpdated,
+    onEdit,
     onPaginate,
     onSearch,
     isPending,
@@ -193,26 +192,23 @@ export const GradingTermListPresenter = ({
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">
-                                            <GradingTermEditInlineContainer
-                                                gradingTerm={gt}
-                                                onUpdated={onUpdated}
-                                            >
-                                                <TooltipProvider>
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                            >
-                                                                <Edit className="h-4 w-4" />
-                                                            </Button>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            Editar
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                </TooltipProvider>
-                                            </GradingTermEditInlineContainer>
+                                            
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => onEdit(gt.id.toString())}
+                                                        >
+                                                            <Edit className="h-4 w-4" />
+                                                        </Button>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        Editar
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
                                             <GradingTermDeleteContainer
                                                 gradingTerm={gt}
                                                 onConfirm={onDeleted}

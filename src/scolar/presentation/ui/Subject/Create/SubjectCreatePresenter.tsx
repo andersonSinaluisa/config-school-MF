@@ -28,7 +28,7 @@ export const SubjectCreatePresenter = ({
     formData,
 }: SubjectCreatePresenterProps) => {
     return (
-        <div className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6">
             <nav className="flex items-center text-sm text-muted-foreground">
                 <Link to="/" className="hover:text-foreground transition-colors">
                     <Home className="h-4 w-4" />
@@ -81,7 +81,6 @@ export const SubjectCreatePresenter = ({
                         <CardHeader>
                             <CardTitle>{"Crear"} Asignatura</CardTitle>
                         </CardHeader>
-                        <form onSubmit={onSubmit}>
                             <CardContent className="space-y-4">
                                 {errors.root && <div className="bg-destructive text-destructive-foreground p-3 rounded-md text-sm">{errors.root?.message}</div>}
 
@@ -149,7 +148,6 @@ export const SubjectCreatePresenter = ({
                                     {isSubmitting ? "Guardando..." : "Guardar"}
                                 </Button>
                             </CardFooter>
-                        </form>
                     </Card>
                 </div>
 
@@ -235,6 +233,6 @@ export const SubjectCreatePresenter = ({
                     </Card>
                 </div>
             </div>
-        </div>
+        </form>
     )
 }

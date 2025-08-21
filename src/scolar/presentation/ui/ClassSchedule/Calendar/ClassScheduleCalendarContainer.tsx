@@ -25,12 +25,13 @@ import {
 
 import { ClassScheduleCalendarPresenter } from "./ClassScheduleCalendarPresenter";
 import { useFetchCourse } from "@/scolar/application/hooks/courses/useFetchCourse";
-import { useFetchParallels } from "@/scolar/application/hooks/parallels/useFetchParallels";
 import { useFetchSchoolYears } from "@/scolar/application/hooks/school-year/useFetchSchoolYear";
 import { useFetchSubjects } from "@/scolar/application/hooks/subject/useFetchSubject";
 import { useFetchSection } from "@/scolar/application/hooks/sections/useFetchSection";
 import { PER_PAGE, ScheduleView } from "@/lib/time";
 import { Section } from "@/scolar/domain/entities/section";
+import { useFilterParallels } from "@/scolar/application/hooks/parallels/useFilterParallels";
+import { useByCourseSubject } from "@/scolar/application/hooks/subject/useByFilterSubject";
 
 
 
@@ -38,7 +39,7 @@ import { Section } from "@/scolar/domain/entities/section";
 export const ClassScheduleCalendarContainer = () => {
     // Paginaciones unificadas (más simple de extender)
     const [paginateCourse, setPaginateCourse] = useState({ page: 1, perPage: PER_PAGE, search: "" });
-    const [paginateParallels, setPaginateParallels] = useState({ page: 1, perPage: PER_PAGE, search: "" });
+    const [, setPaginateParallels] = useState({ page: 1, perPage: PER_PAGE, search: "" });
     const [paginateSchoolYears, setPaginateSchoolYears] = useState({ page: 1, perPage: PER_PAGE, search: "" });
     const [paginateSubjects, setPaginateSubjects] = useState({ page: 1, perPage: PER_PAGE, search: "" });
     const [paginateSections] = useState({ page: 1, perPage: PER_PAGE, search: "" });
@@ -52,11 +53,10 @@ export const ClassScheduleCalendarContainer = () => {
     const [selectedSection, setSelectedSection] = useState<Section | null>(null);
     // Fetchs
     const courses = useFetchCourse(paginateCourse.page, paginateCourse.perPage, paginateCourse.search || "");
-    const parallels = useFetchParallels(paginateParallels.page, paginateParallels.perPage, paginateParallels.search || "");
     const schoolYears = useFetchSchoolYears(paginateSchoolYears.page, paginateSchoolYears.perPage, paginateSchoolYears.search || "");
     const subjects = useFetchSubjects(paginateSubjects.page, paginateSubjects.perPage, paginateSubjects.search || "");
     const sections = useFetchSection(paginateSections.page, paginateSections.perPage, paginateSections.search || "");
-
+    const courseSubject = useByCourseSubject(selectedCourse)
 
     // Use cases
     const listUseCase = useInjection<ListClassSchedulesUseCase>(CLASS_SCHEDULE_LIST_USE_CASE);
@@ -72,7 +72,7 @@ export const ClassScheduleCalendarContainer = () => {
 
     // Form
     const {
-        register, handleSubmit, reset, control, watch,
+        register, handleSubmit, reset, control,
         formState: { errors }, clearErrors
     } = useForm<ClassSchedule>({
         defaultValues: {
@@ -81,17 +81,25 @@ export const ClassScheduleCalendarContainer = () => {
         }
     });
 
-    const selectedCourseId = watch("courseId");
 
+
+
+    const parallels = useFilterParallels(
+        1,
+        10,
+        "",
+        selectedCourse,
+        selectedSchoolYear,
+        undefined,
+        undefined,
+        selectedSection?.id
+    )
     // Lookups memorizados para mapear nombres sin recomputar
     const courseById = useMemo(() => new Map(courses.map(c => [c.id, c])), [courses]);
-    const parallelById = useMemo(() => new Map(parallels.map(p => [p.id, p])), [parallels]);
+    const parallelById = useMemo(() => new Map(parallels.data.map(p => [p.id, p])), [parallels]);
     const subjectById = useMemo(() => new Map(subjects.map(s => [s.id, s])), [subjects]);
 
-    const filteredParallels = useMemo(
-        () => parallels.filter(p => p.courseId === Number(selectedCourseId)),
-        [parallels, selectedCourseId]
-    );
+
 
     // Carga de horarios -> se mapea usando los lookups memorizados
     const load = useCallback(() => {
@@ -124,11 +132,11 @@ export const ClassScheduleCalendarContainer = () => {
     // Cargar cuando estén listos los catálogos base
     useEffect(() => {
         // Solo carga si tenemos data de catálogos (para mapear nombres bien)
-        if (courses.length || parallels.length || subjects.length) {
+        if (courses.length || parallels.data.length || subjects.length) {
             load();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [courses.length, parallels.length, subjects.length, load]);
+    }, [courses.length, parallels.data.length, subjects.length, load]);
 
     // -------------------- Handlers --------------------
     const openAdd = useCallback((day?: string) => {
@@ -224,8 +232,8 @@ export const ClassScheduleCalendarContainer = () => {
                 onSelect={openEdit}
                 onDelete={handleBlockDelete}
                 course={courses}
-                parallel={parallels}
-                subject={subjects}
+                parallel={parallels.data}
+                subject={courseSubject}
                 year={schoolYears}
                 section={sections}
                 onSearchCourse={(value) => setPaginateCourse(prev => ({ ...prev, search: value }))}
@@ -290,7 +298,7 @@ export const ClassScheduleCalendarContainer = () => {
                                                 <SelectValue placeholder="Seleccionar paralelo" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {parallels.map(p => (
+                                                {parallels.data.map(p => (
                                                     <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>
                                                 ))}
                                             </SelectContent>

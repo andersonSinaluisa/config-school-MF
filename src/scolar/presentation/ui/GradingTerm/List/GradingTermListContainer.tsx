@@ -42,17 +42,20 @@ export const GradingTermListContainer = () => {
         debounceRef.current = setTimeout(() => setCommand({ ...command, where: term }), 300);
     };
     const handleDeleted = () => loadData();
-    const handleUpdated = () => loadData();
-
+    
+    const handleEdit = (id:string) => {
+        navigate(`/terminos-calificacion/${id}/`);
+    }
+   
     return (
         <GradingTermListPresenter
             gradingTerms={result}
             onAdd={handleAdd}
             onDeleted={handleDeleted}
-            onUpdated={handleUpdated}
             onPaginate={handlePaginate}
             onSearch={handleSearch}
-            isPending={isPending}
+            isPending={isPending}   
+            onEdit={handleEdit}
         />
     );
 };

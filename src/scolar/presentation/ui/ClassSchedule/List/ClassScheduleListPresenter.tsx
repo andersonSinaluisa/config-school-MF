@@ -58,13 +58,24 @@ export const ClassScheduleListPresenter = ({ schedules, onEdit, onDelete, onAdd,
             <CardContent>
                 <div className="mb-4 flex flex-col md:grid md:grid-cols-5 gap-2">
                     <Command className="rounded-lg border md:col-span-2">
-                        <CommandInput placeholder="Buscar..." onValueChange={onSearch} />
+                        <CommandInput placeholder="Buscar..." 
+                        
+                        onValueChange={onSearch} />
                     </Command>
-                    <SearchSelect options={courses.map(c => ({ value: c.id, label: c.name }))} onChange={onCourseChange} placeholder="Curso" />
-                    <SearchSelect options={parallels.map(p => ({ value: p.id, label: p.name }))} onChange={onParallelChange} placeholder="Paralelo" />
-                    <SearchSelect options={schoolYears.map(s => ({ value: s.id, label: s.name }))} onChange={onSchoolYearChange} placeholder="Año lectivo" />
-                    <SearchSelect options={subjects.map(s => ({ value: s.id, label: s.name }))} onChange={onSubjectChange} placeholder="Materia" />
-                    <SearchSelect options={[{value:1,label:'Lunes'},{value:2,label:'Martes'},{value:3,label:'Miércoles'},{value:4,label:'Jueves'},{value:5,label:'Viernes'},{value:6,label:'Sábado'}]} onChange={onDayChange} placeholder="Día" />
+                    <SearchSelect 
+                    options={courses.map(c => ({ value: c.id, label: c.name }))} 
+                    onChange={onCourseChange} placeholder="Curso" />
+                    <SearchSelect 
+                        options={parallels.map(p => ({ value: p.id, label: p.name }))} 
+                        onChange={onParallelChange} placeholder="Paralelo" />
+                    <SearchSelect 
+                    options={schoolYears.map(s => ({ value: s.id, label: s.name }))} 
+                    onChange={onSchoolYearChange} placeholder="Año lectivo" />
+                    <SearchSelect 
+                    options={subjects.map(s => ({ value: s.id, label: s.name }))} 
+                    onChange={onSubjectChange} placeholder="Materia" />
+                    <SearchSelect 
+                    options={[{value:1,label:'Lunes'},{value:2,label:'Martes'},{value:3,label:'Miércoles'},{value:4,label:'Jueves'},{value:5,label:'Viernes'},{value:6,label:'Sábado'}]} onChange={onDayChange} placeholder="Día" />
                     <Button variant="outline" onClick={onClearFilters} className="md:col-span-1">Limpiar filtros</Button>
                 </div>
                 <Table>

@@ -18,6 +18,7 @@ import {
     GRADING_TERM_GET_USECASE,
     GRADING_TERM_UPDATE_USECASE,
 } from "@/scolar/domain/symbols/GradingTermSymbol";
+import { GradingTerm } from "@/scolar/domain/entities/grading_term";
 
 const formSchema = z.object({
     data: z.object({
@@ -70,7 +71,7 @@ export const GradingTermEditContainer = () => {
                 navigate('/terminos-calificacion');
                 return;
             }
-            const data = res.extract();
+            const data = res.extract()  as GradingTerm;
             if (data) {
                 form.reset({
                     data: {

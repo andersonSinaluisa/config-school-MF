@@ -8,6 +8,8 @@ import { PARALLEL_SERVICE } from "@/scolar/domain/symbols/ParallelSymbol";
 import { inject, injectable } from "inversify";
 import { Left, Right } from "purify-ts/Either";
 
+
+
 export class ListParallelByFiltersUseCaseCommand extends PaginateUseCaseCommand {
     constructor(
         public params: { courseId?: number; schoolYearId?: number; name?: string; capacity?: number; sectionId?: number; },
