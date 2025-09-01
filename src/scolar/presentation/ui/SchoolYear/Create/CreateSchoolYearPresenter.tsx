@@ -151,7 +151,7 @@ export const CreateSchoolYearPresenter = ({
                                                 
                                                 {
                                                     Status.getAll().map((status) => (
-                                                        <SelectItem key={status.id} value={status.label} className={`flex items-center gap-2 hover:${status.textColor}`}>
+                                                        <SelectItem key={status.id} value={status.value} className={`flex items-center gap-2 hover:${status.textColor}`}>
                                                             <span className={`h-4 w-4 rounded-full hover:${status.textColor}`} />
                                                             {status.label}
                                                         </SelectItem>

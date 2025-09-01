@@ -19,4 +19,6 @@ export interface ClassScheduleRepository {
     create(data: Omit<ClassScheduleDto, 'id'>): Promise<ClassScheduleDto>;
     update(id: number, data: Omit<ClassScheduleDto, 'id'>): Promise<ClassScheduleDto>;
     delete(id: number): Promise<void>;
+
+    generateByParallel(parallelId: number): Promise<ClassScheduleDto[]>;
 }

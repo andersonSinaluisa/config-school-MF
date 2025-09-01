@@ -10,6 +10,9 @@ export class Section {
         public hasBreak: boolean = false,
         public breakCount: number = 0,
         public breakDuration: string = '',
-        public days: string[] = []
+        public days: string[] = [],
+        public classDuration: string = ''
     ) { }
+
+    
 }

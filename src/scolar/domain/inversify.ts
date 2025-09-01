@@ -10,6 +10,14 @@ import { SCHOOL_YEAR_CREATE_USE_CASE, SCHOOL_YEAR_DELETE_USE_CASE, SCHOOL_YEAR_G
 import { SchoolYearRepositoryImpl } from "../infrastructure/adapters/api/SchoolYearRepositoryImpl";
 import { SECTION_LIST_USE_CASE, SECTION_REPOSITORY, SECTION_SERVICE } from "./symbols/SectionSymbol";
 import { SectionRepositoryImpl } from "../infrastructure/adapters/api/SectionRepositoryImpl";
+import { SECTION_BREAK_CREATE_USE_CASE, SECTION_BREAK_DELETE_USE_CASE, SECTION_BREAK_GET_USE_CASE, SECTION_BREAK_LIST_USE_CASE, SECTION_BREAK_REPOSITORY, SECTION_BREAK_SERVICE, SECTION_BREAK_UPDATE_USE_CASE } from "./symbols/SectionBreakSymbol";
+import { SectionBreakRepositoryImpl } from "../infrastructure/adapters/api/SectionBreakRepositoryImpl";
+import { SectionBreakService } from "./services/SectionBreakService";
+import { ListSectionBreaksUseCaseImpl } from "../application/useCases/sectionBreaks/listSectionBreaksUseCase";
+import { CreateSectionBreakUseCaseImpl } from "../application/useCases/sectionBreaks/createSectionBreakUseCase";
+import { UpdateSectionBreakUseCaseImpl } from "../application/useCases/sectionBreaks/updateSectionBreakUseCase";
+import { DeleteSectionBreakUseCaseImpl } from "../application/useCases/sectionBreaks/deleteSectionBreakUseCase";
+import { GetSectionBreakUseCaseImpl } from "../application/useCases/sectionBreaks/getSectionBreakUseCase";
 import { SUBJECT_CREATE_USE_CASE, SUBJECT_LIST_USE_CASE, SUBJECT_LIST_BY_FILTERS_USE_CASE, SUBJECT_REPOSITORY, SUBJECT_SERVICE, SUBJECT_GET_USE_CASE, SUBJECT_UPDATE_USE_CASE } from "./symbols/SubjectSymbol";
 import { SubjectRepositoryImpl } from "../infrastructure/adapters/api/SubjectRepositoryImpl";
 import { GRADING_SYSTEM_CREATE_USECASE, GRADING_SYSTEM_DELETE_USECASE, GRADING_SYSTEM_GET_USECASE, GRADING_SYSTEM_LIST_USECASE, GRADING_SYSTEM_REPOSITORY, GRADING_SYSTEM_SERVICE, GRADING_SYSTEM_UPDATE_USECASE } from "./symbols/GradingSystemSymbol";
@@ -98,7 +106,7 @@ import { ListBehaviorScalesUseCaseImpl } from "../application/useCases/behaviorS
 import { CreateBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/createBehaviorScaleUseCase";
 import { UpdateBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/updateBehaviorScaleUseCase";
 import { DeleteBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/deleteBehaviorScaleUseCase";
-import { CLASS_SCHEDULE_REPOSITORY, CLASS_SCHEDULE_SERVICE, CLASS_SCHEDULE_LIST_USE_CASE, CLASS_SCHEDULE_LIST_BY_FILTERS_USE_CASE, CLASS_SCHEDULE_CREATE_USE_CASE, CLASS_SCHEDULE_UPDATE_USE_CASE, CLASS_SCHEDULE_DELETE_USE_CASE, CLASS_SCHEDULE_GET_USE_CASE } from "./symbols/ClassScheduleSymbol";
+import { CLASS_SCHEDULE_REPOSITORY, CLASS_SCHEDULE_SERVICE, CLASS_SCHEDULE_LIST_USE_CASE, CLASS_SCHEDULE_LIST_BY_FILTERS_USE_CASE, CLASS_SCHEDULE_CREATE_USE_CASE, CLASS_SCHEDULE_UPDATE_USE_CASE, CLASS_SCHEDULE_DELETE_USE_CASE, CLASS_SCHEDULE_GET_USE_CASE, CLASS_SCHEDULE_GENERATE_USE_CASE, PRINT_CLASS_SCHEDULE_USE_CASE, PDF_SERVICE } from "./symbols/ClassScheduleSymbol";
 import { ClassScheduleRepositoryImpl } from "../infrastructure/adapters/api/ClassScheduleRepositoryImpl";
 import { ClassScheduleService } from "./services/ClassScheduleService";
 import { ListClassSchedulesUseCaseImpl } from "../application/useCases/classSchedules/listClassSchedulesUseCase";
@@ -118,6 +126,9 @@ import { DeleteAcademicPlanningUseCaseImpl } from "../application/useCases/acade
 import { GetAcademicPlanningUseCaseImpl } from "../application/useCases/academicPlannings/getAcademicPlanningUseCase";
 import { GetBehaviorScaleUseCaseImpl } from "../application/useCases/behaviorScales/getBehaviorScaleUseCase";
 import { ListParallelByFiltersUseCaseImpl } from "../application/useCases/parallels/listParalleByFilters";
+import { GenerateClassScheduleUseCaseImpl } from "../application/useCases/classSchedules/generateClassScheduleUseCase";
+import { JsPdfService } from "../infrastructure/adapters/pdf/JsPdfService";
+import { PrintCalendarUseCase } from "../application/useCases/classSchedules/printClassScheduleUseCase";
 
 const contianerScolar = new ContainerModule(
     (bind) => {
@@ -148,6 +159,9 @@ const contianerScolar = new ContainerModule(
         bind(SUBJECT_REPOSITORY).toDynamicValue(() => {
             return new SubjectRepositoryImpl(schoolapi);
         })
+        bind(SECTION_BREAK_REPOSITORY).toDynamicValue(() => {
+            return new SectionBreakRepositoryImpl(schoolapi);
+        })
         bind(GRADING_SYSTEM_REPOSITORY).toDynamicValue(() => {
             return new GradingSystemRepositoryImpl(schoolapi);
         })
@@ -159,6 +173,12 @@ const contianerScolar = new ContainerModule(
         })
         bind(SECTION_SERVICE).to(SectionService)
         bind(SECTION_LIST_USE_CASE).to(ListSectionUseCaseImpl)
+        bind(SECTION_BREAK_SERVICE).to(SectionBreakService)
+        bind(SECTION_BREAK_LIST_USE_CASE).to(ListSectionBreaksUseCaseImpl)
+        bind(SECTION_BREAK_CREATE_USE_CASE).to(CreateSectionBreakUseCaseImpl)
+        bind(SECTION_BREAK_UPDATE_USE_CASE).to(UpdateSectionBreakUseCaseImpl)
+        bind(SECTION_BREAK_DELETE_USE_CASE).to(DeleteSectionBreakUseCaseImpl)
+        bind(SECTION_BREAK_GET_USE_CASE).to(GetSectionBreakUseCaseImpl)
 
         bind(GRADING_SYSTEM_SERVICE).to(GradingSystemService);
         bind(GRADING_SYSTEM_CREATE_USECASE).to(CreateGradingSystemUseCaseImpl);
@@ -262,7 +282,10 @@ const contianerScolar = new ContainerModule(
         bind(CLASS_SCHEDULE_UPDATE_USE_CASE).to(UpdateClassScheduleUseCaseImpl)
         bind(CLASS_SCHEDULE_DELETE_USE_CASE).to(DeleteClassScheduleUseCaseImpl)
         bind(CLASS_SCHEDULE_GET_USE_CASE).to(GetClassScheduleUseCaseImpl)
-
+        bind(CLASS_SCHEDULE_GENERATE_USE_CASE).to(GenerateClassScheduleUseCaseImpl)
+        bind(PRINT_CLASS_SCHEDULE_USE_CASE).to(PrintCalendarUseCase)
+        bind(PDF_SERVICE).to(JsPdfService)
+        
         bind(ACADEMIC_PLANNING_REPOSITORY).toDynamicValue(() => {
             return new AcademicPlanningRepositoryImpl(schoolapi);
         })

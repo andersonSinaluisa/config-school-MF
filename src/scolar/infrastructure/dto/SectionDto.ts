@@ -5,10 +5,11 @@ export interface SectionDto {
     name: string;
     type: string;
     description: string;
-    startTime: string;
-    endTime: string;
-    hasBreak: boolean;
-    breakCount: number;
-    breakDuration: string;
+    start_time: string;
+    end_time: string;
+    has_break: boolean;
+    break_count: number;
+    break_duration: string;
     days: string;
+    class_duration: string;
 }

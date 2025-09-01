@@ -7,6 +7,12 @@ import { ClassScheduleRepository } from "@/scolar/domain/repositories/ClassSched
 @injectable()
 export class ClassScheduleRepositoryImpl implements ClassScheduleRepository {
     constructor(private readonly http: AxiosInstance) {}
+    async generateByParallel(parallelId: number): Promise<ClassScheduleDto[]> {
+        const {data} = await this.http.post<ClassScheduleDto[]>(`/class-schedules/generate/`,{
+            parallel_id: parallelId
+        });
+        return data;
+    }
 
     async findAll(
         page: number,

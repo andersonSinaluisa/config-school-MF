@@ -1,21 +1,24 @@
 import { useInjection } from "inversify-react"
-import { ListSchoolYearUseCase, ListSchoolYearUseCaseCommand } from "../../useCases/schoolYears/listSchoolYearUseCase";
-import { SCHOOL_YEAR_LIST_USE_CASE } from "@/scolar/domain/symbols/SchoolYearSymbol";
+import { SCHOOL_YEAR_LIST_BY_FILTERS_USE_CASE } from "@/scolar/domain/symbols/SchoolYearSymbol";
 import { useCallback, useEffect, useState } from "react";
 import { SchoolYear } from "@/scolar/domain/entities/school_year";
+import { ListSchoolYearByFiltersUseCase, ListSchoolYearByFiltersUseCaseCommand } from "../../useCases/schoolYears/listSchoolYearByFiltersUseCase";
 
 
 export const useFetchSchoolYears = (
     page: number,
     perPage: number,
-    search: string
+    search: string,
+    status?: string
 ) => {
    
-    const schoolYearUseCase = useInjection<ListSchoolYearUseCase>(SCHOOL_YEAR_LIST_USE_CASE);
+    const schoolYearUseCase = useInjection<ListSchoolYearByFiltersUseCase>(SCHOOL_YEAR_LIST_BY_FILTERS_USE_CASE);
     const [parallels, setParallels] = useState<SchoolYear[]>([]);
 
     const fetchParallel = useCallback(() => {
-        schoolYearUseCase.execute(new ListSchoolYearUseCaseCommand(page, perPage,
+        schoolYearUseCase.execute(new ListSchoolYearByFiltersUseCaseCommand(
+            search, status,
+            page, perPage,
             [], 
             search)).then(res => {
             if (res.isRight()) {

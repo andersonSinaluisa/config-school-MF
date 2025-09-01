@@ -50,4 +50,9 @@ export class ClassScheduleService {
     async delete(id: number) {
         return this.repository.delete(id);
     }
+
+    async generateByParallel(parallelId: number) {
+        const res = await this.repository.generateByParallel(parallelId);
+        return res.map(ClassScheduleMapper.toDomain);
+    }
 }

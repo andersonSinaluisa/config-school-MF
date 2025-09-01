@@ -7,6 +7,7 @@ import { injectable, inject } from "inversify";
 import { Either, Right, Left } from "purify-ts/Either";
 import { LOGGER } from "@/scolar/domain/symbols/SharedSymbol";
 import { Logger } from "@/scolar/infrastructure/services/Logger";
+import { extractErrorMessage } from "@/lib/utils";
 
 export class CreateClassScheduleCommand implements UseCaseCommand {
     constructor(
@@ -32,7 +33,8 @@ export class CreateClassScheduleUseCaseImpl implements CreateClassScheduleUseCas
             return Right(result);
         } catch (error) {
             this.logger.error("Error creating class schedule: " + JSON.stringify(error));
-            return Left([]);
+            const message = extractErrorMessage(error);
+            return Left([message]);
         }
     }
 }

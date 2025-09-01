@@ -10,12 +10,13 @@ export class SectionMapper {
             section.name,
             section.type,
             section.description,
-            section.startTime,
-            section.endTime,
-            section.hasBreak,
-            section.breakCount,
-            section.breakDuration,
-            section.days.split(',')
+            section.start_time,
+            section.end_time,
+            section.has_break,
+            section.break_count,
+            section.break_duration,
+            section.days.split(','),
+            section.class_duration
         );
     }
 
@@ -25,12 +26,13 @@ export class SectionMapper {
             section.name || "",
             section.type || "",
             section.description || "",
-            section.startTime || "",
-            section.endTime || "",
-            section.hasBreak || false,
-            section.breakCount || 0,
-            section.breakDuration || "",
-            section.days ? section.days.split(',') : []
+            section.start_time || "",
+            section.end_time || "",
+            section.has_break || false,
+            section.break_count || 0,
+            section.break_duration || "",
+            section.days ? section.days.split(',') : [],
+            section.class_duration || ""
         );
     }
 
@@ -39,12 +41,13 @@ export class SectionMapper {
             name: section.name,
            description: section.description,
            type: section.type,
-            startTime: section.startTime,
-            endTime: section.endTime,
-            hasBreak: section.hasBreak,
-            breakCount: section.breakCount,
-            breakDuration: section.breakDuration,
-            days: section.days.split(',')
+            startTime: section.start_time,
+            endTime: section.end_time,
+            hasBreak: section.has_break,
+            breakCount: section.break_count,
+            breakDuration: section.break_duration,
+            days: section.days.split(','),
+            classDuration: section.class_duration
         };
     }
         
