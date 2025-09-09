@@ -4,10 +4,6 @@ import { useInjection } from "inversify-react";
 import { toast } from "@/hooks/use-toast";
 
 import {
-    ListClassSchedulesUseCase,
-    ListClassSchedulesCommand,
-} from "@/scolar/application/useCases/classSchedules/listClassSchedulesUseCase";
-import {
     CreateClassScheduleUseCase,
     CreateClassScheduleCommand,
 } from "@/scolar/application/useCases/classSchedules/createClassScheduleUseCase";
@@ -25,12 +21,12 @@ import {
 } from "@/scolar/application/useCases/classSchedules/generateClassScheduleUseCase";
 
 import {
-    CLASS_SCHEDULE_LIST_USE_CASE,
     CLASS_SCHEDULE_CREATE_USE_CASE,
     CLASS_SCHEDULE_UPDATE_USE_CASE,
     CLASS_SCHEDULE_DELETE_USE_CASE,
     CLASS_SCHEDULE_GENERATE_USE_CASE,
     PRINT_CLASS_SCHEDULE_USE_CASE,
+    CLASS_SCHEDULE_LIST_BY_FILTERS_USE_CASE,
 } from "@/scolar/domain/symbols/ClassScheduleSymbol";
 
 import { ClassSchedule } from "@/scolar/domain/entities/classSchedule";
@@ -47,11 +43,12 @@ import { useFetchSectionBreaks } from "@/scolar/application/hooks/sectionBreaks/
 
 import { ClassScheduleCalendarPresenter } from "./ClassScheduleCalendarPresenter";
 import { PrintCalendarUseCase, PrintCalendarUseCaseCommand } from "@/scolar/application/useCases/classSchedules/printClassScheduleUseCase";
+import { ListClassSchedulesByFiltersUseCase, ListClassSchedulesByFiltersUseCaseCommand } from "@/scolar/application/useCases/classSchedules/listClassSchedulesByFiltersUseCase";
 
 export const ClassScheduleCalendarContainer = () => {
     // ---- UseCases (inyección de dependencias) ----
-    const listUseCase = useInjection<ListClassSchedulesUseCase>(
-        CLASS_SCHEDULE_LIST_USE_CASE
+    const listUseCase = useInjection<ListClassSchedulesByFiltersUseCase>(
+        CLASS_SCHEDULE_LIST_BY_FILTERS_USE_CASE
     );
     const createUseCase = useInjection<CreateClassScheduleUseCase>(
         CLASS_SCHEDULE_CREATE_USE_CASE
@@ -93,7 +90,7 @@ export const ClassScheduleCalendarContainer = () => {
         selectedSchoolYear,
         undefined,
         undefined,
-        selectedSection?.id
+        undefined
     );
     const sectionBreaks = useFetchSectionBreaks(1, 100, selectedSection?.id);
 
@@ -138,9 +135,20 @@ export const ClassScheduleCalendarContainer = () => {
 
     // ---- Load schedules ----
     const load = useCallback(() => {
+        if (!selectedCourse || !selectedParallel || !selectedSchoolYear){
+            return
+        }
         startTransition(() => {
             listUseCase
-                .execute(new ListClassSchedulesCommand(1, PER_PAGE, [], ""))
+                .execute(new ListClassSchedulesByFiltersUseCaseCommand(
+                    selectedCourse || undefined,
+                    selectedParallel || undefined,
+                    selectedSchoolYear || undefined,
+                    undefined,
+                    undefined,
+                    1,1000,undefined,undefined
+                    
+                ))
                 .then((res) => {
                     if (res.isRight()) {
                         const data = res.extract()!.data;
@@ -160,7 +168,7 @@ export const ClassScheduleCalendarContainer = () => {
                     }
                 });
         });
-    }, [listUseCase, courseById, parallelById, subjectById]);
+    }, [listUseCase, courseById, parallelById, subjectById, selectedCourse, selectedParallel, selectedSchoolYear]);
 
     useEffect(() => {
         if (courses.length || parallels.data.length || subjects.length) {
