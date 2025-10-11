@@ -101,7 +101,7 @@ export const CreateCoursePresenter = ({
 
                             <div className="space-y-2">
                                 <Label htmlFor="name">Nombre</Label>
-                                <Input id="name" value={formData.data.name}
+                                <Input id="name"
                                 {...register("data.name")}
                                 />
                             </div>
@@ -112,7 +112,10 @@ export const CreateCoursePresenter = ({
                                     name="data.level_id"
                                     control={control}
                                     render={({ field }) => (
-                                        <Select onValueChange={(value) => field.onChange(value)}>
+                                        <Select 
+                                            value={field.value?.toString()} 
+
+                                        onValueChange={(value) => field.onChange(value)}>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Seleccionar nivel" />
                                             </SelectTrigger>

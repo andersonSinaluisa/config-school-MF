@@ -13,6 +13,7 @@
         "start:spa": "concurrently -k -n build,serve -c auto \"npm run build:watch\" \"npm run preview\""
     },
     "dependencies": {
+        "@faker-js/faker": "^10.0.0",
         "@hookform/resolvers": "^5.1.1",
         "@radix-ui/react-accordion": "^1.2.11",
         "@radix-ui/react-alert-dialog": "^1.1.14",

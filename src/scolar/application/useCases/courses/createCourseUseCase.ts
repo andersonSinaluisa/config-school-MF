@@ -13,13 +13,13 @@ import { isAxiosError } from "axios";
 export class CreateCourseCommand implements UseCaseCommand {
 
     constructor(
-        private name: string,
-        private level_id: number,
-        private description: string,
+        public name: string,
+        public level_id: number,
+        public description: string,
     ) {
 
     }
-
+    
     get data() {
         return new  Course(0,
             this.name,
